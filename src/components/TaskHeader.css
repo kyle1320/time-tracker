@@ -1,0 +1,48 @@
+.task-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: end;
+  width: 100%;
+  background-color: white;
+  color: #333;
+  border-top: 1px solid #CCC;
+  padding: 10px;
+  font-size: 30px;
+  box-sizing: border-box;
+}
+
+.task-header input {
+  min-width: 0;
+  width: auto;
+  background: none;
+  border: none;
+  font-size: 1em;
+  color: inherit;
+}
+
+.task-header:last-child {
+  border-bottom: 1px solid #CCC;
+}
+
+.task-header.selected {
+  border-left: 6px solid #03A9F4;
+  color: #03A9F4;
+}
+
+.app.paused .task-header.selected {
+  border-left: 6px solid #FFC107;
+  color: #FFC107;
+}
+
+.task-header .task-detail {
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.task-header .icon-trash {
+  color: #FF5252;
+  font-size: 12px;
+  cursor: pointer;
+  justify-self: end;
+}

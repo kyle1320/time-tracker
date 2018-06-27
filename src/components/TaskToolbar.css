@@ -1,0 +1,52 @@
+.task-toolbar {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.task-toolbar-btn {
+  border: none;
+  background: none;
+  outline: none;
+  color: #03A9F4;
+  background-color: white;
+  border-bottom: 2px solid #D0D0D0;
+  background-color: #eeeeee;
+  font-size: 18px;
+  font-weight: bold;
+  /* border-radius: 5px; */
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.task-toolbar-btn:hover {
+  border-bottom: 2px solid #03A9F4;
+  background-color: #B3E5FC;
+}
+
+.task-toolbar-btn:active {
+  background-color: #03A9F4;
+  color: white !important;
+  border-bottom: none;
+}
+
+.task-toolbar-btn.pause {
+  color: #F44336;
+}
+
+.task-toolbar-btn.play {
+  color: #4CAF50;
+}
+
+.task-toolbar-btn.add {
+  color: #FFC107;
+}
+
+.task-toolbar-btn.reset {
+  color: #FF5252;
+}

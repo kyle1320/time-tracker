@@ -1,0 +1,9 @@
+.root {
+  max-width: 1200px;
+  margin: auto;
+  font-size: 12pt;
+}
+
+.app {
+  margin: 0 10px;
+}
