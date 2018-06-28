@@ -5,7 +5,6 @@ import './App.css';
 import TaskList from './components/TaskList';
 
 const mapStateToProps = state => ({
-  appRunning: state.running,
   themeColor: state.themeColor
 });
 
@@ -24,7 +23,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className={`app ${this.props.appRunning ? "running" : "paused"}`}>
+      <div className="app">
         <div className='container'>
           <TaskList />
         </div>

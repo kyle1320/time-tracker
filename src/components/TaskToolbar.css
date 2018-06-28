@@ -44,14 +44,6 @@
   border-bottom: none;
 }
 
-.task-toolbar-btn.pause {
-  color: #F44336;
-}
-
-.task-toolbar-btn.play {
-  color: #4CAF50;
-}
-
 .task-toolbar-btn.add {
   color: #03A9F4;
 }

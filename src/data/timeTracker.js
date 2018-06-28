@@ -7,8 +7,6 @@ import {
   EDIT_CLEAR,
   TIME_RESET,
   TIME_ADD,
-  APP_PAUSE,
-  APP_RESUME,
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
 
@@ -94,17 +92,6 @@ function tasks(state, action) {
   }
 }
 
-function running(state, action) {
-  switch (action.type) {
-    case APP_PAUSE:
-      return false;
-    case APP_RESUME:
-      return true;
-    default:
-      return state;
-  }
-}
-
 function selectedTask(state, action) {
   switch (action.type) {
     case TASK_SELECT:
@@ -120,22 +107,6 @@ function nextTaskId(state, action) {
       return state + 1;
     default:
       return state;
-  }
-}
-
-function lastTickTime(state, action) {
-  switch (action.type) {
-    case APP_PAUSE:
-      return -1;
-    case APP_RESUME:
-      return action._time;
-    case TIME_RESET:
-      return action._time;
-    default:
-      if (action._running)
-        return action._time;
-      else
-        return -1;
   }
 }
 
@@ -164,7 +135,6 @@ export default function timeTracker(state = DEFAULT_STATE, action) {
   // TODO: this is bad practice...
   action._time = +new Date();
 
-  action._running = state.running;
   action._selectedId = state.selectedTask;
   action._newId = state.nextTaskId;
   action._delta = state.lastTickTime && state.lastTickTime > 0
@@ -173,10 +143,9 @@ export default function timeTracker(state = DEFAULT_STATE, action) {
 
   return {
     tasks: tasks(state.tasks, action),
-    running: running(state.running, action),
     selectedTask: selectedTask(state.selectedTask, action),
     nextTaskId: nextTaskId(state.nextTaskId, action),
-    lastTickTime: lastTickTime(state.lastTickTime, action),
+    lastTickTime: action._time,
     editTaskId: editTaskId(state.editTaskId, action),
     themeColor: themeColor(state.themeColor, action)
   };

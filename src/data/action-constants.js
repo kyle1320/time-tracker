@@ -14,6 +14,3 @@ export const TIME_ADD = 'TIME_ADD';
 export const TASK_SELECT = 'TASK_SELECT';
 
 export const THEME_SET = 'THEME_SET';
-
-export const APP_PAUSE = 'PAUSE';
-export const APP_RESUME = 'RESUME';

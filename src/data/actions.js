@@ -7,8 +7,6 @@ import {
   EDIT_CLEAR,
   TIME_RESET,
   TIME_ADD,
-  APP_PAUSE,
-  APP_RESUME,
   THEME_SET } from "./action-constants";
 
 export function tick() {
@@ -29,18 +27,6 @@ export function update(id, data) {
     type: TASK_UPDATE,
     id,
     data
-  };
-}
-
-export function resume() {
-  return {
-    type: APP_RESUME
-  };
-}
-
-export function pause() {
-  return {
-    type: APP_PAUSE
   };
 }
 

@@ -31,10 +31,6 @@
   color: #03A9F4;
 }
 
-.app.paused .task-header.selected {
-  color: #FFC107;
-}
-
 .task-header-status {
   position: absolute;
   top: 0;
@@ -52,10 +48,6 @@
 
 .task-header.selected .task-header-status {
   background-color: #03A9F4;
-}
-
-.app.paused .task-header.selected .task-header-status {
-  background-color: #FFC107;
 }
 
 .task-header .task-detail {
@@ -109,11 +101,7 @@
   100% { transform: rotate(180deg); }
 }
 
-.app.paused .task-header.selected .icon-select-task {
-  color: #FFC107;
-}
-
-.app:not(.paused) .task-header.selected .icon-select-task {
+.task-header.selected .icon-select-task {
   color: #03A9F4;
   animation: turnover 4s ease-in-out infinite;
 }
