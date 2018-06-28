@@ -5,14 +5,29 @@ import './App.css';
 import TaskList from './components/TaskList';
 
 const mapStateToProps = state => ({
-  appRunning: state.running
+  appRunning: state.running,
+  themeColor: state.themeColor
 });
 
 class App extends Component {
+  componentDidMount() {
+    this.updateTheme();
+  }
+
+  componentDidUpdate() {
+    this.updateTheme();
+  }
+
+  updateTheme() {
+    document.body.className = this.props.themeColor;
+  }
+
   render() {
     return (
       <div className={`app ${this.props.appRunning ? "running" : "paused"}`}>
-        <TaskList />
+        <div className='container'>
+          <TaskList />
+        </div>
       </div>
     );
   }

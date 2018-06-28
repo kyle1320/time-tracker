@@ -1,0 +1,19 @@
+.color-chooser {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: auto;
+  padding: 20px 10px 10px
+}
+
+.color-item {
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 0 0 5px 5px;
+}

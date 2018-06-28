@@ -1,38 +1,61 @@
 .task-header {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-  align-items: end;
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   background-color: white;
   color: #333;
-  border-top: 1px solid #CCC;
-  padding: 10px;
-  font-size: 30px;
+  margin: 0 0 2px 0;
+  padding: 0;
+  font-size: 22px;
   box-sizing: border-box;
+  border-radius: 5px;
+  overflow: hidden;
+  padding-left: 10px;
 }
 
 .task-header input {
+  display: block;
   min-width: 0;
-  width: auto;
+  width: 100%;
   background: none;
   border: none;
   font-size: 1em;
+  font: inherit;
   color: inherit;
 }
 
-.task-header:last-child {
-  border-bottom: 1px solid #CCC;
-}
-
 .task-header.selected {
-  border-left: 6px solid #03A9F4;
   color: #03A9F4;
 }
 
 .app.paused .task-header.selected {
-  border-left: 6px solid #FFC107;
   color: #FFC107;
+}
+
+.task-header-status {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 10px;
+  background-color: #CCC;
+  cursor: pointer;
+}
+
+.task-header:not(.selected) .task-header-status:hover {
+  background-color: #B3E5FC;
+}
+
+.task-header.selected .task-header-status {
+  background-color: #03A9F4;
+}
+
+.app.paused .task-header.selected .task-header-status {
+  background-color: #FFC107;
 }
 
 .task-header .task-detail {
@@ -40,9 +63,65 @@
   font-size: 16px;
 }
 
-.task-header .icon-trash {
-  color: #FF5252;
-  font-size: 12px;
+.task-header .task-time {
+  margin: 5px 10px;
+}
+
+.task-header-buttons {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  border-left: 1px solid #eeeeee;
+  padding: 5px;
+}
+
+.task-header-buttons .button {
   cursor: pointer;
-  justify-self: end;
+  margin: 5px;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  color: #BBB;
+}
+
+.task-header-buttons .button > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.task-header-info {
+  margin: 5px 10px;
+  flex-grow: 1;
+}
+
+.icon-trash:hover {
+  color: #F44336;
+}
+
+.icon-select-task:hover {
+  color: #03A9F4;
+}
+
+@keyframes turnover {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(0deg); }
+  100% { transform: rotate(180deg); }
+}
+
+.app.paused .task-header.selected .icon-select-task {
+  color: #FFC107;
+}
+
+.app:not(.paused) .task-header.selected .icon-select-task {
+  color: #03A9F4;
+  animation: turnover 4s ease-in-out infinite;
+}
+
+.icon-plus-time:hover {
+  color: #4CAF50;
+}
+
+.icon-minus-time:hover {
+  color: #FF5252;
 }

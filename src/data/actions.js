@@ -3,10 +3,13 @@ import {
   TASK_SELECT,
   TASK_UPDATE,
   TASK_ADD,
+  TASK_REMOVE,
+  EDIT_CLEAR,
   TIME_RESET,
+  TIME_ADD,
   APP_PAUSE,
   APP_RESUME,
-  TASK_REMOVE} from "./action-constants";
+  THEME_SET } from "./action-constants";
 
 export function tick() {
   return {
@@ -61,5 +64,26 @@ export function deleteTask(id) {
 export function reset() {
   return {
     type: TIME_RESET
+  };
+}
+
+export function addTime(id, delta) {
+  return {
+    type: TIME_ADD,
+    id,
+    delta
+  };
+}
+
+export function cancelEdit() {
+  return {
+    type: EDIT_CLEAR
+  };
+}
+
+export function setTheme(color) {
+  return {
+    type: THEME_SET,
+    color
   };
 }

@@ -1,5 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Open Sans';
+  background-color: #673AB7;
+  font-size: 12pt;
+}
+
+.purple {
+  background-color: #673AB7;
+}
+
+.orange {
+  background-color: #FF9800;
+}
+
+.green {
+  background-color: #4CAF50;
+}
+
+.blue {
+  background-color: #2196F3;
+}
+
+.red {
+  background-color: #F44336;
+}
+
+.teal {
+  background-color: #009688;
 }

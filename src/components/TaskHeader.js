@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import './TaskHeader.css';
-import { select, tick, update, deleteTask } from '../data/actions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { select, tick, update, deleteTask, addTime, cancelEdit } from '../data/actions';
+import IconWrapper from './IconWrapper';
+import { faTrashAlt, faHourglassHalf, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+
+const mapStateToProps = (state, props) => ({
+  shouldEdit: (state.editTaskId === props.task.id)
+});
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onClick: () => dispatch(select(props.task.id)),
-  onTick: () => dispatch(tick()),
-  onChange: (data) => dispatch(update(props.task.id, data)),
-  onDelete: () => dispatch(deleteTask(props.task.id))
+  onSelect:    ()     => dispatch(select(props.task.id)),
+  onTick:      ()     => dispatch(tick()),
+  onChange:    (data) => dispatch(update(props.task.id, data)),
+  onDelete:    ()     => dispatch(deleteTask(props.task.id)),
+  onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
+  onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
+  cancelEdit:  ()     => dispatch(cancelEdit())
 });
 
 class TaskHeader extends Component {
@@ -18,10 +25,14 @@ class TaskHeader extends Component {
     super();
 
     this.onChange = this.onChange.bind(this);
-    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
+    if (this.props.shouldEdit) {
+      this.refs.name.select();
+      this.props.cancelEdit();
+    }
+
     this.scheduleTick();
   }
 
@@ -48,10 +59,8 @@ class TaskHeader extends Component {
     this.props.onChange({[el.target.name]: el.target.value});
   }
 
-  onDelete(e) {
-    e.stopPropagation();
-
-    this.props.onDelete();
+  handleFocus(event) {
+    event.target.select();
   }
 
   render() {
@@ -71,31 +80,57 @@ class TaskHeader extends Component {
     }
 
     return (
-      <div className={`task-header ${this.props.isSelected ? "selected" : ""}`}
-           onClick={this.props.onClick}>
-        <input
-          name="name"
-          className="task-name"
-          value={this.props.task.name}
-          onInput={this.onChange} />
+      <div className={`task-header ${this.props.isSelected ? "selected" : ""}`}>
+        <div
+          className="task-header-status"
+          onClick={this.props.onSelect} />
+        <div className="task-header-info">
+          <input
+            name="name"
+            ref="name"
+            className="task-name"
+            value={this.props.task.name}
+            onChange={this.onChange}
+            onFocus={this.handleFocus} />
+          <input
+            name="detail"
+            ref="detail"
+            className="task-detail"
+            value={this.props.task.detail}
+            onChange={this.onChange}
+            onFocus={this.handleFocus} />
+        </div>
         <div className="task-time">
           {formatTime(this.props.task.time)}
         </div>
-        <input
-          name="detail"
-          className="task-detail"
-          value={this.props.task.detail}
-          onInput={this.onChange} />
-        <FontAwesomeIcon
-          icon={faTrashAlt}
-          onClick={this.onDelete}
-          className="icon-trash" />
+        <div className="task-header-buttons">
+          <IconWrapper
+            icon={faPlus}
+            onClick={this.props.onIncrement}
+            title="Add 1 Minute"
+            className="button icon-plus-time" />
+          <IconWrapper
+            icon={faHourglassHalf}
+            onClick={this.props.onSelect}
+            title="Select Task"
+            className="button icon-select-task" />
+          <IconWrapper
+            icon={faMinus}
+            onClick={this.props.onDecrement}
+            title="Subtract 1 Minute"
+            className="button icon-minus-time" />
+          <IconWrapper
+            icon={faTrashAlt}
+            onClick={this.props.onDelete}
+            title="Delete Task"
+            className="button icon-trash" />
+        </div>
       </div>
     );
   }
 }
 
 export default connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps
 )(TaskHeader);
