@@ -132,7 +132,7 @@ function lastTickTime(state, action) {
     case TIME_RESET:
       return action._time;
     default:
-      if (state.running)
+      if (action._running)
         return action._time;
       else
         return -1;
@@ -164,6 +164,7 @@ export default function timeTracker(state = DEFAULT_STATE, action) {
   // TODO: this is bad practice...
   action._time = +new Date();
 
+  action._running = state.running;
   action._selectedId = state.selectedTask;
   action._newId = state.nextTaskId;
   action._delta = state.lastTickTime && state.lastTickTime > 0
