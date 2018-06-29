@@ -11,6 +11,9 @@ import {
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
 
+// cannot use Infinity because it must be stored in JSON
+const MAX_TIME = Number.MAX_VALUE;
+
 function task(state, action) {
   if (!state) {
     return state;
@@ -21,7 +24,7 @@ function task(state, action) {
       if (state.id === action.id)
         return {
           ...state,
-          lastActionTime: Infinity // current task is always at the top
+          lastActionTime: MAX_TIME // current task is always at the top
         };
 
     /* falls through */
@@ -39,7 +42,7 @@ function task(state, action) {
         return {
           ...state,
           time: state.time + action._delta,
-          lastActionTime: Infinity
+          lastActionTime: MAX_TIME
         };
       else
         return state;
