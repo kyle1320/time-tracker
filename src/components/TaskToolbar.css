@@ -1,11 +1,28 @@
 .task-toolbar {
   display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.task-toolbar > * {
+  margin-bottom: 10px;
+}
+
+.title {
+  color: white;
+  font-size: 20pt;
+  padding-right: 10px;
+  margin-right: auto;
+}
+
+.button-container {
+  display: flex;
   flex-flow: row nowrap;
   align-items: flex-end;
-  justify-content: space-between;
-  width: 100%;
-  margin: 10px 0;
-  box-sizing: border-box;
+  justify-content: flex-start;
 }
 
 .task-toolbar-btn {
@@ -20,17 +37,12 @@
   padding: 10px 20px;
   margin-bottom: 10px;
   cursor: pointer;
-  flex-grow: 1;
-  margin: 0 2px 0 0;
-}
-
-.task-toolbar-btn:first-child {
-  border-radius: 5px 0 0 5px;
+  margin: 0 10px 0 0;
+  border-radius: 5px;
 }
 
 .task-toolbar-btn:last-child {
   margin-right: 0;
-  border-radius: 0 5px 5px 0;
 }
 
 .task-toolbar-btn:hover {

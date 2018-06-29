@@ -16,16 +16,19 @@ class TaskToolbar extends Component {
   render() {
     return (
       <div className="task-toolbar">
-        <IconWrapper
-          icon={faPlusSquare}
-          className="task-toolbar-btn add"
-          title="New Task"
-          onClick={this.props.triggerNewTask} />
-        <IconWrapper
-          icon={faUndo}
-          className="task-toolbar-btn reset"
-          title="Reset Task Timers"
-          onClick={this.props.triggerReset} />
+        <div class="title">Time Tracker</div>
+        <div class="button-container">
+          <IconWrapper
+            icon={faPlusSquare}
+            className="task-toolbar-btn add"
+            title="New Task"
+            onClick={this.props.triggerNewTask} />
+          <IconWrapper
+            icon={faUndo}
+            className="task-toolbar-btn reset"
+            title="Reset Task Timers"
+            onClick={this.props.triggerReset} />
+        </div>
       </div>
     );
   }

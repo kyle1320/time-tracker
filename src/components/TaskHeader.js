@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import './TaskHeader.css';
 import { select, deselect, tick, update, deleteTask, addTime, cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
-import { faTrashAlt, faHourglassHalf, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faPlay, faPause, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
@@ -121,7 +121,7 @@ class TaskHeader extends Component {
             title="Add 1 Minute"
             className="button icon-plus-time" />
           <IconWrapper
-            icon={faHourglassHalf}
+            icon={this.props.isSelected ? faPause : faPlay}
             onClick={this.onToggle}
             title={this.props.isSelected ? "Deselect Task" : "Select Task"}
             className="button icon-select-task" />

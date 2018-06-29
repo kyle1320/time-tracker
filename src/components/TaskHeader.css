@@ -43,7 +43,7 @@
 }
 
 .task-header:not(.selected) .task-header-status:hover {
-  background-color: #B3E5FC;
+  background-color: #03A9F4;
 }
 
 .task-header.selected .task-header-status {
@@ -101,17 +101,6 @@
 
 .task-header.selected .icon-select-task:hover {
   color: #FFC107;
-}
-
-@keyframes turnover {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(0deg); }
-  100% { transform: rotate(180deg); }
-}
-
-.task-header.selected .icon-select-task {
-  color: #03A9F4;
-  animation: turnover 4s ease-in-out infinite;
 }
 
 .icon-plus-time:hover {
