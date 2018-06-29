@@ -23,7 +23,10 @@ function task(state, action) {
           ...state,
           lastActionTime: Infinity // current task is always at the top
         };
-      else if (state.id === action._selectedId)
+
+    /* falls through */
+    case TASK_DESELECT:
+      if (state.id === action._selectedId)
         return {
           ...state,
           time: state.time + action._delta,
@@ -31,8 +34,6 @@ function task(state, action) {
         };
       else
         return state;
-    case TASK_DESELECT:
-      /* falls through */
     case TASK_TICK:
       if (state.id === action._selectedId)
         return {
