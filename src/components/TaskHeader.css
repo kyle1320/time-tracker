@@ -50,6 +50,10 @@
   background-color: #03A9F4;
 }
 
+.task-header.selected .task-header-status:hover {
+  background-color: #FFC107;
+}
+
 .task-header .task-detail {
   margin-top: 5px;
   font-size: 16px;
@@ -93,6 +97,10 @@
 
 .icon-select-task:hover {
   color: #03A9F4;
+}
+
+.task-header.selected .icon-select-task:hover {
+  color: #FFC107;
 }
 
 @keyframes turnover {

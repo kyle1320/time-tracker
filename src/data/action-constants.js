@@ -12,5 +12,6 @@ export const TIME_RESET = 'TIME_RESET';
 export const TIME_ADD = 'TIME_ADD';
 
 export const TASK_SELECT = 'TASK_SELECT';
+export const TASK_DESELECT = 'TASK_DESELECT';
 
 export const THEME_SET = 'THEME_SET';

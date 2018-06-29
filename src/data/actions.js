@@ -4,6 +4,7 @@ import {
   TASK_UPDATE,
   TASK_ADD,
   TASK_REMOVE,
+  TASK_DESELECT,
   EDIT_CLEAR,
   TIME_RESET,
   TIME_ADD,
@@ -19,6 +20,12 @@ export function select(id) {
   return {
     type: TASK_SELECT,
     id
+  };
+}
+
+export function deselect() {
+  return {
+    type: TASK_DESELECT
   };
 }
 

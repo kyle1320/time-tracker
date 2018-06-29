@@ -3,6 +3,7 @@ import {
   TASK_ADD,
   TASK_REMOVE,
   TASK_SELECT,
+  TASK_DESELECT,
   TASK_UPDATE,
   EDIT_CLEAR,
   TIME_RESET,
@@ -30,6 +31,8 @@ function task(state, action) {
         };
       else
         return state;
+    case TASK_DESELECT:
+      /* falls through */
     case TASK_TICK:
       if (state.id === action._selectedId)
         return {
@@ -96,6 +99,8 @@ function selectedTask(state, action) {
   switch (action.type) {
     case TASK_SELECT:
       return action.id
+    case TASK_DESELECT:
+      return -1;
     default:
       return state;
   }

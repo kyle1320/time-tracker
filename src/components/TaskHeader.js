@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import './TaskHeader.css';
-import { select, tick, update, deleteTask, addTime, cancelEdit } from '../data/actions';
+import { select, deselect, tick, update, deleteTask, addTime, cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
 import { faTrashAlt, faHourglassHalf, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
 const mapStateToProps = (state, props) => ({
-  shouldEdit: (state.editTaskId === props.task.id)
+  isSelected: (state.selectedTask === props.task.id),
+  shouldEdit: (state.editTaskId   === props.task.id)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   onSelect:    ()     => dispatch(select(props.task.id)),
+  onDeselect:  ()     => dispatch(deselect()),
   onTick:      ()     => dispatch(tick()),
   onChange:    (data) => dispatch(update(props.task.id, data)),
   onDelete:    ()     => dispatch(deleteTask(props.task.id)),
@@ -25,6 +27,7 @@ class TaskHeader extends Component {
     super();
 
     this.onChange = this.onChange.bind(this);
+    this.onToggle = this.onToggle.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +62,13 @@ class TaskHeader extends Component {
     this.props.onChange({[el.target.name]: el.target.value});
   }
 
+  onToggle() {
+    if (this.props.isSelected)
+      this.props.onDeselect()
+    else
+      this.props.onSelect()
+  }
+
   handleFocus(event) {
     event.target.select();
   }
@@ -83,7 +93,8 @@ class TaskHeader extends Component {
       <div className={`task-header ${this.props.isSelected ? "selected" : ""}`}>
         <div
           className="task-header-status"
-          onClick={this.props.onSelect} />
+          title={this.props.isSelected ? "Deselect Task" : "Select Task"}
+          onClick={this.onToggle} />
         <div className="task-header-info">
           <input
             name="name"
@@ -111,8 +122,8 @@ class TaskHeader extends Component {
             className="button icon-plus-time" />
           <IconWrapper
             icon={faHourglassHalf}
-            onClick={this.props.onSelect}
-            title="Select Task"
+            onClick={this.onToggle}
+            title={this.props.isSelected ? "Deselect Task" : "Select Task"}
             className="button icon-select-task" />
           <IconWrapper
             icon={faMinus}

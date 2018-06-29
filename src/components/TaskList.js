@@ -7,8 +7,7 @@ import TaskToolbar from './TaskToolbar';
 import ColorChooser from './ColorChooser';
 
 const mapStateToProps = state => ({
-  tasks: state.tasks,
-  selectedTask: state.selectedTask
+  tasks: state.tasks
 });
 
 class TaskList extends Component {
@@ -19,7 +18,6 @@ class TaskList extends Component {
         {this.props.tasks.map(task =>
           <TaskHeader
             task={task}
-            isSelected={this.props.selectedTask === task.id}
             key={task.id} />
         )}
         {this.props.tasks.length === 0
