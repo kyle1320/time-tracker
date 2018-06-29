@@ -107,6 +107,17 @@ function selectedTask(state, action) {
   }
 }
 
+function lastTickTime(state, action) {
+  switch (action.type) {
+    case TASK_TICK:
+    case TASK_SELECT:
+    case TIME_RESET:
+      return action._time;
+    default:
+      return state;
+  }
+}
+
 function nextTaskId(state, action) {
   switch (action.type) {
     case TASK_ADD:
@@ -151,7 +162,7 @@ export default function timeTracker(state = DEFAULT_STATE, action) {
     tasks: tasks(state.tasks, action),
     selectedTask: selectedTask(state.selectedTask, action),
     nextTaskId: nextTaskId(state.nextTaskId, action),
-    lastTickTime: action._time,
+    lastTickTime: lastTickTime(state.lastTickTime, action),
     editTaskId: editTaskId(state.editTaskId, action),
     themeColor: themeColor(state.themeColor, action)
   };
