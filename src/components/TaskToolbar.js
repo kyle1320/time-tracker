@@ -16,8 +16,8 @@ class TaskToolbar extends Component {
   render() {
     return (
       <div className="task-toolbar">
-        <div class="title">Time Tracker</div>
-        <div class="button-container">
+        <div className="title">Time Tracker</div>
+        <div className="button-container">
           <IconWrapper
             icon={faPlusSquare}
             className="task-toolbar-btn add"
