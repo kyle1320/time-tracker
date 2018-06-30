@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import IconWrapper from './IconWrapper';
-import { faPlusSquare, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare, faUndo, faSortAlphaDown } from '@fortawesome/free-solid-svg-icons'
 
 import './TaskToolbar.css';
-import { newTask, resetAll } from '../data/actions';
+import { newTask, resetAll, sortName } from '../data/actions';
 
 const mapDispatchToProps = dispatch => ({
   triggerNewTask:  () => dispatch(newTask()),
-  triggerResetAll: () => dispatch(resetAll())
+  triggerResetAll: () => dispatch(resetAll()),
+  triggerSortName: () => dispatch(sortName())
 });
 
 class TaskToolbar extends Component {
@@ -23,6 +24,11 @@ class TaskToolbar extends Component {
             className="task-toolbar-btn add"
             title="New Task"
             onClick={this.props.triggerNewTask} />
+          <IconWrapper
+            icon={faSortAlphaDown}
+            className="task-toolbar-btn sort"
+            title="Sort Tasks by Name"
+            onClick={this.props.triggerSortName} />
           <IconWrapper
             icon={faUndo}
             className="task-toolbar-btn reset"

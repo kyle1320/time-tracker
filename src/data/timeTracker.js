@@ -9,8 +9,10 @@ import {
   TIME_RESET,
   TIME_RESET_ALL,
   TIME_ADD,
+  SORT_NAME,
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
+import customCompare from './customCompare';
 
 function task(state, action) {
   if (!state) {
@@ -78,37 +80,41 @@ function createTask(action) {
   };
 }
 
+function moveSelectedToTop(tasks, selectedId) {
+  var newTasks = [];
+
+  tasks.forEach(t => {
+    if (t.id === selectedId) {
+      newTasks.unshift(t);
+    } else {
+      newTasks.push(t);
+    }
+  });
+
+  return newTasks;
+}
+
 function tasks(state, action) {
   switch (action.type) {
     case TASK_ADD:
-      var newState = state.map(t => task(t, action));
-      var newTask = createTask(action);
-
-      if (newState.length > 0 && newState[0].id === action._selectedId) {
-        var selectedTask = newState.shift();
-        newState.unshift(newTask);
-        newTask = selectedTask;
-      }
-
-      newState.unshift(newTask);
-
-      return newState;
+      return moveSelectedToTop([
+        createTask(action),
+        ...state.map(t => task(t, action))
+      ], action._selectedId);
     case TASK_REMOVE:
       return state.filter(t => t.id !== action.id);
     case TASK_SELECT:
-      newState = [];
-
-      state.forEach(t => {
-        var newTask = task(t, action);
-
-        if (newTask.id === action.id) {
-          newState.unshift(newTask);
-        } else {
-          newState.push(newTask);
-        }
-      });
-
-      return newState;
+      return moveSelectedToTop(
+        state.map(t => task(t, action)),
+        action.id
+      );
+    case SORT_NAME:
+      return moveSelectedToTop(
+        state
+          .map(t => task(t, action))
+          .sort((a, b) => customCompare(a.name, b.name)),
+        action._selectedId
+      );
     default:
       return state.map(t => task(t, action));
   }

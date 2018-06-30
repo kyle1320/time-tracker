@@ -9,6 +9,7 @@ import {
   TIME_RESET,
   TIME_RESET_ALL,
   TIME_ADD,
+  SORT_NAME,
   THEME_SET } from "./action-constants";
 
 export function tick() {
@@ -79,6 +80,12 @@ export function addTime(id, delta) {
 export function cancelEdit() {
   return {
     type: EDIT_CLEAR
+  };
+}
+
+export function sortName() {
+  return {
+    type: SORT_NAME
   };
 }
 

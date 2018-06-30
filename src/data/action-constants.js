@@ -14,4 +14,6 @@ export const TIME_RESET = 'TIME_RESET';
 export const TIME_RESET_ALL = 'TIME_RESET_ALL';
 export const TIME_ADD = 'TIME_ADD';
 
+export const SORT_NAME = 'SORT_NAME';
+
 export const THEME_SET = 'THEME_SET';

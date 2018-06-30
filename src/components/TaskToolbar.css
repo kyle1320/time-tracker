@@ -60,6 +60,10 @@
   color: #03A9F4;
 }
 
+.task-toolbar-btn.sort {
+  color: #4CAF50;
+}
+
 .task-toolbar-btn.reset {
   color: #FF5252;
 }
