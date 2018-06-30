@@ -126,6 +126,7 @@
 
 .task-select-btn:hover {
   color: #03A9F4;
+  background-color: #B3E5FC;
 }
 
 .task-header.selected .task-select-btn {
