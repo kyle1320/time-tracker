@@ -7,6 +7,7 @@ import {
   TASK_UPDATE,
   EDIT_CLEAR,
   TIME_RESET,
+  TIME_RESET_ALL,
   TIME_ADD,
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
@@ -44,6 +45,14 @@ function task(state, action) {
       else
         return state;
     case TIME_RESET:
+      if (state.id === action.id)
+        return {
+          ...state,
+          time: 0
+        };
+      else
+        return state;
+    case TIME_RESET_ALL:
       return {
         ...state,
         time: 0
@@ -120,8 +129,13 @@ function lastTickTime(state, action) {
   switch (action.type) {
     case TASK_TICK:
     case TASK_SELECT:
-    case TIME_RESET:
+    case TIME_RESET_ALL:
       return action._time;
+    case TIME_RESET:
+      if (action.id === action._selectedId)
+        return action._time;
+      else
+        return state;
     default:
       return state;
   }

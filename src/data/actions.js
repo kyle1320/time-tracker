@@ -7,6 +7,7 @@ import {
   TASK_DESELECT,
   EDIT_CLEAR,
   TIME_RESET,
+  TIME_RESET_ALL,
   TIME_ADD,
   THEME_SET } from "./action-constants";
 
@@ -54,9 +55,16 @@ export function deleteTask(id) {
   };
 }
 
-export function reset() {
+export function reset(id) {
   return {
-    type: TIME_RESET
+    type: TIME_RESET,
+    id
+  };
+}
+
+export function resetAll() {
+  return {
+    type: TIME_RESET_ALL
   };
 }
 

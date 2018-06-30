@@ -5,11 +5,11 @@ import IconWrapper from './IconWrapper';
 import { faPlusSquare, faUndo } from '@fortawesome/free-solid-svg-icons'
 
 import './TaskToolbar.css';
-import { newTask, reset } from '../data/actions';
+import { newTask, resetAll } from '../data/actions';
 
 const mapDispatchToProps = dispatch => ({
-  triggerNewTask: () => dispatch(newTask()),
-  triggerReset:   () => dispatch(reset())
+  triggerNewTask:  () => dispatch(newTask()),
+  triggerResetAll: () => dispatch(resetAll())
 });
 
 class TaskToolbar extends Component {
@@ -27,7 +27,7 @@ class TaskToolbar extends Component {
             icon={faUndo}
             className="task-toolbar-btn reset"
             title="Reset Task Timers"
-            onClick={this.props.triggerReset} />
+            onClick={this.props.triggerResetAll} />
         </div>
       </div>
     );
