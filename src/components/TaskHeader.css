@@ -1,19 +1,50 @@
 .task-header {
-  position: relative;
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   width: 100%;
   background-color: white;
   color: #333;
+  border-left: 10px solid #CCC;
   margin: 0 0 2px 0;
   padding: 0;
   font-size: 22px;
   box-sizing: border-box;
   border-radius: 5px;
   overflow: hidden;
-  padding-left: 10px;
+}
+
+.task-header-center-content {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  flex-grow: 1;
+  border-right: 1px solid #eeeeee;
+}
+
+.task-header-info {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 5px 10px;
+}
+
+.task-header-details {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.task-header-buttons {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  border-top: 1px solid #eeeeee;
 }
 
 .task-header input {
@@ -29,29 +60,7 @@
 
 .task-header.selected {
   color: #03A9F4;
-}
-
-.task-header-status {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  width: 10px;
-  background-color: #CCC;
-  cursor: pointer;
-}
-
-.task-header:not(.selected) .task-header-status:hover {
-  background-color: #03A9F4;
-}
-
-.task-header.selected .task-header-status {
-  background-color: #03A9F4;
-}
-
-.task-header.selected .task-header-status:hover {
-  background-color: #FFC107;
+  border-color: currentColor;
 }
 
 .task-header .task-detail {
@@ -64,22 +73,14 @@
   white-space: nowrap;
 }
 
-.task-header-buttons {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  height: 100%;
-  border-left: 1px solid #eeeeee;
-  padding: 5px;
-}
-
-.task-header-buttons .button {
+.task-header .button {
   cursor: pointer;
-  margin: 5px;
+  padding: 5px 10px;
   width: 16px;
   height: 16px;
   text-align: center;
-  color: #BBB;
+  color: #AAA;
+  border-right: 1px solid #eeeeee;
 }
 
 .task-header-buttons .button > svg {
@@ -96,11 +97,7 @@
   color: #F44336;
 }
 
-.icon-select-task:hover {
-  color: #03A9F4;
-}
-
-.task-header.selected .icon-select-task:hover {
+.icon-reset-time:hover {
   color: #FFC107;
 }
 
@@ -110,4 +107,32 @@
 
 .icon-minus-time:hover {
   color: #FF5252;
+}
+
+.task-select-btn {
+  display: block;
+  cursor: pointer;
+  min-width: 70px;
+  max-width: 70px;
+  padding: auto;
+  box-sizing: border-box;
+  color: #888;
+}
+
+.task-select-btn > svg {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.task-select-btn:hover {
+  color: #03A9F4;
+}
+
+.task-header.selected .task-select-btn {
+  background-color: #03A9F4;
+  color: white;
+}
+
+.task-header.selected .task-select-btn:hover {
+  background-color: #FFC107;
 }
