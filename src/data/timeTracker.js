@@ -11,9 +11,6 @@ import {
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
 
-// cannot use Infinity because it must be stored in JSON
-const MAX_TIME = Number.MAX_VALUE;
-
 function task(state, action) {
   if (!state) {
     return state;
@@ -21,19 +18,12 @@ function task(state, action) {
 
   switch (action.type) {
     case TASK_SELECT:
-      if (state.id === action.id)
-        return {
-          ...state,
-          lastActionTime: MAX_TIME // current task is always at the top
-        };
-
     /* falls through */
     case TASK_DESELECT:
       if (state.id === action._selectedId)
         return {
           ...state,
-          time: state.time + action._delta,
-          lastActionTime: action._time
+          time: state.time + action._delta
         };
       else
         return state;
@@ -41,8 +31,7 @@ function task(state, action) {
       if (state.id === action._selectedId)
         return {
           ...state,
-          time: state.time + action._delta,
-          lastActionTime: MAX_TIME
+          time: state.time + action._delta
         };
       else
         return state;
@@ -72,30 +61,47 @@ function task(state, action) {
   }
 }
 
-function taskSort(taskA, taskB) {
-  return taskB.lastActionTime - taskA.lastActionTime;
-}
-
 function createTask(action) {
   return {
     time: 0,
     ...action.data,
-    id: action._newId,
-    lastActionTime: action._time
+    id: action._newId
   };
 }
 
 function tasks(state, action) {
   switch (action.type) {
     case TASK_ADD:
-      return [
-        ...state.map(t => task(t, action)),
-        createTask(action)
-      ].sort(taskSort)
+      var newState = state.map(t => task(t, action));
+      var newTask = createTask(action);
+
+      if (newState.length > 0 && newState[0].id === action._selectedId) {
+        var selectedTask = newState.shift();
+        newState.unshift(newTask);
+        newTask = selectedTask;
+      }
+
+      newState.unshift(newTask);
+
+      return newState;
     case TASK_REMOVE:
       return state.filter(t => t.id !== action.id);
+    case TASK_SELECT:
+      newState = [];
+
+      state.forEach(t => {
+        var newTask = task(t, action);
+
+        if (newTask.id === action.id) {
+          newState.unshift(newTask);
+        } else {
+          newState.push(newTask);
+        }
+      });
+
+      return newState;
     default:
-      return state.map(t => task(t, action)).sort(taskSort);
+      return state.map(t => task(t, action));
   }
 }
 
