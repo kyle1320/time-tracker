@@ -6,13 +6,33 @@
   width: 100%;
   background-color: white;
   color: #333;
-  border-left: 10px solid #CCC;
   margin: 0 0 2px 0;
   padding: 0;
   font-size: 22px;
   box-sizing: border-box;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.task-header-handle {
+  position: relative;
+  min-width: 16px;
+  max-width: 16px;
+  width: 16px;
+  background-color: #CCC;
+  cursor: grab;
+}
+
+.task-header-handle:before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  height: 14px;
+  width: 2px;
+  border: 2px dotted white;
 }
 
 .task-header-center-content {
@@ -60,7 +80,10 @@
 
 .task-header.selected {
   color: #03A9F4;
-  border-color: currentColor;
+}
+
+.task-header.selected .task-header-handle {
+  background-color: #03A9F4;
 }
 
 .task-header .task-detail {
@@ -69,7 +92,6 @@
 }
 
 .task-header .task-time {
-  margin-right: 10px;
   white-space: nowrap;
 }
 
@@ -110,11 +132,13 @@
 }
 
 .task-select-btn {
-  display: block;
+  display: flex;
   cursor: pointer;
   min-width: 70px;
   max-width: 70px;
-  padding: auto;
+  width: 70px;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   color: #888;
 }

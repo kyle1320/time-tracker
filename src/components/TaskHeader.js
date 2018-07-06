@@ -5,6 +5,7 @@ import './TaskHeader.css';
 import { select, deselect, tick, update, reset, deleteTask, addTime, cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
 import { faTrashAlt, faPlay, faPause, faPlus, faMinus, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { SortableHandle } from 'react-sortable-hoc';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
@@ -22,6 +23,10 @@ const mapDispatchToProps = (dispatch, props) => ({
   onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
   cancelEdit:  ()     => dispatch(cancelEdit())
 });
+
+const SortableHandleItem = SortableHandle(() => (
+  <div className="task-header-handle" title="Drag to Reorder"></div>
+));
 
 class TaskHeader extends Component {
   constructor() {
@@ -91,7 +96,10 @@ class TaskHeader extends Component {
     }
 
     return (
-      <div className={`task-header ${this.props.isSelected ? "selected" : ""}`}>
+      <div
+          id={this.props.isSelected ? "selected-task" : undefined}
+          className={`task-header ${this.props.isSelected ? "selected" : ""}`}>
+        <SortableHandleItem />
         <div className="task-header-center-content">
           <div className="task-header-info">
             <div className="task-header-details">

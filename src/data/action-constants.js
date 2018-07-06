@@ -4,6 +4,7 @@ export const TASK_TICK     = 'TASK_TICK';
 export const TASK_UPDATE   = 'TASK_UPDATE';
 export const TASK_SELECT   = 'TASK_SELECT';
 export const TASK_DESELECT = 'TASK_DESELECT';
+export const TASK_MOVE     = 'TASK_MOVE';
 
 // clears the id set when a new task is created.
 //   this id is used to select the new task for editing,

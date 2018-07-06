@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import './App.css';
+
+import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
+import ColorChooser from './components/ColorChooser';
 
 const mapStateToProps = state => ({
   themeColor: state.themeColor
@@ -24,9 +27,9 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <div className='container'>
+          <TaskToolbar />
           <TaskList />
-        </div>
+          <ColorChooser />
       </div>
     );
   }

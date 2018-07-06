@@ -5,6 +5,7 @@ import {
   TASK_SELECT,
   TASK_DESELECT,
   TASK_UPDATE,
+  TASK_MOVE,
   EDIT_CLEAR,
   TIME_RESET,
   TIME_RESET_ALL,
@@ -13,6 +14,7 @@ import {
   THEME_SET } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
 import customCompare from './customCompare';
+import { arrayMove } from 'react-sortable-hoc';
 
 function task(state, action) {
   if (!state) {
@@ -80,41 +82,27 @@ function createTask(action) {
   };
 }
 
-function moveSelectedToTop(tasks, selectedId) {
-  var newTasks = [];
-
-  tasks.forEach(t => {
-    if (t.id === selectedId) {
-      newTasks.unshift(t);
-    } else {
-      newTasks.push(t);
-    }
-  });
-
-  return newTasks;
-}
-
 function tasks(state, action) {
   switch (action.type) {
     case TASK_ADD:
-      return moveSelectedToTop([
+      return [
         createTask(action),
         ...state.map(t => task(t, action))
-      ], action._selectedId);
+      ];
     case TASK_REMOVE:
       return state.filter(t => t.id !== action.id);
     case TASK_SELECT:
-      return moveSelectedToTop(
+      return state.map(t => task(t, action))
+    case TASK_MOVE:
+      return arrayMove(
         state.map(t => task(t, action)),
-        action.id
+        action.oldIndex,
+        action.newIndex
       );
     case SORT_NAME:
-      return moveSelectedToTop(
-        state
-          .map(t => task(t, action))
-          .sort((a, b) => customCompare(a.name, b.name)),
-        action._selectedId
-      );
+      return state
+        .map(t => task(t, action))
+        .sort((a, b) => customCompare(a.name, b.name))
     default:
       return state.map(t => task(t, action));
   }

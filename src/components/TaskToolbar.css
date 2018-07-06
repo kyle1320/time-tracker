@@ -3,7 +3,6 @@
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
   box-sizing: border-box;
 }
 

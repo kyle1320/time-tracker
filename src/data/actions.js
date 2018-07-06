@@ -5,6 +5,7 @@ import {
   TASK_ADD,
   TASK_REMOVE,
   TASK_DESELECT,
+  TASK_MOVE,
   EDIT_CLEAR,
   TIME_RESET,
   TIME_RESET_ALL,
@@ -36,6 +37,14 @@ export function update(id, data) {
     type: TASK_UPDATE,
     id,
     data
+  };
+}
+
+export function move(oldIndex, newIndex) {
+  return {
+    type: TASK_MOVE,
+    oldIndex,
+    newIndex
   };
 }
 
