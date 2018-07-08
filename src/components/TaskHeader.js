@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {
+  faTrashAlt,
+  faPlay,
+  faPause,
+  faPlus,
+  faMinus,
+  faUndo } from '@fortawesome/free-solid-svg-icons'
+import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
-import { select, deselect, tick, update, reset, deleteTask, addTime, cancelEdit } from '../data/actions';
+
+import {
+  select,
+  deselect,
+  tick,
+  update,
+  reset,
+  deleteTask,
+  addTime,
+  cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
-import { faTrashAlt, faPlay, faPause, faPlus, faMinus, faUndo } from '@fortawesome/free-solid-svg-icons'
-import { SortableHandle } from 'react-sortable-hoc';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),

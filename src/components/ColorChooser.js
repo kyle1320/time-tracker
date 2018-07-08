@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import './ColorChooser.css';
+
 import { setTheme } from '../data/actions';
 
 const mapDispatchToProps = (dispatch) => ({

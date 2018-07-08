@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 import './TaskList.css';
+
 import TaskHeader from './TaskHeader';
 import { move } from '../data/actions';
 

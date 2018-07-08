@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import IconWrapper from './IconWrapper';
-import { faPlusSquare, faUndo, faSortAlphaDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPlusSquare,
+  faUndo,
+  faSortAlphaDown } from '@fortawesome/free-solid-svg-icons'
 
 import './TaskToolbar.css';
+
 import { newTask, resetAll, sortName } from '../data/actions';
+import IconWrapper from './IconWrapper';
 
 const mapDispatchToProps = dispatch => ({
   triggerNewTask:  () => dispatch(newTask()),

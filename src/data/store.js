@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+
 import timeTracker from './timeTracker';
 import { DEFAULT_STATE } from './data-constants';
 
