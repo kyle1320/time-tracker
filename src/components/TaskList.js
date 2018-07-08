@@ -31,6 +31,10 @@ const SortableList = SortableContainer(({tasks}) => {
 });
 
 class TaskList extends Component {
+  onSortStart(_, event) {
+    event.preventDefault();
+  }
+
   render() {
     return this.props.tasks.length === 0
       ? <div className="no-tasks">
@@ -39,6 +43,7 @@ class TaskList extends Component {
         </div>
       : <SortableList
           tasks={this.props.tasks}
+          onSortStart={this.onSortStart}
           onSortEnd={this.props.onSortEnd}
           lockAxis="y"
           useDragHandle={true}
