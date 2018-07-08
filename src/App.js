@@ -5,7 +5,7 @@ import './App.css';
 
 import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
-import ColorChooser from './components/ColorChooser';
+import Footer from './components/Footer';
 
 const mapStateToProps = state => ({
   themeColor: state.themeColor
@@ -29,7 +29,7 @@ class App extends Component {
       <div className="app">
           <TaskToolbar />
           <TaskList />
-          <ColorChooser />
+          <Footer />
       </div>
     );
   }
