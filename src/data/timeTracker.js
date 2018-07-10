@@ -15,7 +15,6 @@ import {
   SORT_NAME,
   THEME_SET,
   STATE_UPGRADE } from './action-constants';
-import { DEFAULT_STATE } from './data-constants';
 import customCompare from './customCompare';
 import { upgradeVersion } from './version';
 
@@ -167,7 +166,7 @@ function themeColor(state, action) {
   }
 }
 
-export default function timeTracker(state = DEFAULT_STATE, action) {
+export default function timeTracker(state, action) {
 
   if (action.type === STATE_UPGRADE) {
     return upgradeVersion(state);

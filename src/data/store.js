@@ -1,8 +1,18 @@
 import { createStore } from 'redux';
 
 import timeTracker from './timeTracker';
-import { DEFAULT_STATE } from './data-constants';
 import { upgrade } from './actions';
+import { CURRENT_VERSION } from './version';
+
+const DEFAULT_STATE = {
+  selectedTask: -1,
+  lastTickTime: -1,
+  nextTaskId: 0,
+  editTaskId: -1,
+  themeColor: '',
+  tasks: [],
+  version: CURRENT_VERSION
+};
 
 const STORAGE_KEY = 'savedState';
 
