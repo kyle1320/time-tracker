@@ -21,6 +21,7 @@ import {
   addTime,
   cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
+import pressAndHold from './pressAndHold';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
@@ -38,6 +39,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
   cancelEdit:  ()     => dispatch(cancelEdit())
 });
+
+const HoldableButton = pressAndHold(IconWrapper, 80, 500);
 
 const SortableHandleItem = SortableHandle(() => (
   <div className="task-header-handle" title="Drag to Reorder"></div>
@@ -143,15 +146,15 @@ class TaskHeader extends Component {
               onClick={this.props.onReset}
               title="Reset Task"
               className="button icon-reset-time" />
-            <IconWrapper
+            <HoldableButton
               icon={faPlus}
               onClick={this.props.onIncrement}
-              title="Add 1 Minute"
+              title="Add a Minute"
               className="button icon-plus-time" />
-            <IconWrapper
+            <HoldableButton
               icon={faMinus}
               onClick={this.props.onDecrement}
-              title="Subtract 1 Minute"
+              title="Subtract a Minute"
               className="button icon-minus-time" />
             <IconWrapper
               icon={faTrashAlt}
