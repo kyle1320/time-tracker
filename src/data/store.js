@@ -2,6 +2,7 @@ import { createStore } from 'redux';
 
 import timeTracker from './timeTracker';
 import { DEFAULT_STATE } from './data-constants';
+import { upgrade } from './actions';
 
 const STORAGE_KEY = 'savedState';
 
@@ -26,5 +27,7 @@ const store = createStore(timeTracker, loadState());
 store.subscribe(() => {
   saveState(store.getState());
 });
+
+store.dispatch(upgrade());
 
 export default store;

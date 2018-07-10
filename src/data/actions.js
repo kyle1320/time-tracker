@@ -11,7 +11,8 @@ import {
   TIME_RESET_ALL,
   TIME_ADD,
   SORT_NAME,
-  THEME_SET } from "./action-constants";
+  THEME_SET,
+  STATE_UPGRADE } from "./action-constants";
 
 export function tick() {
   return {
@@ -102,5 +103,11 @@ export function setTheme(color) {
   return {
     type: THEME_SET,
     color
+  };
+}
+
+export function upgrade() {
+  return {
+    type: STATE_UPGRADE
   };
 }

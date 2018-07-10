@@ -18,3 +18,5 @@ export const TIME_ADD = 'TIME_ADD';
 export const SORT_NAME = 'SORT_NAME';
 
 export const THEME_SET = 'THEME_SET';
+
+export const STATE_UPGRADE = 'STATE_UPGRADE';

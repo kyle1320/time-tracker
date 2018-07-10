@@ -1,3 +1,5 @@
+import { arrayMove } from 'react-sortable-hoc';
+
 import {
   TASK_TICK,
   TASK_ADD,
@@ -11,10 +13,11 @@ import {
   TIME_RESET_ALL,
   TIME_ADD,
   SORT_NAME,
-  THEME_SET } from './action-constants';
+  THEME_SET,
+  STATE_UPGRADE } from './action-constants';
 import { DEFAULT_STATE } from './data-constants';
 import customCompare from './customCompare';
-import { arrayMove } from 'react-sortable-hoc';
+import { upgradeVersion } from './version';
 
 function task(state, action) {
   if (!state) {
@@ -166,6 +169,10 @@ function themeColor(state, action) {
 
 export default function timeTracker(state = DEFAULT_STATE, action) {
 
+  if (action.type === STATE_UPGRADE) {
+    return upgradeVersion(state);
+  }
+
   // TODO: this is bad practice...
   action._time = +new Date();
 
@@ -176,11 +183,12 @@ export default function timeTracker(state = DEFAULT_STATE, action) {
                : 0;
 
   return {
+    ...state,
     tasks: tasks(state.tasks, action),
     selectedTask: selectedTask(state.selectedTask, action),
     nextTaskId: nextTaskId(state.nextTaskId, action),
     lastTickTime: lastTickTime(state.lastTickTime, action),
     editTaskId: editTaskId(state.editTaskId, action),
-    themeColor: themeColor(state.themeColor, action)
+    themeColor: themeColor(state.themeColor, action),
   };
 }
