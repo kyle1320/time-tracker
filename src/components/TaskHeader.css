@@ -43,6 +43,14 @@
   border-right: 1px solid #eeeeee;
 }
 
+.task-header-main-content {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
 .task-header-info {
   display: flex;
   flex-flow: row nowrap;
@@ -92,6 +100,10 @@
 
 .task-header.selected .task-header-handle {
   background-color: #03A9F4;
+}
+
+.task-header-info {
+  cursor: pointer;
 }
 
 .task-header .task-detail {
