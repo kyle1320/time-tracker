@@ -43,7 +43,7 @@ export default function pressAndHold(
         this.delayTimeout = null;
       }
 
-      event.preventDefault();
+      event && event.preventDefault();
     }
 
     start(event) {
