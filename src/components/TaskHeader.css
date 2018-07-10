@@ -151,7 +151,11 @@
   color: #FF5252;
 }
 
-.icon-edit:hover, .task-header.editing .icon-edit {
+.icon-edit:hover {
+  color: #03A9F4;
+}
+
+.task-header.editing .icon-edit {
   background-color: #03A9F4;
   color: white;
 }
