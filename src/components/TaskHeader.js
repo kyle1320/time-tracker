@@ -4,7 +4,7 @@ import {
   faTrashAlt,
   faPlus,
   faMinus,
-  faEdit,
+  faPencilAlt,
   faSave,
   faUndo } from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
@@ -218,7 +218,7 @@ class TaskHeader extends Component {
               title="Reset Task"
               className="button icon-reset-time" />
             <IconWrapper
-              icon={this.state.isEditing ? faSave : faEdit}
+              icon={this.state.isEditing ? faSave : faPencilAlt}
               onClick={this.toggleEditing}
               title={this.state.isEditing ? "Stop Editing" : "Edit Task"}
               className="button icon-edit" />
