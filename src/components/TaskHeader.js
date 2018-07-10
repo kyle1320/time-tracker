@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   faTrashAlt,
-  faPlay,
-  faPause,
   faPlus,
   faMinus,
+  faEdit,
+  faSave,
   faUndo } from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
 
@@ -46,25 +46,45 @@ const SortableHandleItem = SortableHandle(() => (
   <div className="task-header-handle" title="Drag to Reorder"></div>
 ));
 
+function noSelect(event) {
+  event && event.stopPropagation();
+}
+
 class TaskHeader extends Component {
   constructor() {
     super();
 
+    this.state = {
+      isEditing: false
+    };
+
     this.onChange = this.onChange.bind(this);
+    this.onInputKey = this.onInputKey.bind(this);
     this.onToggle = this.onToggle.bind(this);
+    this.toggleEditing = this.toggleEditing.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onIncrement = this.onIncrement.bind(this);
+    this.onDecrement = this.onDecrement.bind(this);
   }
 
   componentDidMount() {
     if (this.props.shouldEdit) {
-      this.refs.name.select();
       this.props.cancelEdit();
+      this.setState({
+        isEditing: true
+      });
     }
 
     this.scheduleTick();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(_, prevState) {
     this.scheduleTick();
+
+    if (this.state.isEditing && !prevState.isEditing) {
+      this.refs.name.select();
+    }
   }
 
   componentWillUnmount() {
@@ -82,18 +102,65 @@ class TaskHeader extends Component {
     }
   }
 
-  onChange(el) {
-    this.props.onChange({[el.target.name]: el.target.value});
+  onChange(event) {
+    this.props.onChange({[event.target.name]: event.target.value});
   }
 
-  onToggle() {
+  onInputKey(event) {
+    if (event.keyCode === 13) {
+      this.setState({
+        isEditing: false
+      });
+    }
+  }
+
+  onToggle(event) {
+    noSelect(event);
+
     if (this.props.isSelected)
       this.props.onDeselect()
     else
       this.props.onSelect()
   }
 
+  onReset(event) {
+    noSelect(event);
+
+    this.props.onReset(event);
+  }
+
+  onDelete(event) {
+    noSelect(event);
+
+    if (window.confirm('Are you sure you want to delete "' + this.props.task.name + '"?')) {
+      this.props.onDelete(event);
+    }
+  }
+
+  onIncrement(event) {
+    noSelect(event);
+
+    this.props.onIncrement(event);
+  }
+
+  onDecrement(event) {
+    noSelect(event);
+
+    this.props.onDecrement(event);
+  }
+
+  toggleEditing(event) {
+    noSelect(event);
+
+    this.setState(state => ({
+      ...state,
+      isEditing: !state.isEditing
+    }));
+  }
+
   handleFocus(event) {
+    noSelect(event);
+
     event.target.select();
   }
 
@@ -116,58 +183,81 @@ class TaskHeader extends Component {
     return (
       <div
           id={this.props.isSelected ? "selected-task" : undefined}
-          className={`task-header ${this.props.isSelected ? "selected" : ""}`}>
+          className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`}
+          onClick={this.onToggle}>
         <SortableHandleItem />
         <div className="task-header-center-content">
           <div className="task-header-info">
             <div className="task-header-details">
-              <input
-                name="name"
-                ref="name"
-                className="task-name"
-                value={this.props.task.name}
-                onChange={this.onChange}
-                onFocus={this.handleFocus} />
-              <input
-                name="detail"
-                ref="detail"
-                className="task-detail"
-                value={this.props.task.detail}
-                onChange={this.onChange}
-                onFocus={this.handleFocus} />
+              {this.state.isEditing
+                ? [
+                  <input
+                    name="name"
+                    ref="name"
+                    key="name"
+                    className="task-name"
+                    value={this.props.task.name}
+                    onChange={this.onChange}
+                    onKeyDown={this.onInputKey}
+                    onClick={noSelect}
+                    onFocus={this.handleFocus} />,
+                  <textarea
+                    name="detail"
+                    ref="detail"
+                    key="detail"
+                    className="task-detail"
+                    value={this.props.task.detail}
+                    onChange={this.onChange}
+                    onKeyDown={this.onInputKey}
+                    onClick={noSelect}
+                    onFocus={this.handleFocus} />
+                  ]
+                : [
+                  <div className="task-name" key="name">
+                    {this.props.task.name}
+                  </div>,
+                  <div className="task-detail" key="detail">
+                    {this.props.task.detail}
+                  </div>
+                ]
+              }
             </div>
             <div className="task-time">
               {formatTime(this.props.task.time)}
             </div>
+            <div className="task-time-buttons">
+              <HoldableButton
+                icon={faPlus}
+                onTrigger={this.onIncrement}
+                onClick={noSelect}
+                title="Add a Minute"
+                className="button icon-plus-time" />
+              <HoldableButton
+                icon={faMinus}
+                onTrigger={this.onDecrement}
+                onClick={noSelect}
+                title="Subtract a Minute"
+                className="button icon-minus-time" />
+            </div>
           </div>
           <div className="task-header-buttons">
             <IconWrapper
-              icon={faUndo}
-              onClick={this.props.onReset}
-              title="Reset Task"
-              className="button icon-reset-time" />
-            <HoldableButton
-              icon={faPlus}
-              onClick={this.props.onIncrement}
-              title="Add a Minute"
-              className="button icon-plus-time" />
-            <HoldableButton
-              icon={faMinus}
-              onClick={this.props.onDecrement}
-              title="Subtract a Minute"
-              className="button icon-minus-time" />
-            <IconWrapper
               icon={faTrashAlt}
-              onClick={this.props.onDelete}
+              onClick={this.onDelete}
               title="Delete Task"
               className="button icon-trash" />
+            <IconWrapper
+              icon={faUndo}
+              onClick={this.onReset}
+              title="Reset Task"
+              className="button icon-reset-time" />
+            <IconWrapper
+              icon={this.state.isEditing ? faSave : faEdit}
+              onClick={this.toggleEditing}
+              title={this.state.isEditing ? "Stop Editing" : "Edit Task"}
+              className="button icon-edit" />
           </div>
         </div>
-        <IconWrapper
-              icon={this.props.isSelected ? faPause : faPlay}
-              onClick={this.onToggle}
-              title={this.props.isSelected ? "Deselect Task" : "Select Task"}
-              className="task-select-btn" />
       </div>
     );
   }

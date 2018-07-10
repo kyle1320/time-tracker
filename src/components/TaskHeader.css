@@ -16,9 +16,9 @@
 
 .task-header-handle {
   position: relative;
-  min-width: 16px;
-  max-width: 16px;
-  width: 16px;
+  min-width: 18px;
+  max-width: 18px;
+  width: 18px;
   background-color: #CCC;
   cursor: grab;
 }
@@ -28,7 +28,7 @@
   display: block;
   content: "";
   top: 50%;
-  right: 5px;
+  right: 6px;
   transform: translateY(-50%);
   height: 14px;
   width: 2px;
@@ -48,7 +48,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
-  margin: 5px 10px;
+  flex-grow: 1;
 }
 
 .task-header-details {
@@ -56,7 +56,15 @@
   flex-flow: column nowrap;
   align-items: stretch;
   flex-grow: 1;
-  margin-right: 10px;
+  margin: 5px 10px;
+}
+
+.task-time-buttons {
+  display: flex;
+  flex-flow: column nowrap;
+  align-self: stretch;
+  justify-content: center;
+  border-left: 1px solid #eeeeee;
 }
 
 .task-header-buttons {
@@ -67,15 +75,15 @@
   border-top: 1px solid #eeeeee;
 }
 
-.task-header input {
-  display: block;
-  min-width: 0;
+.task-header input, .task-header textarea {
   width: 100%;
-  background: none;
-  border: none;
   font-size: 1em;
   font: inherit;
   color: inherit;
+}
+
+.task-header textarea {
+  resize: vertical;
 }
 
 .task-header.selected {
@@ -93,26 +101,38 @@
 
 .task-header .task-time {
   white-space: nowrap;
+  margin-right: 10px;
 }
 
 .task-header .button {
   cursor: pointer;
+  text-align: center;
+  color: #AAA;
+}
+
+.task-time-buttons .button {
+  font-size: 12px;
+  padding: 5px;
+  width: 16px;
+  height: 16px;
+  border-bottom: 1px solid #eeeeee;
+  flex-grow: 1;
+}
+
+.task-time-buttons .button:last-child {
+  border-bottom: none;
+}
+
+.task-header-buttons .button {
   padding: 5px 10px;
   width: 16px;
   height: 16px;
-  text-align: center;
-  color: #AAA;
   border-right: 1px solid #eeeeee;
 }
 
 .task-header-buttons .button > svg {
   width: 16px;
   height: 16px;
-}
-
-.task-header-info {
-  margin: 5px 10px;
-  flex-grow: 1;
 }
 
 .icon-trash:hover {
@@ -131,33 +151,7 @@
   color: #FF5252;
 }
 
-.task-select-btn {
-  display: flex;
-  cursor: pointer;
-  min-width: 70px;
-  max-width: 70px;
-  width: 70px;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  color: #888;
-}
-
-.task-select-btn > svg {
-  width: 24px !important;
-  height: 24px !important;
-}
-
-.task-select-btn:hover {
-  color: #03A9F4;
-  background-color: #B3E5FC;
-}
-
-.task-header.selected .task-select-btn {
+.icon-edit:hover, .task-header.editing .icon-edit {
   background-color: #03A9F4;
   color: white;
-}
-
-.task-header.selected .task-select-btn:hover {
-  background-color: #FFC107;
 }

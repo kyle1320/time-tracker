@@ -28,8 +28,8 @@ export default function pressAndHold(
       this.stop = this.stop.bind(this);
     }
 
-    tick() {
-      this.props.onClick(); // TODO: apply this / arguments
+    tick(event) {
+      this.props.onTrigger(event);
     }
 
     stop(event) {
@@ -54,7 +54,7 @@ export default function pressAndHold(
       // no repeat events
       if (this.delayTimeout || this.tickTimeout) return;
 
-      this.tick();
+      this.tick(event);
 
       this.delayTimeout = setTimeout(() => {
         this.delayTimeout = null;
@@ -76,7 +76,7 @@ export default function pressAndHold(
       joinFunc(newProps, 'onTouchEnd',    this.stop);
       joinFunc(newProps, 'onTouchCancel', this.stop);
 
-      delete newProps.onClick;
+      delete newProps.onTrigger;
 
       return (
         <InnerComponent {...newProps}>

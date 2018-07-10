@@ -17,6 +17,18 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class TaskToolbar extends Component {
+  constructor() {
+    super();
+
+    this.onResetAll = this.onResetAll.bind(this);
+  }
+
+  onResetAll() {
+    if (window.confirm("Are you sure you want to reset all tasks?")) {
+      this.props.triggerResetAll();
+    }
+  }
+
   render() {
     return (
       <div className="task-toolbar">
@@ -36,7 +48,7 @@ class TaskToolbar extends Component {
             icon={faUndo}
             className="task-toolbar-btn reset"
             title="Reset Task Timers"
-            onClick={this.props.triggerResetAll} />
+            onClick={this.onResetAll} />
         </div>
       </div>
     );
