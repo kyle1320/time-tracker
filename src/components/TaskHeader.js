@@ -5,8 +5,7 @@ import {
   faPlus,
   faMinus,
   faPencilAlt,
-  faSave,
-  faUndo } from '@fortawesome/free-solid-svg-icons'
+  faSave} from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
@@ -16,7 +15,6 @@ import {
   deselect,
   tick,
   update,
-  reset,
   deleteTask,
   addTime,
   cancelEdit } from '../data/actions';

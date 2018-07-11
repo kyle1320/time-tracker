@@ -17,16 +17,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class SummaryDialog extends Component {
-  constructor() {
-    super();
-
-    this.onReset = this.onReset.bind(this);
-  }
-
-  onReset() {
-    this.props.onReset();
-    this.props.onClose();
-  }
 
   render() {
     return (
@@ -42,7 +32,7 @@ class SummaryDialog extends Component {
           </div>
           <div className="summary-dialog-content">
             {this.props.tasks.map(task =>
-              <div className="summary-dialog-task-item">
+              <div className="summary-dialog-task-item" key={task.id}>
                 <div className="summary-dialog-task-name">
                   {task.name}
                 </div>
