@@ -5,7 +5,8 @@ import {
   faPlus,
   faMinus,
   faPencilAlt,
-  faSave} from '@fortawesome/free-solid-svg-icons'
+  faSave,
+  faUndo } from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
@@ -15,6 +16,7 @@ import {
   deselect,
   tick,
   update,
+  reset,
   deleteTask,
   addTime,
   cancelEdit } from '../data/actions';
@@ -33,6 +35,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   onTick:      ()     => dispatch(tick()),
   onChange:    (data) => dispatch(update(props.task.id, data)),
   onDelete:    ()     => dispatch(deleteTask(props.task.id)),
+  onReset:     ()     => dispatch(reset(props.task.id)),
   onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
   onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
   cancelEdit:  ()     => dispatch(cancelEdit())
@@ -195,6 +198,11 @@ class TaskHeader extends Component {
               onClick={this.onDelete}
               title="Delete Task"
               className="button icon-trash" />
+            <IconWrapper
+              icon={faUndo}
+              onClick={this.props.onReset}
+              title="Reset Task"
+              className="button icon-reset-time" />
             <IconWrapper
               icon={this.state.isEditing ? faSave : faPencilAlt}
               onClick={this.toggleEditing}
