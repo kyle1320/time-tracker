@@ -47,7 +47,7 @@
 
 .task-toolbar-btn:hover {
   border-color: #03A9F4;
-  background-color: #B3E5FC;
+  background-color: #DDF3FE;
 }
 
 .task-toolbar-btn:active {
@@ -61,9 +61,9 @@
 }
 
 .task-toolbar-btn.sort {
-  color: #4CAF50;
+  color: #FFC107;
 }
 
-.task-toolbar-btn.reset {
+.task-toolbar-btn.end-day {
   color: #FF5252;
 }

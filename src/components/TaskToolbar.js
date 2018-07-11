@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   faPlusSquare,
-  faUndo,
   faSortAlphaDown } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
 
 import './TaskToolbar.css';
 
@@ -45,10 +45,10 @@ class TaskToolbar extends Component {
             title="Sort Tasks by Name"
             onClick={this.props.triggerSortName} />
           <IconWrapper
-            icon={faUndo}
-            className="task-toolbar-btn reset"
-            title="Reset Task Timers"
-            onClick={this.onResetAll} />
+            icon={faCalendarCheck}
+            className="task-toolbar-btn end-day"
+            title="Wrap-up Day"
+            onClick={this.props.onEndDay} />
         </div>
       </div>
     );

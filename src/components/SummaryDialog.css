@@ -1,0 +1,105 @@
+.summary-dialog-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.summary-dialog {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 450px;
+  height: 350px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.summary-dialog-header {
+  flex-shrink: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #CCC;
+  padding: 10px;
+}
+
+.summary-dialog-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding-right: 20px;
+}
+
+.summary-dialog-close-btn {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.summary-dialog-close-btn:hover {
+  color: #FF5252;
+}
+
+.summary-dialog-content {
+  padding: 10px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.summary-dialog-task-item {
+  display: flex;
+  width: 100%;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+.summary-dialog-task-name {
+  font-weight: bold;
+}
+
+.summary-dialog-task-separator {
+  border-bottom: 1px dotted #CCC;
+  flex-grow: 1;
+  margin: 5px;
+  min-width: 9px;
+}
+
+.summary-dialog-task-time {
+  white-space: nowrap;
+}
+
+.summary-dialog-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #CCC;
+}
+
+.summary-dialog-footer-button {
+  display: inline-block;
+  padding: 10px;
+  border: 2px solid #03A9F4;
+  background-color: #03A9F4;
+  color: white;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.summary-dialog-footer-button:active {
+  background-color: #0288D1;
+}
