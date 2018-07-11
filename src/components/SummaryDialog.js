@@ -31,16 +31,18 @@ class SummaryDialog extends Component {
               className="summary-dialog-close-btn" />
           </div>
           <div className="summary-dialog-content">
-            {this.props.tasks.map(task =>
-              <div className="summary-dialog-task-item" key={task.id}>
-                <div className="summary-dialog-task-name">
-                  {task.name}
+            {this.props.tasks
+              .filter(task => task.time >= 60000)
+              .map(task =>
+                <div className="summary-dialog-task-item" key={task.id}>
+                  <div className="summary-dialog-task-name">
+                    {task.name}
+                  </div>
+                  <div className="summary-dialog-task-separator"></div>
+                  <div className="summary-dialog-task-time">
+                    {formatTime('?(%h hours, )%m minutes', task.time)}
+                  </div>
                 </div>
-                <div className="summary-dialog-task-separator"></div>
-                <div className="summary-dialog-task-time">
-                  {formatTime('?(%h hours, )%m minutes', task.time)}
-                </div>
-              </div>
             )}
           </div>
           <div className="summary-dialog-footer">
