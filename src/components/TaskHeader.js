@@ -22,6 +22,7 @@ import {
   cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
 import pressAndHold from './pressAndHold';
+import { formatTime } from '../data/utils';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
@@ -136,21 +137,6 @@ class TaskHeader extends Component {
   }
 
   render() {
-    function formatTime(time) {
-      var millis = time % 1000;
-      time = (time - millis) / 1000;
-
-      var seconds = time % 60;
-      time = (time - seconds) / 60;
-
-      var minutes = time % 60;
-      time = (time - minutes) / 60;
-
-      var hours = time;
-
-      return (hours ? hours + "h " : "") + minutes + "m";
-    }
-
     return (
       <div
           id={this.props.isSelected ? "selected-task" : undefined}
@@ -190,7 +176,7 @@ class TaskHeader extends Component {
                   </div>
               }
               <div className="task-time">
-                {formatTime(this.props.task.time)}
+                {formatTime("?(%hh )%mm", this.props.task.time)}
               </div>
             </div>
             <div className="task-time-buttons">
