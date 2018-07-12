@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   faTrashAlt,
-  faPlus,
-  faMinus,
+  faCaretUp,
+  faCaretDown,
   faPencilAlt,
   faSave,
   faUndo } from '@fortawesome/free-solid-svg-icons'
@@ -181,12 +181,12 @@ class TaskHeader extends Component {
             </div>
             <div className="task-time-buttons">
               <HoldableButton
-                icon={faPlus}
+                icon={faCaretUp}
                 onTrigger={this.props.onIncrement}
                 title="Add a Minute"
                 className="button icon-plus-time" />
               <HoldableButton
-                icon={faMinus}
+                icon={faCaretDown}
                 onTrigger={this.props.onDecrement}
                 title="Subtract a Minute"
                 className="button icon-minus-time" />

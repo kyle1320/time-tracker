@@ -7,7 +7,7 @@
   background-color: white;
   margin: 0 0 2px 0;
   padding: 0;
-  font-size: 22px;
+  font-size: 16px;
   box-sizing: border-box;
   border-radius: 5px;
   overflow: hidden;
@@ -69,9 +69,7 @@
 .task-time-buttons {
   display: flex;
   flex-flow: column nowrap;
-  align-self: stretch;
   justify-content: center;
-  border-left: 1px solid #eeeeee;
 }
 
 .task-header-buttons {
@@ -105,14 +103,18 @@
   cursor: pointer;
 }
 
+.task-header .task-name {
+  font-size: 1.3em;
+}
+
 .task-header .task-detail {
   margin-top: 3px;
-  font-size: 16px;
 }
 
 .task-header .task-time {
   white-space: nowrap;
-  margin-right: 10px;
+  font-size: 1.2em;
+  padding-bottom: 1px;
 }
 
 .task-header .button {
@@ -122,16 +124,10 @@
 }
 
 .task-time-buttons .button {
-  font-size: 12px;
-  padding: 5px;
-  width: 16px;
-  height: 16px;
-  border-bottom: 1px solid #eeeeee;
-  flex-grow: 1;
-}
-
-.task-time-buttons .button:last-child {
-  border-bottom: none;
+  font-size: 20px;
+  padding: 4px;
+  width: 24px;
+  height: 24px;
 }
 
 .task-header-buttons .button {
@@ -146,6 +142,15 @@
   height: 16px;
 }
 
+.task-header-buttons .button-divider {
+  flex-grow: 1;
+}
+
+.task-header-buttons .button-divider ~ .button {
+  border-right: none;
+  border-left: 1px solid #eeeeee;
+}
+
 .icon-trash:hover {
   color: #F44336;
 }
@@ -154,19 +159,15 @@
   color: #FFC107;
 }
 
-.icon-plus-time:hover {
-  color: #4CAF50;
-}
-
-.icon-minus-time:hover {
-  color: #FF5252;
+.icon-plus-time:hover, .icon-minus-time:hover  {
+  color: #333;
 }
 
 .icon-edit:hover {
-  color: #03A9F4;
+  color: #1976D2;
 }
 
 .task-header.editing .icon-edit {
-  background-color: #03A9F4;
+  background-color: #1976D2;
   color: white;
 }
