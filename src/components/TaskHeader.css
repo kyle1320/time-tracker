@@ -125,10 +125,18 @@
 }
 
 .task-time-buttons .button {
-  font-size: 14px;
-  padding: 2px 4px;
+  font-size: 12px;
+  padding: 4px;
   width: 24px;
   height: 24px;
+}
+
+.task-time-buttons .icon-plus-time {
+  padding-bottom: 2px;
+}
+
+.task-time-buttons .icon-minus-time {
+  padding-top: 2px;
 }
 
 .task-header .icon-edit {
