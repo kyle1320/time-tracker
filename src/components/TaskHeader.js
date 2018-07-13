@@ -55,6 +55,9 @@ class TaskHeader extends Component {
     this.state = {
       isEditing: false
     };
+
+    this.nameField   = React.createRef();
+    this.detailField = React.createRef();
   }
 
   componentDidMount() {
@@ -72,7 +75,7 @@ class TaskHeader extends Component {
     this.scheduleTick();
 
     if (this.state.isEditing && !prevState.isEditing) {
-      this.refs.name.select();
+      this.nameField.current.select();
     }
   }
 
@@ -144,7 +147,7 @@ class TaskHeader extends Component {
               ? <div className="task-header-details">
                   <input
                     name="name"
-                    ref="name"
+                    ref={this.nameField}
                     className="task-name"
                     placeholder="Add a Title"
                     value={this.props.task.name}
@@ -154,7 +157,7 @@ class TaskHeader extends Component {
                     onFocus={this.handleFocus} />
                   <textarea
                     name="detail"
-                    ref="detail"
+                    ref={this.detailField}
                     className="task-detail"
                     placeholder="Add a Description"
                     value={this.props.task.detail}
