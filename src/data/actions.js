@@ -54,7 +54,7 @@ export function newTask() {
     type: TASK_ADD,
     data: {
       name: "New Task",
-      detail: "Add a description"
+      detail: ""
     }
   };
 }

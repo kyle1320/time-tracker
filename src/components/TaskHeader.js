@@ -147,6 +147,7 @@ class TaskHeader extends Component {
                       name="name"
                       ref="name"
                       className="task-name"
+                      placeholder="Add a Title"
                       value={this.props.task.name}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
@@ -156,6 +157,7 @@ class TaskHeader extends Component {
                       name="detail"
                       ref="detail"
                       className="task-detail"
+                      placeholder="Add a Description"
                       value={this.props.task.detail}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
