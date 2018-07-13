@@ -106,6 +106,7 @@
 .task-header .task-name {
   display: flex;
   flex-flow: row nowrap;
+  align-items: baseline;
   font-size: 1.3em;
 }
 
@@ -143,6 +144,7 @@
   font-size: .7em;
   padding: 5px;
   margin-left: 5px;
+  color: #CCC;
 }
 
 .task-header-buttons .button {
