@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  faTrashAlt,
   faCaretUp,
-  faCaretDown,
-  faPencilAlt,
-  faSave,
-  faUndo } from '@fortawesome/free-solid-svg-icons'
+  faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
@@ -16,7 +12,6 @@ import {
   deselect,
   tick,
   update,
-  reset,
   deleteTask,
   addTime,
   cancelEdit } from '../data/actions';
@@ -35,7 +30,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   onTick:      ()     => dispatch(tick()),
   onChange:    (data) => dispatch(update(props.task.id, data)),
   onDelete:    ()     => dispatch(deleteTask(props.task.id)),
-  onReset:     ()     => dispatch(reset(props.task.id)),
   onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
   onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
   cancelEdit:  ()     => dispatch(cancelEdit())
@@ -141,7 +135,7 @@ class TaskHeader extends Component {
         <SortableHandleItem />
         <div className="task-header-center-content">
           <div className="task-header-main-content">
-            <div className="task-header-info" onClick={this.onToggle}>
+          <div className="task-header-info" onClick={this.onToggle}>
               {this.state.isEditing
                 ? <div className="task-header-details">
                     <input
@@ -190,22 +184,17 @@ class TaskHeader extends Component {
             </div>
           </div>
           <div className="task-header-buttons">
-            <IconWrapper
-              icon={faTrashAlt}
-              onClick={this.onDelete}
-              title="Delete Task"
-              className="button icon-trash" />
-            <IconWrapper
-              icon={faUndo}
-              onClick={this.props.onReset}
-              title="Reset Task"
-              className="button icon-reset-time" />
-            <IconWrapper
-              icon={this.state.isEditing ? faSave : faPencilAlt}
-              onClick={this.toggleEditing}
-              title={this.state.isEditing ? "Stop Editing" : "Edit Task"}
-              className="button icon-edit" />
-          </div>
+              <div
+                  onClick={this.toggleEditing}
+                  title={this.state.isEditing ? "Stop Editing" : "Edit Task"}
+                  className="button icon-edit" >
+                {this.state.isEditing ? "Save" : "Edit"}
+              </div>
+              <div
+                onClick={this.onDelete}
+                title="Delete Task"
+                className="button icon-trash" >Delete</div>
+            </div>
         </div>
       </div>
     );

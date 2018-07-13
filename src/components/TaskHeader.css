@@ -125,21 +125,19 @@
 
 .task-time-buttons .button {
   font-size: 20px;
-  padding: 4px;
+  padding: 2px 4px;
   width: 24px;
   height: 24px;
 }
 
 .task-header-buttons .button {
   padding: 5px 10px;
-  width: 16px;
-  height: 16px;
   border-right: 1px solid #eeeeee;
-}
-
-.task-header-buttons .button > svg {
-  width: 16px;
-  height: 16px;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: 10px;
+  font-weight: bold;
+  color: #808080;
 }
 
 .task-header-buttons .button-divider {
@@ -153,10 +151,6 @@
 
 .icon-trash:hover {
   color: #F44336;
-}
-
-.icon-reset-time:hover {
-  color: #FFC107;
 }
 
 .icon-plus-time:hover, .icon-minus-time:hover  {
