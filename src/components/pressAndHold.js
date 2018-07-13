@@ -22,17 +22,13 @@ export default function pressAndHold(
 
       this.tickInterval = null;
       this.delayTimeout = null;
-
-      this.start = this.start.bind(this);
-      this.tick = this.tick.bind(this);
-      this.stop = this.stop.bind(this);
     }
 
-    tick(event) {
+    tick = (event) => {
       this.props.onTrigger(event);
     }
 
-    stop(event) {
+    stop = (event) => {
       if (this.tickInterval) {
         clearInterval(this.tickInterval);
         this.tickInterval = null;
@@ -46,7 +42,7 @@ export default function pressAndHold(
       event && event.preventDefault();
     }
 
-    start(event) {
+    start = (event) => {
 
       // primary mouse button only
       if (event && event.type === 'mousedown' && event.button !== 0) return;

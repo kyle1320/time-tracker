@@ -58,12 +58,6 @@ class TaskHeader extends Component {
     this.state = {
       isEditing: false
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onInputKey = this.onInputKey.bind(this);
-    this.onToggle = this.onToggle.bind(this);
-    this.toggleEditing = this.toggleEditing.bind(this);
-    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
@@ -89,22 +83,25 @@ class TaskHeader extends Component {
     clearTimeout(this.timer);
   }
 
-  scheduleTick() {
+  scheduleTick = () => {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+
     if (this.props.isSelected) {
       this.timer = setTimeout(
         this.props.onTick,
         1001 - (this.props.task.time % 1000)
       );
-    } else if (this.timer) {
-      clearTimeout(this.timer);
     }
   }
 
-  onChange(event) {
+  onChange = (event) => {
     this.props.onChange({[event.target.name]: event.target.value});
   }
 
-  onInputKey(event) {
+  onInputKey = (event) => {
     if (event.keyCode === 13) {
       this.setState({
         isEditing: false
@@ -112,27 +109,27 @@ class TaskHeader extends Component {
     }
   }
 
-  onToggle() {
+  onToggle = () => {
     if (this.props.isSelected)
       this.props.onDeselect()
     else
       this.props.onSelect()
   }
 
-  onDelete(event) {
+  onDelete = (event) => {
     if (window.confirm('Are you sure you want to delete "' + this.props.task.name + '"?')) {
       this.props.onDelete(event);
     }
   }
 
-  toggleEditing() {
+  toggleEditing = () => {
     this.setState(state => ({
       ...state,
       isEditing: !state.isEditing
     }));
   }
 
-  handleFocus(event) {
+  handleFocus = (event) => {
     event.target.select();
   }
 

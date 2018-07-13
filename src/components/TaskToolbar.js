@@ -17,13 +17,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class TaskToolbar extends Component {
-  constructor() {
-    super();
-
-    this.onResetAll = this.onResetAll.bind(this);
-  }
-
-  onResetAll() {
+  onResetAll = () => {
     if (window.confirm("Are you sure you want to reset all tasks?")) {
       this.props.triggerResetAll();
     }
