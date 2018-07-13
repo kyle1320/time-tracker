@@ -104,6 +104,8 @@
 }
 
 .task-header .task-name {
+  display: flex;
+  flex-flow: row nowrap;
   font-size: 1.3em;
 }
 
@@ -114,7 +116,6 @@
 .task-header .task-time {
   white-space: nowrap;
   font-size: 1.2em;
-  padding-bottom: 1px;
 }
 
 .task-header .button {
@@ -124,10 +125,16 @@
 }
 
 .task-time-buttons .button {
-  font-size: 20px;
+  font-size: 14px;
   padding: 2px 4px;
   width: 24px;
   height: 24px;
+}
+
+.task-header .icon-edit {
+  font-size: .7em;
+  padding: 5px;
+  margin-left: 5px;
 }
 
 .task-header-buttons .button {
@@ -137,6 +144,7 @@
   letter-spacing: .03em;
   font-size: 10px;
   font-weight: bold;
+  color: #808080;
 }
 
 .task-header-buttons .button-divider {
@@ -152,6 +160,10 @@
   color: #F44336;
 }
 
+.icon-reset:hover {
+  color: #FFC107;
+}
+
 .icon-plus-time:hover, .icon-minus-time:hover  {
   color: #333;
 }
@@ -160,7 +172,7 @@
   color: #1976D2;
 }
 
-.task-header.editing .icon-edit {
+.task-header .icon-save {
   background-color: #1976D2;
   color: white;
 }

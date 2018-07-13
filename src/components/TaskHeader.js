@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  faCaretUp,
-  faCaretDown} from '@fortawesome/free-solid-svg-icons'
+  faPencilAlt,
+  faPlus,
+  faMinus} from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
@@ -12,6 +13,7 @@ import {
   deselect,
   tick,
   update,
+  reset,
   deleteTask,
   addTime,
   cancelEdit } from '../data/actions';
@@ -29,6 +31,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   onDeselect:  ()     => dispatch(deselect()),
   onTick:      ()     => dispatch(tick()),
   onChange:    (data) => dispatch(update(props.task.id, data)),
+  onReset:     ()     => dispatch(reset(props.task.id)),
   onDelete:    ()     => dispatch(deleteTask(props.task.id)),
   onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
   onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
@@ -116,7 +119,9 @@ class TaskHeader extends Component {
     }
   }
 
-  toggleEditing = () => {
+  toggleEditing = (event) => {
+    noSelect(event);
+
     this.setState(state => ({
       ...state,
       isEditing: !state.isEditing
@@ -159,7 +164,12 @@ class TaskHeader extends Component {
                   </div>
                 : <div className="task-header-details">
                     <div className="task-name">
-                      {this.props.task.name}
+                      <div>{this.props.task.name}</div>
+                      <IconWrapper
+                          icon={faPencilAlt}
+                          onClick={this.toggleEditing}
+                          title="Edit Task"
+                          className="button icon-edit" />
                     </div>
                     <div className="task-detail">
                       {this.props.task.detail}
@@ -172,29 +182,33 @@ class TaskHeader extends Component {
             </div>
             <div className="task-time-buttons">
               <HoldableButton
-                icon={faCaretUp}
+                icon={faPlus}
                 onTrigger={this.props.onIncrement}
                 title="Add a Minute"
                 className="button icon-plus-time" />
               <HoldableButton
-                icon={faCaretDown}
+                icon={faMinus}
                 onTrigger={this.props.onDecrement}
                 title="Subtract a Minute"
                 className="button icon-minus-time" />
             </div>
           </div>
-          <div className="task-header-buttons">
+          {this.state.isEditing && 
+            <div className="task-header-buttons">
               <div
                   onClick={this.toggleEditing}
-                  title={this.state.isEditing ? "Stop Editing" : "Edit Task"}
-                  className="button icon-edit" >
-                {this.state.isEditing ? "Save" : "Edit"}
-              </div>
+                  title="Stop Editing"
+                  className="button icon-save" >Save</div>
+              <div
+                onClick={this.props.onReset}
+                title="Reset Task"
+                className="button icon-reset" >Reset</div>
               <div
                 onClick={this.onDelete}
                 title="Delete Task"
                 className="button icon-trash" >Delete</div>
             </div>
+          }
         </div>
       </div>
     );
