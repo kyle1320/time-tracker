@@ -1,4 +1,4 @@
-import { formatTime } from './utils';
+import { formatTime } from './time';
 
 function time(h, m, s) {
   return h*60*60*1000 + m*60*1000 + s*1000;

@@ -19,7 +19,7 @@ import {
   cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
 import pressAndHold from './pressAndHold';
-import { formatTime } from '../data/utils';
+import { formatTime } from '../utils/time';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),

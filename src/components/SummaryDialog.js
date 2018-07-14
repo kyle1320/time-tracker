@@ -5,7 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import './SummaryDialog.css';
 
 import { resetAll } from '../data/actions';
-import { formatTime } from '../data/utils';
+import { formatTime } from '../utils/time';
 import IconWrapper from './IconWrapper';
 
 const mapStateToProps = (state) => ({
