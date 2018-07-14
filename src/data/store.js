@@ -9,7 +9,7 @@ const DEFAULT_STATE = {
   lastTickTime: -1,
   nextTaskId: 0,
   editTaskId: -1,
-  themeColor: '',
+  themeColor: 'purple',
   tasks: [],
   version: CURRENT_VERSION
 };

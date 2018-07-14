@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import './App.css';
 
@@ -8,9 +9,10 @@ import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
 import { deselect, resetAll } from './data/actions';
+import { colorNameToHex } from './utils/color';
 
 const mapStateToProps = state => ({
-  themeColor: state.themeColor
+  themeColor: colorNameToHex(state.themeColor)
 });
 
 class App extends Component {
@@ -35,7 +37,7 @@ class App extends Component {
   }
 
   updateTheme() {
-    document.body.className = this.props.themeColor;
+    document.body.style.backgroundColor = this.props.themeColor;
   }
 
   endDay() {
@@ -59,15 +61,18 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-          <TaskToolbar
-            onEndDay={this.showSummary}/>
-          <TaskList />
-          <Footer />
-          {this.state.showSummary &&
-            <SummaryDialog
-              onClose={this.closeSummary}
-              onEndDay={this.endDay}/>
-          }
+        <Helmet>
+          <meta name="theme-color" content={this.props.themeColor} />
+        </Helmet>
+        <TaskToolbar
+          onEndDay={this.showSummary}/>
+        <TaskList />
+        <Footer />
+        {this.state.showSummary &&
+          <SummaryDialog
+            onClose={this.closeSummary}
+            onEndDay={this.endDay}/>
+        }
       </div>
     );
   }
