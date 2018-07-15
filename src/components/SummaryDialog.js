@@ -49,7 +49,7 @@ class SummaryDialog extends Component {
             <div
                 className="summary-dialog-footer-button"
                 onClick={this.props.onEndDay}>
-              Wrap-up Day & Resets Tasks
+              Wrap-up Day & Reset Tasks
             </div>
           </div>
         </div>
