@@ -142,7 +142,9 @@
 }
 
 .task-header .icon-edit {
-  font-size: .7em;
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
   padding: 5px;
   margin-left: 5px;
   color: #CCC;
