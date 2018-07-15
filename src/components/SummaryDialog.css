@@ -66,6 +66,8 @@
 
 .summary-dialog-task-name {
   font-weight: bold;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .summary-dialog-task-separator {
