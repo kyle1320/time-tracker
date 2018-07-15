@@ -8,13 +8,15 @@ import {
   TASK_DESELECT,
   TASK_UPDATE,
   TASK_MOVE,
+  SUBTASK_ADD,
+  SUBTASK_REMOVE,
   EDIT_CLEAR,
   TIME_RESET,
   TIME_RESET_ALL,
   TIME_ADD,
   SORT_NAME,
   THEME_SET,
-  STATE_UPGRADE } from './action-constants';
+  STATE_UPGRADE} from './action-constants';
 import customCompare from './customCompare';
 import { upgradeVersion } from './version';
 
@@ -70,17 +72,44 @@ function task(state, action) {
           time: Math.max(0, state.time + action.delta)
         };
       else
-        return state
+        return state;
+    case SUBTASK_ADD:
+      if (state.id === action.id)
+        return {
+          ...state,
+          subtasks: [...state.subtasks, createSubtask(action)]
+        };
+      else
+        return state;
+    case SUBTASK_REMOVE:
+      if (state.id === action.id) {
+        var newSubtasks = state.subtasks.slice();
+        newSubtasks.splice(action.index, 1);
+
+        return {
+          ...state,
+          subtasks: newSubtasks
+        };
+      } else
+        return state;
     default:
       return state;
   }
+}
+
+function createSubtask(action) {
+  return {
+    time: action._time,
+    content: action.content
+  };
 }
 
 function createTask(action) {
   return {
     time: 0,
     ...action.data,
-    id: action._newId
+    id: action._newId,
+    subtasks: []
   };
 }
 

@@ -18,6 +18,7 @@ import {
   addTime,
   cancelEdit } from '../data/actions';
 import IconWrapper from './IconWrapper';
+import SubtaskList from './SubtaskList';
 import pressAndHold from './pressAndHold';
 import { formatTime } from '../utils/time';
 
@@ -137,84 +138,90 @@ class TaskHeader extends Component {
 
   render() {
     return (
-      <div
-          id={this.props.isSelected ? "selected-task" : undefined}
-          className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`} >
-        <SortableHandleItem />
-        <div className="task-header-center-content">
-          <div className="task-header-main-content" onClick={this.onToggle}>
-            {this.state.isEditing
-              ? <div className="task-header-details">
-                  <input
-                    name="name"
-                    ref={this.nameField}
-                    className="task-name"
-                    placeholder="Add a Title"
-                    value={this.props.task.name}
-                    onChange={this.onChange}
-                    onKeyDown={this.onInputKey}
-                    onClick={noSelect}
-                    onFocus={this.handleFocus} />
-                  <textarea
-                    name="detail"
-                    ref={this.detailField}
-                    className="task-detail"
-                    placeholder="Add a Description"
-                    value={this.props.task.detail}
-                    onChange={this.onChange}
-                    onKeyDown={this.onInputKey}
-                    onClick={noSelect}
-                    onFocus={this.handleFocus} />
-                </div>
-              : <div className="task-header-details">
-                  <div className="task-name">
-                    <div>{this.props.task.name}</div>
-                    <IconWrapper
-                        icon={faPencilAlt}
-                        onClick={this.toggleEditing}
-                        title="Edit Task"
-                        className="button icon-edit" />
+      <div className="task-header-container">
+        <div
+            id={this.props.isSelected ? "selected-task" : undefined}
+            className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`} >
+          <SortableHandleItem />
+          <div className="task-header-center-content">
+            <div className="task-header-main-content" onClick={this.onToggle}>
+              {this.state.isEditing
+                ? <div className="task-header-details">
+                    <input
+                      name="name"
+                      ref={this.nameField}
+                      className="task-name"
+                      placeholder="Add a Title"
+                      value={this.props.task.name}
+                      onChange={this.onChange}
+                      onKeyDown={this.onInputKey}
+                      onClick={noSelect}
+                      onFocus={this.handleFocus} />
+                    <textarea
+                      name="detail"
+                      ref={this.detailField}
+                      className="task-detail"
+                      placeholder="Add a Description"
+                      value={this.props.task.detail}
+                      onChange={this.onChange}
+                      onKeyDown={this.onInputKey}
+                      onClick={noSelect}
+                      onFocus={this.handleFocus} />
                   </div>
-                  <div className="task-detail">
-                    {this.props.task.detail}
+                : <div className="task-header-details">
+                    <div className="task-name">
+                      <div>{this.props.task.name}</div>
+                      <IconWrapper
+                          icon={faPencilAlt}
+                          onClick={this.toggleEditing}
+                          title="Edit Task"
+                          className="button icon-edit" />
+                    </div>
+                    <div className="task-detail">
+                      {this.props.task.detail}
+                    </div>
                   </div>
-                </div>
+              }
+              <div className="task-time">
+                {formatTime("?(%hh )%mm", this.props.task.time)}
+              </div>
+              <div className="task-time-buttons">
+                <HoldableButton
+                  icon={faPlus}
+                  onTrigger={this.props.onIncrement}
+                  onClick={noSelect}
+                  title="Add a Minute"
+                  className="button icon-plus-time" />
+                <HoldableButton
+                  icon={faMinus}
+                  onTrigger={this.props.onDecrement}
+                  onClick={noSelect}
+                  title="Subtract a Minute"
+                  className="button icon-minus-time" />
+              </div>
+            </div>
+            {this.state.isEditing &&
+              <div className="task-header-buttons">
+                <div
+                    onClick={this.toggleEditing}
+                    title="Stop Editing"
+                    className="button icon-save" >Save</div>
+                <div
+                  onClick={this.props.onReset}
+                  title="Reset Task"
+                  className="button icon-reset" >Reset</div>
+                <div
+                  onClick={this.onDelete}
+                  title="Delete Task"
+                  className="button icon-trash" >Delete</div>
+              </div>
             }
-            <div className="task-time">
-              {formatTime("?(%hh )%mm", this.props.task.time)}
-            </div>
-            <div className="task-time-buttons">
-              <HoldableButton
-                icon={faPlus}
-                onTrigger={this.props.onIncrement}
-                onClick={noSelect}
-                title="Add a Minute"
-                className="button icon-plus-time" />
-              <HoldableButton
-                icon={faMinus}
-                onTrigger={this.props.onDecrement}
-                onClick={noSelect}
-                title="Subtract a Minute"
-                className="button icon-minus-time" />
-            </div>
           </div>
-          {this.state.isEditing &&
-            <div className="task-header-buttons">
-              <div
-                  onClick={this.toggleEditing}
-                  title="Stop Editing"
-                  className="button icon-save" >Save</div>
-              <div
-                onClick={this.props.onReset}
-                title="Reset Task"
-                className="button icon-reset" >Reset</div>
-              <div
-                onClick={this.onDelete}
-                title="Delete Task"
-                className="button icon-trash" >Delete</div>
-            </div>
-          }
         </div>
+        <SubtaskList
+          taskId={this.props.task.id}
+          subtasks={this.props.task.subtasks}
+          isEditing={this.state.isEditing} />
       </div>
     );
   }

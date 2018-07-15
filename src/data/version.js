@@ -1,4 +1,4 @@
-export const CURRENT_VERSION = 0;
+export const CURRENT_VERSION = 1;
 
 export function upgradeVersion(state) {
   switch (state.version) {
@@ -9,7 +9,18 @@ export function upgradeVersion(state) {
       };
 
     /* falls through */
-    case 0: // current version
+    case 0:
+      state = {
+        ...state,
+        tasks: state.tasks.map(task => ({
+          ...task,
+          subtasks: []
+        })),
+        version: 1
+      };
+
+    /* falls through */
+    case 1: // current version
       break;
     default:
       console.error("State has unknown version: " + state.version);

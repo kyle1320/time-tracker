@@ -6,6 +6,8 @@ import {
   TASK_REMOVE,
   TASK_DESELECT,
   TASK_MOVE,
+  SUBTASK_ADD,
+  SUBTASK_REMOVE,
   EDIT_CLEAR,
   TIME_RESET,
   TIME_RESET_ALL,
@@ -63,6 +65,22 @@ export function deleteTask(id) {
   return {
     type: TASK_REMOVE,
     id
+  };
+}
+
+export function newSubtask(taskId, content) {
+  return {
+    type: SUBTASK_ADD,
+    id: taskId,
+    content
+  };
+}
+
+export function deleteSubtask(taskId, index) {
+  return {
+    type: SUBTASK_REMOVE,
+    id: taskId,
+    index
   };
 }
 
