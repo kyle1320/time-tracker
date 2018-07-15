@@ -37,6 +37,10 @@ class SubtaskList extends Component {
 
     this.props.onCreate(this.inputField.current.value);
     this.inputField.current.value = "";
+
+    this.setState({
+      isExpanded: true
+    });
   }
 
   onInputKey = (event) => {
