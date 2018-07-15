@@ -132,10 +132,6 @@ class TaskHeader extends Component {
     }));
   }
 
-  handleFocus = (event) => {
-    event.target.select();
-  }
-
   render() {
     return (
       <div className="task-header-container">
@@ -155,8 +151,7 @@ class TaskHeader extends Component {
                       value={this.props.task.name}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
-                      onClick={noSelect}
-                      onFocus={this.handleFocus} />
+                      onClick={noSelect} />
                     <textarea
                       name="detail"
                       ref={this.detailField}
@@ -165,8 +160,7 @@ class TaskHeader extends Component {
                       value={this.props.task.detail}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
-                      onClick={noSelect}
-                      onFocus={this.handleFocus} />
+                      onClick={noSelect} />
                   </div>
                 : <div className="task-header-details">
                     <div className="task-name">
