@@ -92,6 +92,9 @@
 }
 
 .subtask-list-new .add-subtask-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #CCC;
   color: white;
   padding: 5px 10px;
