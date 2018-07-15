@@ -105,10 +105,14 @@
   flex-flow: row nowrap;
   align-items: baseline;
   font-size: 1.3em;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .task-header .task-detail {
   margin-top: 3px;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .task-header .task-time {
