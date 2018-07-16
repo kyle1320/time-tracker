@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 import './SummaryDialog.css';
 
@@ -27,16 +27,31 @@ class SummaryDialog extends Component {
           </div>
           <div className="summary-dialog-content">
             {this.props.tasks
-              .filter(task => task.time >= 60000)
+              .filter(task => {
+                return task.time >= 60000 ||
+                       task.completedSubtasks.length > 0
+              })
               .map(task =>
                 <div className="summary-dialog-task-item" key={task.id}>
-                  <div className="summary-dialog-task-name">
-                    {task.name}
+                  <div className="summary-dialog-task-header">
+                    <div className="summary-dialog-task-name">
+                      {task.name}
+                    </div>
+                    <div className="summary-dialog-task-separator"></div>
+                    <div className={"summary-dialog-task-time" +
+                        (task.time < 60000 ? " inactive" : "")
+                    }>
+                      {formatTime('?(%h hours, )%m minutes', task.time)}
+                    </div>
                   </div>
-                  <div className="summary-dialog-task-separator"></div>
-                  <div className="summary-dialog-task-time">
-                    {formatTime('?(%h hours, )%m minutes', task.time)}
-                  </div>
+                  {task.completedSubtasks.map((subtask, index) => (
+                    <div key={index} className="summary-dialog-subtask">
+                      <IconWrapper
+                        icon={faCheck}
+                        className="subtask-check" />
+                      <div>{subtask.content}</div>
+                    </div>
+                  ))}
                 </div>
             )}
           </div>
