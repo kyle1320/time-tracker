@@ -16,9 +16,11 @@ function process(str) {
 
   e.g. "ABC 123" would be ordered after "ABC 89"
 */
-export default function compare(a, b) {
+export default function compare(a, b, reverse) {
   var aParts = process(a);
   var bParts = process(b);
+
+  var order = reverse ? -1 : 1;
 
   for (var i = 0; i < aParts.length && i < bParts.length; i++) {
     var x = aParts[i];
@@ -31,8 +33,8 @@ export default function compare(a, b) {
       cmp = x - y;
     }
 
-    if (cmp) return cmp;
+    if (cmp) return cmp * order;
   }
 
-  return aParts.length - bParts.length;
+  return (aParts.length - bParts.length) * order;
 }

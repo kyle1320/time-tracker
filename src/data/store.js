@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 
 import timeTracker from './timeTracker';
-import { upgrade } from './actions';
+import { pageLoad } from './actions';
 import { CURRENT_VERSION } from './version';
 
 const DEFAULT_STATE = {
@@ -10,6 +10,7 @@ const DEFAULT_STATE = {
   nextTaskId: 0,
   editTaskId: -1,
   themeColor: 'purple',
+  tasksSorted: false,
   tasks: [],
   version: CURRENT_VERSION
 };
@@ -17,7 +18,7 @@ const DEFAULT_STATE = {
 const STORAGE_KEY = 'savedState';
 
 function loadState() {
-  var state = window.localStorage.getItem(STORAGE_KEY)
+  var state = window.localStorage.getItem(STORAGE_KEY);
 
   try {
     state = JSON.parse(state);
@@ -38,6 +39,6 @@ store.subscribe(() => {
   saveState(store.getState());
 });
 
-store.dispatch(upgrade());
+store.dispatch(pageLoad());
 
 export default store;

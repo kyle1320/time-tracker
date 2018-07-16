@@ -16,7 +16,7 @@ import {
   TIME_ADD,
   SORT_NAME,
   THEME_SET,
-  STATE_UPGRADE} from './action-constants';
+  PAGE_LOAD } from './action-constants';
 import customCompare from './customCompare';
 import { upgradeVersion } from './version';
 
@@ -133,7 +133,7 @@ function tasks(state, action) {
     case SORT_NAME:
       return state
         .map(t => task(t, action))
-        .sort((a, b) => customCompare(a.name, b.name))
+        .sort((a, b) => customCompare(a.name, b.name, action.reverse))
     default:
       return state.map(t => task(t, action));
   }
@@ -195,10 +195,27 @@ function themeColor(state, action) {
   }
 }
 
-export default function timeTracker(state, action) {
+function tasksSorted(state, action) {
+  switch (action.type) {
+    case TASK_ADD:
+    /* falls through */
+    case TASK_REMOVE:
+    /* falls through */
+    case TASK_MOVE:
+      return false;
+    case SORT_NAME:
+      return !action.reverse;
+    default:
+      return state;
+  }
+}
 
-  if (action.type === STATE_UPGRADE) {
-    return upgradeVersion(state);
+export default function timeTracker(state, action) {
+  if (action.type === PAGE_LOAD) {
+    var newState = upgradeVersion(state);
+    newState.tasksSorted = false;
+
+    return newState;
   }
 
   // TODO: this is bad practice...
@@ -218,5 +235,6 @@ export default function timeTracker(state, action) {
     lastTickTime: lastTickTime(state.lastTickTime, action),
     editTaskId: editTaskId(state.editTaskId, action),
     themeColor: themeColor(state.themeColor, action),
+    tasksSorted: tasksSorted(state.tasksSorted, action)
   };
 }

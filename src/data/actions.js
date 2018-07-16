@@ -14,7 +14,7 @@ import {
   TIME_ADD,
   SORT_NAME,
   THEME_SET,
-  STATE_UPGRADE } from "./action-constants";
+  PAGE_LOAD } from "./action-constants";
 
 export function tick() {
   return {
@@ -111,9 +111,10 @@ export function cancelEdit() {
   };
 }
 
-export function sortName() {
+export function sortName(reverse) {
   return {
-    type: SORT_NAME
+    type: SORT_NAME,
+    reverse
   };
 }
 
@@ -124,8 +125,8 @@ export function setTheme(color) {
   };
 }
 
-export function upgrade() {
+export function pageLoad() {
   return {
-    type: STATE_UPGRADE
+    type: PAGE_LOAD
   };
 }

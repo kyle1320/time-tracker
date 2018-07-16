@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   faPlusSquare,
-  faSortAlphaDown } from '@fortawesome/free-solid-svg-icons'
+  faSortAlphaDown,
+  faSortAlphaUp } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
 
 import './TaskToolbar.css';
@@ -10,10 +11,14 @@ import './TaskToolbar.css';
 import { newTask, resetAll, sortName } from '../data/actions';
 import IconWrapper from './IconWrapper';
 
+const mapStateToProps = state => ({
+  sorted: state.tasksSorted
+});
+
 const mapDispatchToProps = dispatch => ({
   triggerNewTask:  () => dispatch(newTask()),
   triggerResetAll: () => dispatch(resetAll()),
-  triggerSortName: () => dispatch(sortName())
+  triggerSortName: (reverse) => dispatch(sortName(reverse))
 });
 
 class TaskToolbar extends Component {
@@ -21,6 +26,10 @@ class TaskToolbar extends Component {
     if (window.confirm("Are you sure you want to reset all tasks?")) {
       this.props.triggerResetAll();
     }
+  }
+
+  onSort = () => {
+    this.props.triggerSortName(this.props.sorted);
   }
 
   render() {
@@ -34,10 +43,10 @@ class TaskToolbar extends Component {
             title="New Task"
             onClick={this.props.triggerNewTask} />
           <IconWrapper
-            icon={faSortAlphaDown}
+            icon={this.props.sorted ? faSortAlphaUp : faSortAlphaDown}
             className="task-toolbar-btn sort"
             title="Sort Tasks by Name"
-            onClick={this.props.triggerSortName} />
+            onClick={this.onSort} />
           <IconWrapper
             icon={faCalendarCheck}
             className="task-toolbar-btn end-day"
@@ -50,6 +59,6 @@ class TaskToolbar extends Component {
 }
 
 export default connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps
 )(TaskToolbar);
