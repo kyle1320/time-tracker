@@ -8,7 +8,7 @@ import SummaryDialog from './components/SummaryDialog';
 import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-import { deselect, resetAll } from './data/actions';
+import { wrapupDay } from './data/actions';
 import { colorNameToHex } from './utils/color';
 
 const mapStateToProps = state => ({
@@ -41,8 +41,7 @@ class App extends Component {
   }
 
   endDay() {
-    this.props.dispatch(deselect());
-    this.props.dispatch(resetAll());
+    this.props.dispatch(wrapupDay());
     this.closeSummary();
   }
 

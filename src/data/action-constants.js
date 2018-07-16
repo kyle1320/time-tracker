@@ -14,9 +14,10 @@ export const SUBTASK_REMOVE = 'SUBTASK_REMOVE';
 //   and cleared immediately afterward.
 export const EDIT_CLEAR = 'EDIT_CLEAR';
 
-export const TIME_RESET     = 'TIME_RESET';
-export const TIME_RESET_ALL = 'TIME_RESET_ALL';
-export const TIME_ADD       = 'TIME_ADD';
+export const TIME_RESET = 'TIME_RESET';
+export const TIME_ADD   = 'TIME_ADD';
+
+export const WRAP_UP = 'WRAP_UP';
 
 export const SORT_NAME = 'SORT_NAME';
 

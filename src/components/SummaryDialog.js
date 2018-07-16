@@ -4,16 +4,11 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import './SummaryDialog.css';
 
-import { resetAll } from '../data/actions';
 import { formatTime } from '../utils/time';
 import IconWrapper from './IconWrapper';
 
 const mapStateToProps = (state) => ({
   tasks: state.tasks
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onReset: () => dispatch(resetAll())
 });
 
 class SummaryDialog extends Component {
@@ -60,5 +55,5 @@ class SummaryDialog extends Component {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  undefined
 )(SummaryDialog);

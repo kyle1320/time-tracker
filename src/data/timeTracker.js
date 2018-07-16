@@ -12,8 +12,8 @@ import {
   SUBTASK_REMOVE,
   EDIT_CLEAR,
   TIME_RESET,
-  TIME_RESET_ALL,
   TIME_ADD,
+  WRAP_UP,
   SORT_NAME,
   THEME_SET,
   PAGE_LOAD } from './action-constants';
@@ -60,10 +60,11 @@ function task(state, action) {
         };
       else
         return state;
-    case TIME_RESET_ALL:
+    case WRAP_UP:
       return {
         ...state,
-        time: 0
+        time: 0,
+        completedSubtasks: []
       };
     case TIME_ADD:
       if (state.id === action.id)
@@ -84,11 +85,13 @@ function task(state, action) {
     case SUBTASK_REMOVE:
       if (state.id === action.id) {
         var newSubtasks = state.subtasks.slice();
-        newSubtasks.splice(action.index, 1);
+        var newCompletedSubtasks =
+          state.completedSubtasks.concat(newSubtasks.splice(action.index, 1));
 
         return {
           ...state,
-          subtasks: newSubtasks
+          subtasks: newSubtasks,
+          completedSubtasks: newCompletedSubtasks
         };
       } else
         return state;
@@ -109,7 +112,8 @@ function createTask(action) {
     time: 0,
     ...action.data,
     id: action._newId,
-    subtasks: []
+    subtasks: [],
+    completedSubtasks: []
   };
 }
 
@@ -143,6 +147,7 @@ function selectedTask(state, action) {
   switch (action.type) {
     case TASK_SELECT:
       return action.id
+    case WRAP_UP:
     case TASK_DESELECT:
       return -1;
     default:
@@ -154,7 +159,7 @@ function lastTickTime(state, action) {
   switch (action.type) {
     case TASK_TICK:
     case TASK_SELECT:
-    case TIME_RESET_ALL:
+    case WRAP_UP:
       return action._time;
     case TIME_RESET:
       if (action.id === action._selectedId)
@@ -198,9 +203,7 @@ function themeColor(state, action) {
 function tasksSorted(state, action) {
   switch (action.type) {
     case TASK_ADD:
-    /* falls through */
     case TASK_REMOVE:
-    /* falls through */
     case TASK_MOVE:
       return false;
     case SORT_NAME:

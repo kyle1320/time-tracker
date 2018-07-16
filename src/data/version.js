@@ -1,4 +1,4 @@
-export const CURRENT_VERSION = 2;
+export const CURRENT_VERSION = 3;
 
 export function upgradeVersion(state) {
   switch (state.version) {
@@ -25,6 +25,17 @@ export function upgradeVersion(state) {
         ...state,
         tasksSorted: false,
         version: 2
+      };
+
+    /* falls through */
+    case 2:
+      state = {
+        ...state,
+        tasks: state.tasks.map(task => ({
+          ...task,
+          completedSubtasks: []
+        })),
+        version: 3
       };
 
     /* falls through */

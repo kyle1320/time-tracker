@@ -8,7 +8,7 @@ import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
 
 import './TaskToolbar.css';
 
-import { newTask, resetAll, sortName } from '../data/actions';
+import { newTask, sortName } from '../data/actions';
 import IconWrapper from './IconWrapper';
 
 const mapStateToProps = state => ({
@@ -17,17 +17,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   triggerNewTask:  () => dispatch(newTask()),
-  triggerResetAll: () => dispatch(resetAll()),
   triggerSortName: (reverse) => dispatch(sortName(reverse))
 });
 
 class TaskToolbar extends Component {
-  onResetAll = () => {
-    if (window.confirm("Are you sure you want to reset all tasks?")) {
-      this.props.triggerResetAll();
-    }
-  }
-
   onSort = () => {
     this.props.triggerSortName(this.props.sorted);
   }

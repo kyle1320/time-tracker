@@ -10,8 +10,8 @@ import {
   SUBTASK_REMOVE,
   EDIT_CLEAR,
   TIME_RESET,
-  TIME_RESET_ALL,
   TIME_ADD,
+  WRAP_UP,
   SORT_NAME,
   THEME_SET,
   PAGE_LOAD } from "./action-constants";
@@ -91,9 +91,9 @@ export function reset(id) {
   };
 }
 
-export function resetAll() {
+export function wrapupDay() {
   return {
-    type: TIME_RESET_ALL
+    type: WRAP_UP
   };
 }
 
