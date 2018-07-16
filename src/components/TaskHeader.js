@@ -147,6 +147,7 @@ class TaskHeader extends Component {
                     <input
                       name="name"
                       ref={this.nameField}
+                      size="1"
                       className="task-name"
                       placeholder="Add a Title"
                       value={this.props.task.name}
@@ -156,6 +157,7 @@ class TaskHeader extends Component {
                     <textarea
                       name="detail"
                       ref={this.detailField}
+                      size="1"
                       className="task-detail"
                       placeholder="Add a Description"
                       value={this.props.task.detail}

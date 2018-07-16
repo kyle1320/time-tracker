@@ -83,6 +83,7 @@
 
 .task-header-container input, .task-header-container textarea {
   font-size: 1em;
+  min-width: 0;
   font: inherit;
   color: inherit;
 }
