@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   faPencilAlt,
+  faHourglassHalf,
   faPlus,
   faMinus} from '@fortawesome/free-solid-svg-icons'
 import { SortableHandle } from 'react-sortable-hoc';
@@ -177,7 +178,12 @@ class TaskHeader extends Component {
                   </div>
               }
               <div className="task-time">
-                {formatTime("?(%hh )%mm", this.props.task.time)}
+                {this.props.isSelected &&
+                  <IconWrapper
+                    icon={faHourglassHalf}
+                    className="icon-running" />
+                }
+                <div>{formatTime("?(%hh )%mm", this.props.task.time)}</div>
               </div>
               <div className="task-time-buttons">
                 <HoldableButton
