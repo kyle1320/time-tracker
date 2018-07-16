@@ -81,8 +81,7 @@
   border-top: 1px solid #eeeeee;
 }
 
-.task-header input, .task-header textarea {
-  width: 100%;
+.task-header-container input, .task-header-container textarea {
   font-size: 1em;
   font: inherit;
   color: inherit;
