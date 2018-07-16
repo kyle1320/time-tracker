@@ -4,10 +4,12 @@ import {
   faAngleUp,
   faAngleDown,
   faCheck} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './SubtaskList.css';
 
-import IconWrapper from './IconWrapper';
+import Button from './buttons/Button';
+import IconButton from './buttons/IconButton';
 import { newSubtask, deleteSubtask } from '../data/actions';
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -59,10 +61,22 @@ class SubtaskList extends Component {
 
     return (
       <div className={containerClass}>
+        <Button className="subtask-list-btn" onClick={this.toggle}>
+          {this.state.isExpanded
+            ? <React.Fragment>
+                <FontAwesomeIcon className="icon" icon={faAngleUp}/>
+                Hide Subtasks
+              </React.Fragment>
+            : <React.Fragment>
+                <FontAwesomeIcon className="icon" icon={faAngleDown}/>
+                Show Subtasks ({this.props.subtasks.length})
+              </React.Fragment>
+          }
+        </Button>
         <div className="subtask-list">
           {this.props.subtasks.map((subtask, index) => (
             <div className="subtask" key={index}> {/* TODO: use IDs */}
-              <IconWrapper
+              <IconButton
                 icon={faCheck}
                 title="Complete Subtask"
                 className="complete-subtask-btn"
@@ -77,24 +91,10 @@ class SubtaskList extends Component {
                 onKeyDown={this.onInputKey}
                 required="required"
                 placeholder="Add a Subtask..." />
-              <div
+              <Button
                 className="add-subtask-btn"
-                onClick={this.onCreate}>Add Subtask</div>
+                onClick={this.onCreate}>Add Subtask</Button>
             </div>
-          }
-        </div>
-        <div className="subtask-list-btn" onClick={this.toggle}>
-          {this.state.isExpanded
-            ? <React.Fragment>
-                <IconWrapper
-                  icon={faAngleUp} />
-                Hide Subtasks
-              </React.Fragment>
-            : <React.Fragment>
-                <IconWrapper
-                  icon={faAngleDown} />
-                Show Subtasks ({this.props.subtasks.length})
-              </React.Fragment>
           }
         </div>
       </div>

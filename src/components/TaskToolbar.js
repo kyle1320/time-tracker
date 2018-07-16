@@ -9,7 +9,7 @@ import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
 import './TaskToolbar.css';
 
 import { newTask, sortName } from '../data/actions';
-import IconWrapper from './IconWrapper';
+import IconButton from './buttons/IconButton';
 
 const mapStateToProps = state => ({
   sorted: state.tasksSorted
@@ -30,17 +30,17 @@ class TaskToolbar extends Component {
       <div className="task-toolbar">
         <div className="title">Time Tracker</div>
         <div className="button-container">
-          <IconWrapper
+          <IconButton
             icon={faPlusSquare}
             className="task-toolbar-btn add"
             title="New Task"
             onClick={this.props.triggerNewTask} />
-          <IconWrapper
+          <IconButton
             icon={this.props.sorted ? faSortAlphaUp : faSortAlphaDown}
             className="task-toolbar-btn sort"
             title="Sort Tasks by Name"
             onClick={this.onSort} />
-          <IconWrapper
+          <IconButton
             icon={faCalendarCheck}
             className="task-toolbar-btn end-day"
             title="Wrap-up Day"

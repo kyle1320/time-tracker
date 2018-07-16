@@ -26,16 +26,12 @@
 }
 
 .task-toolbar-btn {
-  border: none;
-  background: none;
-  outline: none;
   color: #03A9F4;
   background-color: white;
   border-bottom: 2px solid #CCC;
   font-size: 18px;
   font-weight: bold;
   padding: 10px 20px;
-  cursor: pointer;
   margin: 5px;
   border-radius: 5px;
 }

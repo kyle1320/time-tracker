@@ -48,7 +48,7 @@
   color: #1976D2;
 }
 
-.subtask-list-btn .icon-wrapper {
+.subtask-list-btn .icon {
   margin-right: 5px;
 }
 
@@ -103,6 +103,7 @@
   font-size: 10px;
   font-weight: bold;
   border-radius: 0 5px 5px 0;
+  pointer-events: none;
 }
 
 .subtask-list-new input:valid + .add-subtask-btn {

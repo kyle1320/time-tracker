@@ -5,7 +5,8 @@ import {
   faHourglassHalf,
   faPlus,
   faMinus} from '@fortawesome/free-solid-svg-icons'
-import { SortableHandle } from 'react-sortable-hoc';
+  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+  import { SortableHandle } from 'react-sortable-hoc';
 
 import './TaskHeader.css';
 
@@ -18,7 +19,8 @@ import {
   deleteTask,
   addTime,
   cancelEdit } from '../data/actions';
-import IconWrapper from './IconWrapper';
+import Button from './buttons/Button';
+import IconButton from './buttons/IconButton';
 import SubtaskList from './SubtaskList';
 import pressAndHold from './pressAndHold';
 import { formatTime } from '../utils/time';
@@ -40,7 +42,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   cancelEdit:  ()     => dispatch(cancelEdit())
 });
 
-const HoldableButton = pressAndHold(IconWrapper, 80, 500);
+const HoldableButton = pressAndHold(IconButton, 80, 500);
 
 const SortableHandleItem = SortableHandle(() => (
   <div className="task-header-handle" title="Drag to Reorder"></div>
@@ -168,7 +170,7 @@ class TaskHeader extends Component {
                 : <div className="task-header-details">
                     <div className="task-name">
                       <div>{this.props.task.name}</div>
-                      <IconWrapper
+                      <IconButton
                           icon={faPencilAlt}
                           onClick={this.toggleEditing}
                           title="Edit Task"
@@ -181,7 +183,7 @@ class TaskHeader extends Component {
               }
               <div className="task-time">
                 {this.props.isSelected &&
-                  <IconWrapper
+                  <FontAwesomeIcon
                     icon={faHourglassHalf}
                     className="icon-running" />
                 }
@@ -204,18 +206,18 @@ class TaskHeader extends Component {
             </div>
             {this.state.isEditing &&
               <div className="task-header-buttons">
-                <div
+                <Button
                     onClick={this.toggleEditing}
                     title="Stop Editing"
-                    className="button icon-save" >Save</div>
-                <div
+                    className="button icon-save" >Save</Button>
+                <Button
                   onClick={this.props.onReset}
                   title="Reset Task"
-                  className="button icon-reset" >Reset</div>
-                <div
+                  className="button icon-reset" >Reset</Button>
+                <Button
                   onClick={this.onDelete}
                   title="Delete Task"
-                  className="button icon-trash" >Delete</div>
+                  className="button icon-trash" >Delete</Button>
               </div>
             }
           </div>

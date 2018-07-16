@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './Footer.css';
 
 import ColorChooser from './ColorChooser';
-import IconWrapper from './IconWrapper';
 
 class Footer extends Component {
   render() {
     return (
       <div className="footer">
         <a
-            className="github-link"
+            className="icon-button github-link"
             title="GitHub"
             target="_blank"
             rel="noopener noreferrer"
             href="https://www.github.com/kyle1320/time-tracker">
-          <IconWrapper icon={faGithub} />
+          <FontAwesomeIcon icon={faGithub} />
         </a>
         <ColorChooser />
       </div>

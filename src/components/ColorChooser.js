@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import './ColorChooser.css';
 
+import Button from './buttons/Button';
 import { setTheme } from '../data/actions';
 import { colorNameToHex } from '../utils/color';
 
@@ -11,7 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const ColorItem = ({onChange, color}) => (
-  <div
+  <Button
     className="color-item"
     style={{backgroundColor: colorNameToHex(color)}}
     onClick={onChange(color)} />

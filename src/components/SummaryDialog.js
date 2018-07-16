@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './SummaryDialog.css';
 
+import Button from './buttons/Button';
+import IconButton from './buttons/IconButton';
 import { formatTime } from '../utils/time';
-import IconWrapper from './IconWrapper';
 
 const mapStateToProps = (state) => ({
   tasks: state.tasks
@@ -19,7 +21,7 @@ class SummaryDialog extends Component {
         <div className="summary-dialog">
           <div className="summary-dialog-header">
             <div className="summary-dialog-title">Daily Summary</div>
-            <IconWrapper
+            <IconButton
               icon={faTimes}
               onClick={this.props.onClose}
               title="Close"
@@ -46,7 +48,7 @@ class SummaryDialog extends Component {
                   </div>
                   {task.completedSubtasks.map((subtask, index) => (
                     <div key={index} className="summary-dialog-subtask">
-                      <IconWrapper
+                      <FontAwesomeIcon
                         icon={faCheck}
                         className="subtask-check" />
                       <div>{subtask.content}</div>
@@ -56,11 +58,11 @@ class SummaryDialog extends Component {
             )}
           </div>
           <div className="summary-dialog-footer">
-            <div
+            <Button
                 className="summary-dialog-footer-button"
                 onClick={this.props.onEndDay}>
               Wrap-up Day & Reset Tasks
-            </div>
+            </Button>
           </div>
         </div>
       </div>
