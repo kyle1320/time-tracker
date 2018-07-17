@@ -107,8 +107,6 @@ class TaskHeader extends Component {
   }
 
   onEdit = (event) => {
-    noSelect(event);
-
     this.setState({
       isEditing: true,
       name: this.props.task.name,
@@ -214,13 +212,11 @@ class TaskHeader extends Component {
                 <HoldableButton
                   icon={faPlus}
                   onTrigger={this.props.onIncrement}
-                  onClick={noSelect}
                   title="Add a Minute"
                   className="button icon-plus-time" />
                 <HoldableButton
                   icon={faMinus}
                   onTrigger={this.props.onDecrement}
-                  onClick={noSelect}
                   title="Subtract a Minute"
                   className="button icon-minus-time" />
               </div>
