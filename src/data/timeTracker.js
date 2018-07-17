@@ -27,7 +27,6 @@ function task(state, action) {
 
   switch (action.type) {
     case TASK_SELECT:
-    /* falls through */
     case TASK_DESELECT:
       if (state.id === action._selectedId)
         return {
@@ -36,6 +35,7 @@ function task(state, action) {
         };
       else
         return state;
+    case PAGE_LOAD:
     case TASK_TICK:
       if (state.id === action._selectedId)
         return {
@@ -109,11 +109,13 @@ function createSubtask(action) {
 
 function createTask(action) {
   return {
+    name: '',
+    detail: '',
     time: 0,
-    ...action.data,
     id: action._newId,
     subtasks: [],
-    completedSubtasks: []
+    completedSubtasks: [],
+    ...action.data
   };
 }
 
@@ -126,8 +128,6 @@ function tasks(state, action) {
       ];
     case TASK_REMOVE:
       return state.filter(t => t.id !== action.id);
-    case TASK_SELECT:
-      return state.map(t => task(t, action))
     case TASK_MOVE:
       return arrayMove(
         state.map(t => task(t, action)),
@@ -158,6 +158,7 @@ function selectedTask(state, action) {
 function lastTickTime(state, action) {
   switch (action.type) {
     case TASK_TICK:
+    case PAGE_LOAD:
     case TASK_SELECT:
     case WRAP_UP:
       return action._time;
@@ -202,6 +203,7 @@ function themeColor(state, action) {
 
 function tasksSorted(state, action) {
   switch (action.type) {
+    case PAGE_LOAD:
     case TASK_ADD:
     case TASK_REMOVE:
     case TASK_MOVE:
@@ -215,10 +217,7 @@ function tasksSorted(state, action) {
 
 export default function timeTracker(state, action) {
   if (action.type === PAGE_LOAD) {
-    var newState = upgradeVersion(state);
-    newState.tasksSorted = false;
-
-    return newState;
+    state = upgradeVersion(state);
   }
 
   // TODO: this is bad practice...
