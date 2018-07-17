@@ -17,28 +17,57 @@ const DEFAULT_STATE = {
 
 const STORAGE_KEY = 'savedState';
 
-function loadState() {
-  var state = window.localStorage.getItem(STORAGE_KEY);
+export default (function() {
+  var lastSaveTime = 0;
 
-  try {
-    state = JSON.parse(state);
-  } catch (e) {
-    state = undefined;
+  function loadState() {
+    var state = window.localStorage.getItem(STORAGE_KEY);
+  
+    try {
+      state = JSON.parse(state);
+    } catch (e) {
+      console.log(e);
+      state = undefined;
+    }
+    
+    lastSaveTime = +new Date();
+  
+    return state || DEFAULT_STATE;
   }
 
-  return state || DEFAULT_STATE;
-}
+  function saveState() {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store.getState()));
+    lastSaveTime = +new Date();
+  }
 
-function saveState(state) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+  const startSaveTimeout = (function () {
+    var timeoutId = null;
+    
+    return () => {
+      var timeSinceLastSave = (+new Date()) - lastSaveTime;
 
-const store = createStore(timeTracker, loadState());
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
 
-store.subscribe(() => {
-  saveState(store.getState());
-});
+      // Save immediately if updates are infrequent
+      // Also prevents blocking caused by high-frequency changes
+      if (timeSinceLastSave > 10000) {
+        saveState();
+        return;
+      }
 
-store.dispatch(pageLoad());
+      timeoutId = setTimeout(saveState, 1000);
+    }
+  }());
+  
+  const store = createStore(timeTracker, loadState());
 
-export default store;
+  store.subscribe(startSaveTimeout);
+
+  store.dispatch(pageLoad());
+
+  window.addEventListener("beforeunload", saveState);
+  
+  return store;
+}());
