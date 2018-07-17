@@ -150,6 +150,14 @@
   color: #03A9F4;
 }
 
+.task-header .icon-reset {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+  padding: 8px 5px 8px 8px;
+  margin-left: -8px;
+}
+
 .task-header .icon-edit {
   font-size: 15px;
   width: 15px;
@@ -160,7 +168,7 @@
 }
 
 .task-header-buttons .button {
-  padding: 5px 10px;
+  padding: 6px 10px;
   border-right: 1px solid #eeeeee;
   text-transform: uppercase;
   letter-spacing: .03em;
@@ -179,7 +187,8 @@
 }
 
 .icon-trash:hover {
-  color: #F44336;
+  background-color: #F44336;
+  color: white;
 }
 
 .icon-reset:hover {
@@ -200,6 +209,7 @@
 }
 
 .task-header .icon-cancel {
-  background-color: #F44336;
-  color: white;
+  color: #F44336;
+  padding: 5px 9px;
+  border: 1px solid currentColor !important;
 }

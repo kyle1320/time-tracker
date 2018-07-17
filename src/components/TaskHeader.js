@@ -4,7 +4,8 @@ import {
   faPencilAlt,
   faHourglassHalf,
   faPlus,
-  faMinus} from '@fortawesome/free-solid-svg-icons'
+  faMinus,
+  faHistory } from '@fortawesome/free-solid-svg-icons'
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { SortableHandle } from 'react-sortable-hoc';
 
@@ -196,10 +197,16 @@ class TaskHeader extends Component {
                   </div>
               }
               <div className="task-time">
-                {this.props.isSelected &&
-                  <FontAwesomeIcon
-                    icon={faHourglassHalf}
-                    className="icon-running" />
+                {this.state.isEditing
+                  ? <IconButton
+                      icon={faHistory}
+                      onClick={this.props.onReset}
+                      title="Reset Task"
+                      className="button icon-reset" />
+                  : (this.props.isSelected &&
+                    <FontAwesomeIcon
+                      icon={faHourglassHalf}
+                      className="icon-running" />)
                 }
                 <div>{formatTime("?(%hh )%mm", this.props.task.time)}</div>
               </div>
@@ -224,19 +231,15 @@ class TaskHeader extends Component {
                   onClick={this.onSave}
                   title="Save Changes"
                   className="button icon-save" >Save</Button>
-                <Button
-                  onClick={this.props.onReset}
-                  title="Reset Task"
-                  className="button icon-reset" >Reset</Button>
-                <Button
-                  onClick={this.onDelete}
-                  title="Delete Task"
-                  className="button icon-trash" >Delete</Button>
                 <div className="button-divider" />
                 <Button
                   onClick={this.onCancelEdit}
                   title="Undo Changes"
                   className="button icon-cancel" >Cancel</Button>
+                <Button
+                  onClick={this.onDelete}
+                  title="Delete Task"
+                  className="button icon-trash" >Delete</Button>
               </div>
             }
           </div>
