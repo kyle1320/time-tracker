@@ -16,7 +16,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTick: () => dispatch(tick())
+  onTick:   () => dispatch(tick()),
+  onEndDay: () => dispatch(wrapupDay())
 });
 
 class App extends Component {
@@ -51,7 +52,7 @@ class App extends Component {
   }
 
   endDay() {
-    this.props.dispatch(wrapupDay());
+    this.props.onEndDay();
     this.closeSummary();
   }
 
