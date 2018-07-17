@@ -96,7 +96,7 @@ class TaskHeader extends Component {
     if (this.props.isSelected) {
       this.timer = setTimeout(
         this.props.onTick,
-        1001 - (this.props.task.time % 1000)
+        60050 - (this.props.task.time % 60000)
       );
     }
   }

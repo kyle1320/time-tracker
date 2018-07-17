@@ -8,11 +8,15 @@ import SummaryDialog from './components/SummaryDialog';
 import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-import { wrapupDay } from './data/actions';
+import { wrapupDay, tick } from './data/actions';
 import { colorNameToHex } from './utils/color';
 
 const mapStateToProps = state => ({
   themeColor: colorNameToHex(state.themeColor)
+});
+
+const mapDispatchToProps = dispatch => ({
+  onTick: () => dispatch(tick())
 });
 
 class App extends Component {
@@ -30,10 +34,16 @@ class App extends Component {
 
   componentDidMount() {
     this.updateTheme();
+
+    window.addEventListener("focus", this.props.onTick);
   }
 
   componentDidUpdate() {
     this.updateTheme();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("focus", this.props.onTick);
   }
 
   updateTheme() {
@@ -79,5 +89,5 @@ class App extends Component {
 
 export default connect(
   mapStateToProps,
-  undefined
+  mapDispatchToProps
 )(App);
