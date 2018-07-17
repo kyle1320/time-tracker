@@ -21,22 +21,11 @@ import customCompare from './customCompare';
 import { upgradeVersion } from './version';
 
 function task(state, action) {
-  if (!state) {
-    return state;
-  }
-
   switch (action.type) {
-    case TASK_SELECT:
-    case TASK_DESELECT:
-      if (state.id === action._selectedId)
-        return {
-          ...state,
-          time: state.time + action._delta
-        };
-      else
-        return state;
     case PAGE_LOAD:
     case TASK_TICK:
+    case TASK_SELECT:
+    case TASK_DESELECT:
       if (state.id === action._selectedId)
         return {
           ...state,
@@ -137,7 +126,7 @@ function tasks(state, action) {
     case SORT_NAME:
       return state
         .map(t => task(t, action))
-        .sort((a, b) => customCompare(a.name, b.name, action.reverse))
+        .sort((a, b) => customCompare(a.name, b.name, action.reverse));
     default:
       return state.map(t => task(t, action));
   }
@@ -146,7 +135,7 @@ function tasks(state, action) {
 function selectedTask(state, action) {
   switch (action.type) {
     case TASK_SELECT:
-      return action.id
+      return action.id;
     case WRAP_UP:
     case TASK_DESELECT:
       return -1;
@@ -157,9 +146,10 @@ function selectedTask(state, action) {
 
 function lastTickTime(state, action) {
   switch (action.type) {
-    case TASK_TICK:
     case PAGE_LOAD:
+    case TASK_TICK:
     case TASK_SELECT:
+    case TASK_DESELECT:
     case WRAP_UP:
       return action._time;
     case TIME_RESET:
