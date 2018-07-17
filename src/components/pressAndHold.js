@@ -22,9 +22,6 @@ export default function pressAndHold(
 
       this.tickInterval = null;
       this.delayTimeout = null;
-      this.preventClickTimeout = null;
-
-      this.preventClick = false;
     }
 
     tick = (event) => {
@@ -42,20 +39,7 @@ export default function pressAndHold(
         this.delayTimeout = null;
       }
 
-      if (this.preventClickTimeout) {
-        clearTimeout(this.preventClickTimeout);
-        this.preventClickTimeout = null;
-        this.preventClick = false;
-      }
-
-      if (event) {
-        this.preventClick = true;
-        this.preventClickTimeout = setTimeout(() => {
-          this.preventClick = false;
-        }, 100);
-
-        event.preventDefault();
-      }
+      event && event.preventDefault();
     }
 
     start = (event) => {
@@ -74,12 +58,6 @@ export default function pressAndHold(
       }, initialDelay);
     }
 
-    onClick = (event) => {
-      if (!this.preventClick) {
-        this.tick(event);
-      }
-    }
-
     componentWillUnmount() {
       this.stop();
     }
@@ -93,8 +71,6 @@ export default function pressAndHold(
       joinFunc(newProps, 'onTouchStart',  this.start);
       joinFunc(newProps, 'onTouchEnd',    this.stop);
       joinFunc(newProps, 'onTouchCancel', this.stop);
-
-      joinFunc(newProps, 'onClick',       this.onClick);
 
       delete newProps.onTrigger;
 
