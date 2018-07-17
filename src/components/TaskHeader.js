@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   onSelect:    ()     => dispatch(select(props.task.id)),
   onDeselect:  ()     => dispatch(deselect()),
   onTick:      ()     => dispatch(tick()),
-  onChange:    (data) => dispatch(update(props.task.id, data)),
+  onSave:      (data) => dispatch(update(props.task.id, data)),
   onReset:     ()     => dispatch(reset(props.task.id)),
   onDelete:    ()     => dispatch(deleteTask(props.task.id)),
   onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
@@ -102,7 +102,30 @@ class TaskHeader extends Component {
   }
 
   onChange = (event) => {
-    this.props.onChange({[event.target.name]: event.target.value});
+    this.setState({[event.target.name]: event.target.value});
+  }
+
+  onEdit = (event) => {
+    noSelect(event);
+
+    this.setState({
+      isEditing: true,
+      name: this.props.task.name,
+      detail: this.props.task.detail
+    });
+  }
+
+  onCancelEdit = () => {
+    this.setState({ isEditing: false });
+  }
+
+  onSave = () => {
+    this.props.onSave({
+      name: this.state.name,
+      detail: this.state.detail
+    });
+
+    this.setState({ isEditing: false });
   }
 
   onInputKey = (event) => {
@@ -126,15 +149,6 @@ class TaskHeader extends Component {
     }
   }
 
-  toggleEditing = (event) => {
-    noSelect(event);
-
-    this.setState(state => ({
-      ...state,
-      isEditing: !state.isEditing
-    }));
-  }
-
   render() {
     return (
       <div className="task-header-container">
@@ -152,7 +166,7 @@ class TaskHeader extends Component {
                       size="1"
                       className="task-name"
                       placeholder="Add a Title"
-                      value={this.props.task.name}
+                      value={this.state.name}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
                       onClick={noSelect} />
@@ -162,7 +176,7 @@ class TaskHeader extends Component {
                       size="1"
                       className="task-detail"
                       placeholder="Add a Description"
-                      value={this.props.task.detail}
+                      value={this.state.detail}
                       onChange={this.onChange}
                       onKeyDown={this.onInputKey}
                       onClick={noSelect} />
@@ -172,7 +186,7 @@ class TaskHeader extends Component {
                       <div>{this.props.task.name}</div>
                       <IconButton
                           icon={faPencilAlt}
-                          onClick={this.toggleEditing}
+                          onClick={this.onEdit}
                           title="Edit Task"
                           className="button icon-edit" />
                     </div>
@@ -207,9 +221,9 @@ class TaskHeader extends Component {
             {this.state.isEditing &&
               <div className="task-header-buttons">
                 <Button
-                    onClick={this.toggleEditing}
-                    title="Stop Editing"
-                    className="button icon-save" >Save</Button>
+                  onClick={this.onSave}
+                  title="Save Changes"
+                  className="button icon-save" >Save</Button>
                 <Button
                   onClick={this.props.onReset}
                   title="Reset Task"
@@ -218,6 +232,11 @@ class TaskHeader extends Component {
                   onClick={this.onDelete}
                   title="Delete Task"
                   className="button icon-trash" >Delete</Button>
+                <div className="button-divider" />
+                <Button
+                  onClick={this.onCancelEdit}
+                  title="Undo Changes"
+                  className="button icon-cancel" >Cancel</Button>
               </div>
             }
           </div>
