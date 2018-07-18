@@ -68,9 +68,7 @@ class TaskHeader extends Component {
   componentDidMount() {
     if (this.props.shouldEdit) {
       this.props.cancelEdit();
-      this.setState({
-        isEditing: true
-      });
+      this.onEdit();
     }
 
     this.scheduleTick();
@@ -129,9 +127,7 @@ class TaskHeader extends Component {
 
   onInputKey = (event) => {
     if (event.keyCode === 13) {
-      this.setState({
-        isEditing: false
-      });
+      this.onSave();
     }
   }
 
