@@ -12,7 +12,7 @@ export const SUBTASK_REMOVE = 'SUBTASK_REMOVE';
 // clears the id set when a new task is created.
 //   this id is used to select the new task for editing,
 //   and cleared immediately afterward.
-export const EDIT_CLEAR = 'EDIT_CLEAR';
+export const CLEAR_NEW_TASK = 'CLEAR_NEW_TASK';
 
 export const TIME_RESET = 'TIME_RESET';
 export const TIME_ADD   = 'TIME_ADD';

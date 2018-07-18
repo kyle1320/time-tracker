@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
   selectedTask: -1,
   lastTickTime: -1,
   nextTaskId: 0,
-  editTaskId: -1,
+  newTaskId: -1,
   themeColor: 'purple',
   tasksSorted: false,
   tasks: [],
@@ -22,16 +22,16 @@ export default (function() {
 
   function loadState() {
     var state = window.localStorage.getItem(STORAGE_KEY);
-  
+
     try {
       state = JSON.parse(state);
     } catch (e) {
       console.log(e);
       state = undefined;
     }
-    
+
     lastSaveTime = +new Date();
-  
+
     return state || DEFAULT_STATE;
   }
 
@@ -42,7 +42,7 @@ export default (function() {
 
   const startSaveTimeout = (function () {
     var timeoutId = null;
-    
+
     return () => {
       var timeSinceLastSave = (+new Date()) - lastSaveTime;
 
@@ -60,7 +60,7 @@ export default (function() {
       timeoutId = setTimeout(saveState, 1000);
     }
   }());
-  
+
   const store = createStore(timeTracker, loadState());
 
   store.subscribe(startSaveTimeout);
@@ -68,6 +68,6 @@ export default (function() {
   store.dispatch(pageLoad());
 
   window.addEventListener("beforeunload", saveState);
-  
+
   return store;
 }());

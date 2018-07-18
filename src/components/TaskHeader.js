@@ -19,7 +19,7 @@ import {
   reset,
   deleteTask,
   addTime,
-  cancelEdit } from '../data/actions';
+  clearNewTask } from '../data/actions';
 import Button from './buttons/Button';
 import IconButton from './buttons/IconButton';
 import SubtaskList from './SubtaskList';
@@ -28,19 +28,19 @@ import { formatTime } from '../utils/time';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
-  shouldEdit: (state.editTaskId   === props.task.id)
+  isNewTask:  (state.newTaskId    === props.task.id)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onSelect:    ()     => dispatch(select(props.task.id)),
-  onDeselect:  ()     => dispatch(deselect()),
-  onTick:      ()     => dispatch(tick()),
-  onSave:      (data) => dispatch(update(props.task.id, data)),
-  onReset:     ()     => dispatch(reset(props.task.id)),
-  onDelete:    ()     => dispatch(deleteTask(props.task.id)),
-  onIncrement: ()     => dispatch(addTime(props.task.id, 60000)),
-  onDecrement: ()     => dispatch(addTime(props.task.id, -60000)),
-  cancelEdit:  ()     => dispatch(cancelEdit())
+  onSelect:     ()     => dispatch(select(props.task.id)),
+  onDeselect:   ()     => dispatch(deselect()),
+  onTick:       ()     => dispatch(tick()),
+  onSave:       (data) => dispatch(update(props.task.id, data)),
+  onReset:      ()     => dispatch(reset(props.task.id)),
+  onDelete:     ()     => dispatch(deleteTask(props.task.id)),
+  onIncrement:  ()     => dispatch(addTime(props.task.id, 60000)),
+  onDecrement:  ()     => dispatch(addTime(props.task.id, -60000)),
+  clearNewTask: ()     => dispatch(clearNewTask())
 });
 
 const HoldableButton = pressAndHold(IconButton, 80, 500);
@@ -66,8 +66,8 @@ class TaskHeader extends Component {
   }
 
   componentDidMount() {
-    if (this.props.shouldEdit) {
-      this.props.cancelEdit();
+    if (this.props.isNewTask) {
+      this.props.clearNewTask();
       this.onEdit();
     }
 

@@ -8,7 +8,7 @@ import {
   TASK_MOVE,
   SUBTASK_ADD,
   SUBTASK_REMOVE,
-  EDIT_CLEAR,
+  CLEAR_NEW_TASK,
   TIME_RESET,
   TIME_ADD,
   WRAP_UP,
@@ -105,9 +105,9 @@ export function addTime(id, delta) {
   };
 }
 
-export function cancelEdit() {
+export function clearNewTask() {
   return {
-    type: EDIT_CLEAR
+    type: CLEAR_NEW_TASK
   };
 }
 

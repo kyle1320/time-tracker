@@ -10,7 +10,7 @@ import {
   TASK_MOVE,
   SUBTASK_ADD,
   SUBTASK_REMOVE,
-  EDIT_CLEAR,
+  CLEAR_NEW_TASK,
   TIME_RESET,
   TIME_ADD,
   WRAP_UP,
@@ -171,11 +171,11 @@ function nextTaskId(state, action) {
   }
 }
 
-function editTaskId(state, action) {
+function newTaskId(state, action) {
   switch (action.type) {
     case TASK_ADD:
       return action._newId;
-    case EDIT_CLEAR:
+    case CLEAR_NEW_TASK:
       return -1;
     default:
       return state;
@@ -225,7 +225,7 @@ export default function timeTracker(state, action) {
     selectedTask: selectedTask(state.selectedTask, action),
     nextTaskId: nextTaskId(state.nextTaskId, action),
     lastTickTime: lastTickTime(state.lastTickTime, action),
-    editTaskId: editTaskId(state.editTaskId, action),
+    newTaskId: newTaskId(state.newTaskId, action),
     themeColor: themeColor(state.themeColor, action),
     tasksSorted: tasksSorted(state.tasksSorted, action)
   };
