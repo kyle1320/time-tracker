@@ -54,11 +54,26 @@
   flex-grow: 1;
 }
 
+.summary-dialog-project-name {
+  font-weight: bold;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #808080;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.summary-dialog-project-name:first-child {
+  margin-top: 0;
+}
+
+.summary-dialog-project-name ~ .summary-dialog-task-item {
+  margin-left: 15px;
+}
+
 .summary-dialog-task-item {
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
-  width: 100%;
   padding-bottom: 10px;
 }
 

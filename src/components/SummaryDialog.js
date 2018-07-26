@@ -29,32 +29,45 @@ class SummaryDialog extends Component {
           </div>
           <div className="summary-dialog-content">
             {this.props.tasks
-              .filter(task => {
-                return task.time >= 60000 ||
-                       task.completedSubtasks.length > 0
+              .filter(item => {
+                return item.isProject ||
+                        (
+                          item.time >= 60000 ||
+                          item.completedSubtasks.length > 0
+                        )
               })
-              .map(task =>
-                <div className="summary-dialog-task-item" key={task.id}>
-                  <div className="summary-dialog-task-header">
-                    <div className="summary-dialog-task-name">
-                      {task.name}
-                    </div>
-                    <div className="summary-dialog-task-separator"></div>
-                    <div className={"summary-dialog-task-time" +
-                        (task.time < 60000 ? " inactive" : "")
-                    }>
-                      {formatTime('?(%h hours, )%m minutes', task.time)}
-                    </div>
+              .filter((item, index, arr) => {
+                return !item.isProject ||
+                        (
+                          index < arr.length - 1 &&
+                          !arr[index + 1].isProject
+                        )
+              })
+              .map(item => item.isProject
+                ? <div className="summary-dialog-project-name" key={item.id}>
+                    {item.name}
                   </div>
-                  {task.completedSubtasks.map((subtask, index) => (
-                    <div key={index} className="summary-dialog-subtask">
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        className="subtask-check" />
-                      <div>{subtask.content}</div>
+                : <div className="summary-dialog-task-item" key={item.id}>
+                    <div className="summary-dialog-task-header">
+                      <div className="summary-dialog-task-name">
+                        {item.name}
+                      </div>
+                      <div className="summary-dialog-task-separator"></div>
+                      <div className={"summary-dialog-task-time" +
+                          (item.time < 60000 ? " inactive" : "")
+                      }>
+                        {formatTime('?(%h hours, )%m minutes', item.time)}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    {item.completedSubtasks.map((subtask, index) => (
+                      <div key={index} className="summary-dialog-subtask">
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          className="subtask-check" />
+                        <div>{subtask.content}</div>
+                      </div>
+                    ))}
+                  </div>
             )}
           </div>
           <div className="summary-dialog-footer">

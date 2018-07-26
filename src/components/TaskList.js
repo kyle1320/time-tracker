@@ -5,10 +5,12 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import './TaskList.css';
 
 import TaskHeader from './TaskHeader';
+import ProjectHeader from './ProjectHeader';
 import { move } from '../data/actions';
 
 const mapStateToProps = state => ({
-  tasks: state.tasks
+  tasks: state.tasks,
+  selectedTask: state.selectedTask
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,16 +18,31 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const SortableItem = SortableElement(TaskHeader);
+const SortableProjectHeader = SortableElement(ProjectHeader)
 
-const SortableList = SortableContainer(({tasks}) => {
+const SortableList = SortableContainer(({selectedTask, tasks}) => {
   return (
     <div className="task-list">
-      {tasks.map((task, index) =>
-        <SortableItem
-          task={task}
-          key={task.id}
-          index={index} />
-      )}
+      {tasks.reduce((agg, item, index) => {
+        if (item.isProject) {
+          agg.ignoreTask = item.isHidden
+        } else if (agg.ignoreTask && item.id !== selectedTask) {
+          return agg;
+        }
+
+        agg.elements.push(item.isProject
+          ? <SortableProjectHeader
+              project={item}
+              key={item.id}
+              index={index} />
+          : <SortableItem
+              task={item}
+              key={item.id}
+              index={index} />
+        );
+
+        return agg;
+      }, {elements: [], ignoreTask: false}).elements}
     </div>
   );
 });
@@ -43,6 +60,7 @@ class TaskList extends Component {
         </div>
       : <SortableList
           tasks={this.props.tasks}
+          selectedTask={this.props.selectedTask}
           onSortStart={this.onSortStart}
           onSortEnd={this.props.onSortEnd}
           lockAxis="y"

@@ -9,6 +9,10 @@ export const TASK_MOVE     = 'TASK_MOVE';
 export const SUBTASK_ADD    = 'SUBTASK_ADD';
 export const SUBTASK_REMOVE = 'SUBTASK_REMOVE';
 
+export const PROJECT_ADD = 'PROJECT_ADD';
+export const PROJECT_UPDATE = 'PROJECT_EDIT';
+export const PROJECT_REMOVE = 'PROJECT_REMOVE';
+
 // clears the id set when a new task is created.
 //   this id is used to select the new task for editing,
 //   and cleared immediately afterward.

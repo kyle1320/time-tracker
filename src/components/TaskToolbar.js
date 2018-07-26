@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  faPlusSquare,
-  faSortAlphaDown,
-  faSortAlphaUp } from '@fortawesome/free-solid-svg-icons'
-import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck, faFolder } from '@fortawesome/free-regular-svg-icons'
 
 import './TaskToolbar.css';
 
-import { newTask, sortName } from '../data/actions';
+import { newTask, sortName, newProject } from '../data/actions';
 import IconButton from './buttons/IconButton';
 
 const mapStateToProps = state => ({
@@ -16,8 +13,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  triggerNewTask:  () => dispatch(newTask()),
-  triggerSortName: (reverse) => dispatch(sortName(reverse))
+  triggerNewTask:    () => dispatch(newTask()),
+  triggerNewProject: () => dispatch(newProject()),
+  triggerSortName:   (reverse) => dispatch(sortName(reverse))
 });
 
 class TaskToolbar extends Component {
@@ -36,10 +34,10 @@ class TaskToolbar extends Component {
             title="New Task"
             onClick={this.props.triggerNewTask} />
           <IconButton
-            icon={this.props.sorted ? faSortAlphaUp : faSortAlphaDown}
-            className="task-toolbar-btn sort"
-            title="Sort Tasks by Name"
-            onClick={this.onSort} />
+            icon={faFolder}
+            className="task-toolbar-btn add-project"
+            title="New Project"
+            onClick={this.props.triggerNewProject} />
           <IconButton
             icon={faCalendarCheck}
             className="task-toolbar-btn end-day"

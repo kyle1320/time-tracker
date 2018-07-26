@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
   selectedTask: -1,
   lastTickTime: -1,
   nextTaskId: 0,
-  newTaskId: -1,
+  newItemId: -1,
   themeColor: 'purple',
   tasksSorted: false,
   tasks: [],

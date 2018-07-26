@@ -1,0 +1,53 @@
+.project-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 15px 0 5px;
+  min-height: 32px;
+  background-color: white;
+  border-left: 10px solid #1976D2;
+}
+
+.project-header.hidden {
+  border-left-color: #FFC107;
+}
+
+.project-header-name, input.project-header-name {
+  font-family: 'Open Sans';
+  font-size: 22px;
+  letter-spacing: .03em;
+  flex-grow: 1;
+  padding-bottom: 1px;
+}
+
+.project-header-button-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.project-header-btn {
+  color: #AAA;
+  font-size: 16px;
+  margin: 0 0 0 10px;
+  padding: 3px;
+}
+
+.project-header-btn.btn-edit:hover {
+  color: #1976D2;
+}
+
+.project-header-btn.btn-hide:hover, .project-header.hidden .btn-hide {
+  color: #FFC107;
+}
+
+.project-header-btn.btn-delete:hover {
+  color: #F44336;
+}
+
+.project-header ~ .task-header-container {
+  margin-left: 10px;
+}

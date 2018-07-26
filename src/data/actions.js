@@ -8,6 +8,9 @@ import {
   TASK_MOVE,
   SUBTASK_ADD,
   SUBTASK_REMOVE,
+  PROJECT_ADD,
+  PROJECT_UPDATE,
+  PROJECT_REMOVE,
   CLEAR_NEW_TASK,
   TIME_RESET,
   TIME_ADD,
@@ -81,6 +84,30 @@ export function deleteSubtask(taskId, index) {
     type: SUBTASK_REMOVE,
     id: taskId,
     index
+  };
+}
+
+export function newProject() {
+  return {
+    type: PROJECT_ADD,
+    data: {
+      name: "New Project"
+    }
+  };
+}
+
+export function updateProject(projectId, data) {
+  return {
+    type: PROJECT_UPDATE,
+    id: projectId,
+    data
+  };
+}
+
+export function deleteProject(projectId) {
+  return {
+    type: PROJECT_REMOVE,
+    id: projectId
   };
 }
 

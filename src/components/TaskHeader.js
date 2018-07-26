@@ -28,7 +28,7 @@ import { formatTime } from '../utils/time';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
-  isNewTask:  (state.newTaskId    === props.task.id)
+  isNewTask:  (state.newItemId    === props.task.id)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
