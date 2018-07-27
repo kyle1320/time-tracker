@@ -5,24 +5,15 @@ import { faCalendarCheck, faFolder } from '@fortawesome/free-regular-svg-icons'
 
 import './TaskToolbar.css';
 
-import { newTask, sortName, newProject } from '../data/actions';
+import { newTask, newProject } from '../data/actions';
 import IconButton from './buttons/IconButton';
-
-const mapStateToProps = state => ({
-  sorted: state.tasksSorted
-});
 
 const mapDispatchToProps = dispatch => ({
   triggerNewTask:    () => dispatch(newTask()),
-  triggerNewProject: () => dispatch(newProject()),
-  triggerSortName:   (reverse) => dispatch(sortName(reverse))
+  triggerNewProject: () => dispatch(newProject())
 });
 
 class TaskToolbar extends Component {
-  onSort = () => {
-    this.props.triggerSortName(this.props.sorted);
-  }
-
   render() {
     return (
       <div className="task-toolbar">
@@ -50,6 +41,6 @@ class TaskToolbar extends Component {
 }
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(TaskToolbar);

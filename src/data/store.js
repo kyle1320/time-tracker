@@ -5,12 +5,10 @@ import { pageLoad } from './actions';
 import { CURRENT_VERSION } from './version';
 
 const DEFAULT_STATE = {
-  selectedTask: -1,
+  selectedTask: null,
   lastTickTime: -1,
-  nextTaskId: 0,
-  newItemId: -1,
+  newItemId: null,
   themeColor: 'purple',
-  tasksSorted: false,
   tasks: [],
   version: CURRENT_VERSION
 };
@@ -68,6 +66,14 @@ export default (function() {
   store.dispatch(pageLoad());
 
   window.addEventListener("beforeunload", saveState);
+
+  window.resetAllAppData = function() {
+    if (window.confirm("This will delete all data, forever. Are you sure?")) {
+      window.removeEventListener("beforeunload", saveState);
+      delete localStorage[STORAGE_KEY];
+      window.location.reload();
+    }
+  };
 
   return store;
 }());

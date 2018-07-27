@@ -1,4 +1,4 @@
-export const CURRENT_VERSION = 5;
+export const CURRENT_VERSION = 6;
 
 export function upgradeVersion(state) {
   switch (state.version) {
@@ -53,6 +53,11 @@ export function upgradeVersion(state) {
         newItemId: state.newTaskId
       };
       delete state.newTaskId;
+
+    /* falls through */
+    case 5:
+      delete state.tasksSorted;
+      delete state.nextTaskId;
 
     /* falls through */
     case CURRENT_VERSION:

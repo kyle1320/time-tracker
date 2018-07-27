@@ -17,10 +17,8 @@ import {
   TIME_RESET,
   TIME_ADD,
   WRAP_UP,
-  SORT_NAME,
   THEME_SET,
   PAGE_LOAD } from './action-constants';
-import customCompare from './customCompare';
 import { upgradeVersion } from './version';
 
 function task(state, action) {
@@ -37,15 +35,15 @@ function task(state, action) {
       else
         return state;
     case TASK_UPDATE:
-      if (state.id === action.id)
+      if (state.id === action.payload.id)
         return {
           ...state,
-          ...action.data
+          ...action.payload
         };
       else
         return state;
     case TIME_RESET:
-      if (state.id === action.id)
+      if (state.id === action.payload.id)
         return {
           ...state,
           time: 0
@@ -59,15 +57,15 @@ function task(state, action) {
         completedSubtasks: []
       };
     case TIME_ADD:
-      if (state.id === action.id)
+      if (state.id === action.payload.id)
         return {
           ...state,
-          time: Math.max(0, state.time + action.delta)
+          time: Math.max(0, state.time + action.payload.delta)
         };
       else
         return state;
     case SUBTASK_ADD:
-      if (state.id === action.id)
+      if (state.id === action.payload.id)
         return {
           ...state,
           subtasks: [...state.subtasks, createSubtask(action)]
@@ -75,10 +73,10 @@ function task(state, action) {
       else
         return state;
     case SUBTASK_REMOVE:
-      if (state.id === action.id) {
+      if (state.id === action.payload.id) {
         var newSubtasks = state.subtasks.slice();
         var newCompletedSubtasks =
-          state.completedSubtasks.concat(newSubtasks.splice(action.index, 1));
+          state.completedSubtasks.concat(newSubtasks.splice(action.payload.index, 1));
 
         return {
           ...state,
@@ -95,10 +93,10 @@ function task(state, action) {
 function project(state, action) {
   switch (action.type) {
     case PROJECT_UPDATE:
-      if (state.id === action.id)
+      if (state.id === action.payload.id)
         return {
           ...state,
-          ...action.data
+          ...action.payload
         };
       else
         return state;
@@ -115,8 +113,8 @@ function taskOrProject(state, action) {
 
 function createSubtask(action) {
   return {
-    time: action._time,
-    content: action.content
+    time: action.time,
+    content: action.payload.content
   };
 }
 
@@ -125,10 +123,10 @@ function createTask(action) {
     name: '',
     detail: '',
     time: 0,
-    id: action._newId,
+    id: 0,
     subtasks: [],
     completedSubtasks: [],
-    ...action.data
+    ...action.payload
   };
 }
 
@@ -137,8 +135,8 @@ function createProject(action) {
     name: '',
     isProject: true,
     isHidden: false,
-    id: action._newId,
-    ...action.data
+    id: 0,
+    ...action.payload
   };
 }
 
@@ -155,7 +153,7 @@ function tasks(state, action) {
         createProject(action)
       ];
     case TASK_REMOVE:
-      return state.filter(t => t.id !== action.id);
+      return state.filter(t => t.id !== action.payload.id);
     case PROJECT_REMOVE:
       var relocatedTasks = [];
       var lastUnsortedIndex = 0;
@@ -165,7 +163,7 @@ function tasks(state, action) {
         if (!haveSeenAnyProject) lastUnsortedIndex = index;
         if (item.isProject) haveSeenAnyProject = true;
 
-        if (item.id === action.id) {
+        if (item.id === action.payload.id) {
           relocateTasks = true;
         } else if (item.isProject) {
           relocateTasks = false;
@@ -185,13 +183,9 @@ function tasks(state, action) {
     case TASK_MOVE:
       return arrayMove(
         state.map(t => taskOrProject(t, action)),
-        action.oldIndex,
-        action.newIndex
+        action.payload.oldIndex,
+        action.payload.newIndex
       );
-    case SORT_NAME:
-      return state
-        .map(t => taskOrProject(t, action))
-        .sort((a, b) => customCompare(a.name, b.name, action.reverse));
     default:
       return state.map(t => taskOrProject(t, action));
   }
@@ -200,10 +194,10 @@ function tasks(state, action) {
 function selectedTask(state, action) {
   switch (action.type) {
     case TASK_SELECT:
-      return action.id;
+      return action.payload.id;
     case WRAP_UP:
     case TASK_DESELECT:
-      return -1;
+      return null;
     default:
       return state;
   }
@@ -216,22 +210,12 @@ function lastTickTime(state, action) {
     case TASK_SELECT:
     case TASK_DESELECT:
     case WRAP_UP:
-      return action._time;
+      return action.time;
     case TIME_RESET:
-      if (action.id === action._selectedId)
-        return action._time;
+      if (action.payload.id === action._selectedId)
+        return action.time;
       else
         return state;
-    default:
-      return state;
-  }
-}
-
-function nextTaskId(state, action) {
-  switch (action.type) {
-    case PROJECT_ADD:
-    case TASK_ADD:
-      return state + 1;
     default:
       return state;
   }
@@ -241,9 +225,9 @@ function newItemId(state, action) {
   switch (action.type) {
     case PROJECT_ADD:
     case TASK_ADD:
-      return action._newId;
+      return action.payload.id || null;
     case CLEAR_NEW_TASK:
-      return -1;
+      return null;
     default:
       return state;
   }
@@ -252,21 +236,7 @@ function newItemId(state, action) {
 function themeColor(state, action) {
   switch (action.type) {
     case THEME_SET:
-      return action.color;
-    default:
-      return state;
-  }
-}
-
-function tasksSorted(state, action) {
-  switch (action.type) {
-    case PAGE_LOAD:
-    case TASK_ADD:
-    case TASK_REMOVE:
-    case TASK_MOVE:
-      return false;
-    case SORT_NAME:
-      return !action.reverse;
+      return action.payload.color;
     default:
       return state;
   }
@@ -277,23 +247,17 @@ export default function timeTracker(state, action) {
     state = upgradeVersion(state);
   }
 
-  // TODO: this is bad practice...
-  action._time = +new Date();
-
   action._selectedId = state.selectedTask;
-  action._newId = state.nextTaskId;
   action._delta = state.lastTickTime && state.lastTickTime > 0
-               ? action._time - state.lastTickTime
+               ? action.time - state.lastTickTime
                : 0;
 
   return {
     ...state,
     tasks: tasks(state.tasks, action),
     selectedTask: selectedTask(state.selectedTask, action),
-    nextTaskId: nextTaskId(state.nextTaskId, action),
     lastTickTime: lastTickTime(state.lastTickTime, action),
     newItemId: newItemId(state.newItemId, action),
-    themeColor: themeColor(state.themeColor, action),
-    tasksSorted: tasksSorted(state.tasksSorted, action)
+    themeColor: themeColor(state.themeColor, action)
   };
 }

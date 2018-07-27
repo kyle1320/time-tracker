@@ -23,8 +23,6 @@ export const TIME_ADD   = 'TIME_ADD';
 
 export const WRAP_UP = 'WRAP_UP';
 
-export const SORT_NAME = 'SORT_NAME';
-
 export const THEME_SET = 'THEME_SET';
 
 export const PAGE_LOAD = 'PAGE_LOAD';
