@@ -8,7 +8,7 @@ import SummaryDialog from './components/SummaryDialog';
 import TaskToolbar from './components/TaskToolbar';
 import TaskList from './components/TaskList';
 import Footer from './components/Footer';
-import { wrapupDay, tick } from './data/actions';
+import { wrapupDay, tick, undo, redo } from './data/actions';
 import { colorNameToHex } from './utils/color';
 import { Toasts, ToastContext } from './components/Toasts';
 
@@ -18,7 +18,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onTick:   () => dispatch(tick()),
-  onEndDay: () => dispatch(wrapupDay())
+  onEndDay: () => dispatch(wrapupDay()),
+  onUndo:   () => dispatch(undo()),
+  onRedo:   () => dispatch(redo())
 });
 
 class App extends Component {
@@ -40,6 +42,7 @@ class App extends Component {
     this.updateTheme();
 
     window.addEventListener("focus", this.props.onTick);
+    window.addEventListener("keydown", this.onKeyDown);
   }
 
   componentDidUpdate() {
@@ -48,10 +51,34 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("focus", this.props.onTick);
+    window.removeEventListener("keydown", this.onKeyDown);
   }
 
   updateTheme() {
     document.body.style.backgroundColor = this.props.themeColor;
+  }
+
+  onKeyDown = (event) => {
+    if (!(event.ctrlKey || event.metaKey)) return;
+
+    switch (event.key) {
+      case "z":
+        if (event.shiftKey) {
+          this.props.onRedo();
+        } else {
+          this.props.onUndo();
+        }
+        break;
+      case "Z":
+      case "y":
+        this.props.onRedo();
+        break;
+      default:
+        return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   endDay() {
