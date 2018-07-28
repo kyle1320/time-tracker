@@ -27,7 +27,8 @@ export default class History {
     past = state.past.concat({
       state: present,
       action: action,
-      time: this.currTime++
+      time: this.currTime++,
+      silent: false
     });
     present = this.step(present, action);
     future = [];
@@ -49,6 +50,27 @@ export default class History {
     return {past, present, future};
   }
 
+  // action will be saved, but not undoable.
+  // Does not reset future history.
+  // Useful for permanent actions that have no effect on historical state
+  silent(state, action) {
+    var {past, present, future} = state;
+
+    past = state.past.concat({
+      state: present,
+      action: action,
+      time: this.currTime++,
+      silent: true
+    });
+    present = this.step(present, action);
+
+    if (past.length > this.limit) {
+      past = past.slice(-this.limit);
+    }
+
+    return {past, present, future};
+  }
+
   // action has no effect on history
   ignore(state, action) {
     var {past, present, future} = state;
@@ -58,13 +80,12 @@ export default class History {
     return {past, present, future};
   }
 
-  // undo a specific event matching the given predicate
-  undo(state, predicate) {
-    var eventIndex = predicate
-      ? findLastIndex(state.past, (event) => {
-          return predicate(event.action);
-        })
-      : state.past.length - 1;
+  // undo a specific event matching the given predicate,
+  // or the last (non-silent) event if no predicate is given
+  undo(state, predicate = () => true) {
+    var eventIndex = findLastIndex(state.past, (event) => {
+      return !event.silent && predicate(event.action);
+    });
 
     if (eventIndex < 0) return state;
 
@@ -76,12 +97,12 @@ export default class History {
     // replay subsequent events
     for (var i = eventIndex + 1; i < state.past.length; i++) {
       var action = state.past[i].action;
-      var time = state.past[i].time;
 
       past.push({
         state: present,
         action: action,
-        time: time
+        time: state.past[i].time,
+        silent: state.past[i].silent
       });
 
       present = this.step(present, action);
@@ -112,12 +133,12 @@ export default class History {
     // replay subsequent events
     for (var i = index; i < past.length; i++) {
       var action = past[i].action;
-      var time = past[i].time;
 
       past[i] = {
         state: present,
         action: action,
-        time: time
+        time: past[i].time,
+        silent: past[i].silent
       };
 
       present = this.step(present, action);

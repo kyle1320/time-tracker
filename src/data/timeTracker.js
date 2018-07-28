@@ -296,12 +296,17 @@ export default function(state, action) {
     case TASK_UPDATE:
     case PROJECT_UPDATE:
     case TASK_MOVE:
-      return history.record(state, action);
-    case TASK_TICK:
+    case WRAP_UP:
+    case TIME_RESET:
     case TASK_SELECT:
     case TASK_DESELECT:
-    case CLEAR_NEW_TASK:
+      return history.record(state, action);
     case THEME_SET:
+    case TIME_ADD:
+      return history.silent(state, action);
+    case CLEAR_NEW_TASK:
+    case TASK_TICK:
+    case PAGE_LOAD:
       return history.ignore(state, action);
     default:
      return history.norecord(state, action);

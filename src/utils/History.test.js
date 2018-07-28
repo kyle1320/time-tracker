@@ -119,6 +119,60 @@ it("can undo a specific action", () => {
   expect(state.future.length).toBe(0);
 });
 
+it("correctly applies norecord events", () => {
+  var h = new History(reducer);
+  var state = History.wrap(0);
+
+  state = h.record(state, makeAction('add', 3));
+  state = h.record(state, makeAction('add', 2));
+  state = h.norecord(state, makeAction('reset'));
+  expect(History.unwrap(state)).toBe(0);
+  expect(state.past.length).toBe(2);
+  expect(state.future.length).toBe(0);
+
+  state = h.undo(state);
+  expect(History.unwrap(state)).toBe(3);
+  expect(state.past.length).toBe(1);
+  expect(state.future.length).toBe(1);
+
+  state = h.norecord(state, makeAction('add', 1));
+  expect(History.unwrap(state)).toBe(4);
+  expect(state.past.length).toBe(1);
+  expect(state.future.length).toBe(0);
+});
+
+it("correctly applies silent events", () => {
+  var h = new History(reducer);
+  var state = History.wrap(0);
+
+  state = h.record(state, makeAction('add', 3));
+  state = h.record(state, makeAction('add', 2));
+  state = h.silent(state, makeAction('add', 1));
+  expect(History.unwrap(state)).toBe(6);
+  expect(state.past.length).toBe(3);
+  expect(state.future.length).toBe(0);
+
+  state = h.undo(state);
+  expect(History.unwrap(state)).toBe(4);
+  expect(state.past.length).toBe(2);
+  expect(state.future.length).toBe(1);
+
+  state = h.undo(state);
+  expect(History.unwrap(state)).toBe(1);
+  expect(state.past.length).toBe(1);
+  expect(state.future.length).toBe(2);
+
+  state = h.undo(state);
+  expect(History.unwrap(state)).toBe(1);
+  expect(state.past.length).toBe(1);
+  expect(state.future.length).toBe(2);
+
+  state = h.redo(state);
+  expect(History.unwrap(state)).toBe(4);
+  expect(state.past.length).toBe(2);
+  expect(state.future.length).toBe(1);
+});
+
 it("has a limit on the number of recorded events", () => {
   var h = new History(reducer, 4);
   var state = History.wrap(0);
