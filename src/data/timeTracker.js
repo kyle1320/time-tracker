@@ -22,6 +22,7 @@ import {
   UNDO,
   REDO } from './action-constants';
 import { upgradeVersion } from './version';
+import findIndex from '../utils/findIndex';
 
 function task(state, action) {
   switch (action.type) {
@@ -42,7 +43,7 @@ function task(state, action) {
       if (state.id === action.payload.id)
         return {
           ...state,
-          ...action.payload
+          ...action.payload.data
         };
       else
         return state;
@@ -100,7 +101,7 @@ function project(state, action) {
       if (state.id === action.payload.id)
         return {
           ...state,
-          ...action.payload
+          ...action.payload.data
         };
       else
         return state;
@@ -130,7 +131,7 @@ function createTask(action) {
     id: 0,
     subtasks: [],
     completedSubtasks: [],
-    ...action.payload
+    ...action.payload.data
   };
 }
 
@@ -140,17 +141,19 @@ function createProject(action) {
     isProject: true,
     isHidden: false,
     id: 0,
-    ...action.payload
+    ...action.payload.data
   };
 }
 
 function tasks(state, action) {
   switch (action.type) {
     case TASK_ADD:
-      return [
-        createTask(action),
-        ...state.map(t => taskOrProject(t, action))
-      ];
+      var insertIndex = findIndex(state, x => x.id === action.payload.after) + 1;
+      var newState = state.map(t => taskOrProject(t, action));
+
+      newState.splice(insertIndex, 0, createTask(action));
+
+      return newState;
     case PROJECT_ADD:
       return [
         ...state.map(t => taskOrProject(t, action)),
@@ -231,7 +234,7 @@ function newItemId(state, action) {
   switch (action.type) {
     case PROJECT_ADD:
     case TASK_ADD:
-      return action.payload.id || null;
+      return action.payload.data.id || null;
     case CLEAR_NEW_TASK:
       return null;
     default:

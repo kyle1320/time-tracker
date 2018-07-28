@@ -6,7 +6,9 @@ import {
   faPencilAlt,
   faSave,
   faEyeSlash,
-  faUndo} from '@fortawesome/free-solid-svg-icons';
+  faUndo,
+  faPlusSquare,
+  faTimes} from '@fortawesome/free-solid-svg-icons';
 
 import './ProjectHeader.css';
 
@@ -14,7 +16,8 @@ import {
   deleteProject,
   updateProject,
   clearNewTask,
-  undo } from '../data/actions';
+  undo,
+  newTask} from '../data/actions';
 import IconButton from './buttons/IconButton';
 import { withToasts } from './Toasts';
 
@@ -26,7 +29,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   onDelete: ()     => dispatch(deleteProject(props.project.id)),
   onSave:   (data) => dispatch(updateProject(props.project.id, data)),
   clearNew: ()     => dispatch(clearNewTask()),
-  undo:     ()     => dispatch(undo())
+  undo:     ()     => dispatch(undo()),
+  newTask:  ()     => dispatch(newTask(props.project.id))
 });
 
 class ProjectHeader extends Component {
@@ -100,6 +104,14 @@ class ProjectHeader extends Component {
     });
   }
 
+  newTask = () => {
+    if (this.props.project.isHidden) {
+      this.props.onSave({ isHidden: false });
+    }
+
+    this.props.newTask();
+  }
+
   render() {
     return (
       <div className={"project-header" + (this.props.project.isHidden ? " hidden" : "")}>
@@ -119,21 +131,43 @@ class ProjectHeader extends Component {
         }
 
         <div className="project-header-button-container">
-          <IconButton
-            icon={this.state.isEditing ? faSave : faPencilAlt}
-            className="project-header-btn btn-edit"
-            title={this.state.isEditing ? "Save Project" : "Edit Project"}
-            onClick={this.state.isEditing ? this.onSave : this.onEdit} />
-          <IconButton
-            icon={this.props.project.isHidden ? faEyeSlash : faEye}
-            className="project-header-btn btn-hide"
-            title={this.props.project.isHidden ? "Show Project Tasks" : "Hide Project Tasks"}
-            onClick={this.toggleHidden} />
-          <IconButton
-            icon={faTrash}
-            className="project-header-btn btn-delete"
-            title="Delete Project Header"
-            onClick={this.onDelete} />
+        {this.state.isEditing
+          ? <React.Fragment>
+              <IconButton
+                icon={faSave}
+                className="project-header-btn btn-save"
+                title="Save Project"
+                onClick={this.onSave} />
+              <IconButton
+                icon={faTimes}
+                className="project-header-btn btn-cancel"
+                title="Cancel Changes"
+                onClick={this.onCancelEdit} />
+              <IconButton
+                icon={faTrash}
+                className="project-header-btn btn-delete"
+                title="Delete Project Header"
+                onClick={this.onDelete} />
+            </React.Fragment>
+          : <React.Fragment>
+              <IconButton
+                icon={faPencilAlt}
+                className="project-header-btn btn-edit"
+                title="Edit Project"
+                onClick={this.onEdit} />
+              <IconButton
+                icon={this.props.project.isHidden ? faEyeSlash : faEye}
+                className="project-header-btn btn-hide"
+                title={this.props.project.isHidden ? "Show Project Tasks" : "Hide Project Tasks"}
+                onClick={this.toggleHidden} />
+              <IconButton
+                icon={faPlusSquare}
+                className="project-header-btn btn-add"
+                title="New Task"
+                onClick={this.newTask} />
+            </React.Fragment>
+        }
+
         </div>
       </div>
     );

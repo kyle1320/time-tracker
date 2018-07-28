@@ -36,6 +36,18 @@
   padding: 3px;
 }
 
+.project-header-btn.btn-save {
+  color: #1976D2;
+}
+
+.project-header-btn.btn-cancel {
+  color: #F44336;
+}
+
+.project-header-btn.btn-delete:hover {
+  color: #F44336;
+}
+
 .project-header-btn.btn-edit:hover {
   color: #1976D2;
 }
@@ -44,8 +56,8 @@
   color: #FFC107;
 }
 
-.project-header-btn.btn-delete:hover {
-  color: #F44336;
+.project-header-btn.btn-add:hover {
+  color: #03A9F4;
 }
 
 .project-header ~ .task-header-container {

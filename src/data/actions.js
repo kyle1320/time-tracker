@@ -45,7 +45,7 @@ export function deselect() {
 
 export function update(id, data) {
   return makeAction(TASK_UPDATE, {
-    ...data,
+    data,
     id
   });
 }
@@ -57,11 +57,14 @@ export function move(oldIndex, newIndex) {
   });
 }
 
-export function newTask() {
+export function newTask(afterId) {
   return makeAction(TASK_ADD, {
-    id: uid(),
-    name: "New Task",
-    detail: ""
+    after: afterId,
+    data: {
+      id: uid(),
+      name: "New Task",
+      detail: ""
+    }
   });
 }
 
@@ -87,14 +90,16 @@ export function deleteSubtask(taskId, index) {
 
 export function newProject() {
   return makeAction(PROJECT_ADD, {
-    id: uid(),
-    name: "New Project"
+    data: {
+      id: uid(),
+      name: "New Project"
+    }
   });
 }
 
 export function updateProject(id, data) {
   return makeAction(PROJECT_UPDATE, {
-    ...data,
+    data,
     id
   });
 }
