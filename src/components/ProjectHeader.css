@@ -3,7 +3,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   margin: 15px 0 5px;
   min-height: 32px;
@@ -17,7 +17,8 @@
 
 .project-header-name, input.project-header-name {
   font-family: 'Open Sans';
-  font-size: 22px;
+  font-size: 24px;
+  font-weight: 400;
   letter-spacing: .03em;
   flex-grow: 1;
   padding-bottom: 1px;
@@ -31,9 +32,9 @@
 
 .project-header-btn {
   color: #AAA;
-  font-size: 16px;
-  margin: 0 0 0 10px;
-  padding: 3px;
+  font-size: 18px;
+  margin: 0 0 0 8px;
+  padding: 6px;
 }
 
 .project-header-btn.btn-save {
