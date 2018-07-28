@@ -185,7 +185,16 @@ export class Toasts extends Component {
   }) {
     props.id = this.currentToastId++;
 
-    this.setState(({toasts}) => ({toasts: toasts.concat(props)}));
+    this.setState(({toasts}) => {
+      var newToasts = toasts.concat(props);
+      var limit = +this.props.limit;
+
+      if (limit && newToasts.length > limit) {
+        newToasts = newToasts.slice(-limit);
+      }
+
+      return { toasts: newToasts };
+    });
   }
 
   onDone = (id) => {

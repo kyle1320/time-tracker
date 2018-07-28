@@ -99,7 +99,7 @@ class App extends Component {
               onClose={this.closeSummary}
               onEndDay={this.endDay}/>
           }
-          <Toasts ref={this.toasts} />
+          <Toasts ref={this.toasts} limit={1} />
         </div>
       </ToastContext.Provider>
     );
