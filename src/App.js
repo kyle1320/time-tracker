@@ -71,10 +71,16 @@ class App extends Component {
     });
   }
 
-  createToast = (title, icon, action, actionText) => {
-    this.toasts.current && this.toasts.current.addToast(
-      title, icon, action, actionText
-    );
+  createToast = (props = {
+    title: '',
+    icon: null,
+    action: () => {},
+    actionText: '',
+    actionHoverText: '',
+    visibleTime: 0,
+    fadeOutTime: 0
+  }) => {
+    this.toasts.current && this.toasts.current.addToast(props);
   }
 
   render() {

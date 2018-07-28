@@ -92,12 +92,12 @@ class ProjectHeader extends Component {
 
   onDelete = (event) => {
     this.props.onDelete(event);
-    this.props.createToast(
-      "Deleted " + this.props.project.name,
-      faUndo,
-      this.props.undo,
-      "Undo"
-    );
+    this.props.createToast({
+      title: "Deleted " + this.props.project.name,
+      icon: faUndo,
+      action: this.props.undo,
+      actionText: "Undo"
+    });
   }
 
   render() {

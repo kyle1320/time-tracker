@@ -144,12 +144,12 @@ class TaskHeader extends Component {
 
   onDelete = (event) => {
     this.props.onDelete(event);
-    this.props.createToast(
-      "Deleted " + this.props.task.name,
-      faUndo,
-      this.props.undo,
-      "Undo"
-    );
+    this.props.createToast({
+      title: "Deleted " + this.props.task.name,
+      icon: faUndo,
+      action: this.props.undo,
+      actionText: "Undo"
+    });
   }
 
   render() {

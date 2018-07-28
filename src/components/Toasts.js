@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './Toasts.css';
 
-import IconButton from './buttons/IconButton';
+import Button from './buttons/Button';
 
 const State = {
   NEW: 'NEW',
@@ -12,9 +13,7 @@ const State = {
   FADING_OUT: 'FADING_OUT'
 };
 
-// TODO: make this configurable
-const fadeOutTime = 500;
-
+const defaultFadeOutTime = 1000;
 const defaultVisibleTime = 2500;
 
 class Toast extends Component {
@@ -42,7 +41,7 @@ class Toast extends Component {
         case State.VISIBLE:
           this.setTimer(() => {
             this.setState({state: State.FADING_OUT});
-          }, this.props.visibleTime || defaultVisibleTime);
+          }, this.getVisibleTime());
           break;
         case State.HOVER:
           this.clearTimer();
@@ -50,7 +49,7 @@ class Toast extends Component {
         case State.FADING_OUT:
           this.setTimer(() => {
             this.onDone();
-          }, fadeOutTime);
+          }, this.getFadeOutTime());
           break;
         default:
           this.onDone();
@@ -74,6 +73,14 @@ class Toast extends Component {
     }
   }
 
+  getFadeOutTime() {
+    return +this.props.fadeOutTime || defaultFadeOutTime;
+  }
+
+  getVisibleTime() {
+    return +this.props.visibleTime || defaultVisibleTime;
+  }
+
   getClassName() {
     switch (this.state.state) {
       case State.NEW:
@@ -84,6 +91,22 @@ class Toast extends Component {
       case State.FADING_OUT:
       default:
         return 'toast--hidden';
+    }
+  }
+
+  getStyle() {
+    switch (this.state.state) {
+      case State.FADING_OUT:
+        return {
+          transitionDuration: (this.getFadeOutTime() / 1000) + 's'
+        };
+      case State.NEW:
+      case State.VISIBLE:
+      case State.HOVER:
+      default:
+        return {
+          transitionDuration: '0s'
+        };
     }
   }
 
@@ -108,21 +131,29 @@ class Toast extends Component {
     return (
       <div
           className={"toast " + this.getClassName()}
+          style={this.getStyle()}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}>
         <div className="toast__title">{this.props.title}</div>
-        <div className="toast__action">
-          {this.props.icon
-            ? <IconButton
-                icon={this.props.icon}
-                onClick={this.onAction}
-                title={this.props.actionText} />
-            : <IconButton
-                icon={faTimes}
-                onClick={this.onDone}
-                title="Close" />
-          }
-        </div>
+        {this.props.icon
+          ? <Button
+              className="toast__action"
+              onClick={this.onAction}
+              title={this.props.actionHoverText}>
+              {this.props.actionText &&
+                <div className="toast__action__text">
+                  {this.props.actionText}
+                </div>
+              }
+              <FontAwesomeIcon icon={this.props.icon} />
+            </Button>
+          : <Button
+              className="toast__action"
+              onClick={this.onDone}
+              title="Close">
+              <FontAwesomeIcon icon={faTimes} />
+            </Button>
+        }
       </div>
     );
   }
@@ -139,12 +170,18 @@ export class Toasts extends Component {
     this.currentToastId = 0;
   }
 
-  addToast(title, icon, action, actionText) {
-    const id = this.currentToastId++;
+  addToast(props = {
+    title: '',
+    icon: null,
+    action: () => {},
+    actionText: '',
+    actionHoverText: '',
+    visibleTime: 0,
+    fadeOutTime: 0
+  }) {
+    props.id = this.currentToastId++;
 
-    this.setState(({toasts}) => ({toasts: toasts.concat(
-      {title, icon, action, actionText, id}
-    )}));
+    this.setState(({toasts}) => ({toasts: toasts.concat(props)}));
   }
 
   onDone = (id) => {

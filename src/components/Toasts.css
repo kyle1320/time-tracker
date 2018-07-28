@@ -45,13 +45,27 @@
 
 .toast__action {
   color: #AAA;
-}
-
-.toast__action .button {
   font-size: 16px;
   padding: 8px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .toast__action:hover {
   color: inherit;
+}
+
+.toast__action svg {
+  width: 1em !important;
+}
+
+.toast__action__text {
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 10px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  margin-right: 5px;
 }
