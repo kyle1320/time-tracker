@@ -7,15 +7,12 @@ import IconButton from './buttons/IconButton';
 
 const State = {
   NEW: 'NEW',
-  FADING_IN: 'FADING_IN',
   VISIBLE: 'VISIBLE',
   WAITING: 'HOVER',
-  FADING_OUT: 'FADING_OUT',
-  DONE: 'DONE'
+  FADING_OUT: 'FADING_OUT'
 };
 
-// TODO: make these configurable
-const fadeInTime = 500;
+// TODO: make this configurable
 const fadeOutTime = 500;
 
 const defaultVisibleTime = 2500;
@@ -33,7 +30,7 @@ class Toast extends Component {
 
   componentDidMount() {
     if (this.state.state === State.NEW) {
-      this.setState({state: State.FADING_IN});
+      this.setState({state: State.VISIBLE});
     }
   }
 
@@ -41,11 +38,6 @@ class Toast extends Component {
     if (this.state.state !== prevState.state) {
       switch (this.state.state) {
         case State.NEW:
-          break;
-        case State.FADING_IN:
-          this.setTimer(() => {
-            this.setState({state: State.VISIBLE});
-          }, fadeInTime);
           break;
         case State.VISIBLE:
           this.setTimer(() => {
@@ -57,11 +49,10 @@ class Toast extends Component {
           break;
         case State.FADING_OUT:
           this.setTimer(() => {
-            this.setState({state: State.DONE});
+            this.onDone();
           }, fadeOutTime);
           break;
         default:
-        case State.DONE:
           this.onDone();
           break;
       }
@@ -86,16 +77,11 @@ class Toast extends Component {
   getClassName() {
     switch (this.state.state) {
       case State.NEW:
-        return 'toast--hidden';
-      case State.FADING_IN:
-        return 'toast--visible';
       case State.VISIBLE:
-        return 'toast--visible';
+        return '';
       case State.HOVER:
-        return 'toast--hover toast--visible';
+        return 'toast--hover';
       case State.FADING_OUT:
-        return 'toast--hidden';
-      case State.DONE:
       default:
         return 'toast--hidden';
     }

@@ -17,12 +17,12 @@
   align-items: center;
   background-color: white;
   border-radius: 50px;
-  padding: 10px 20px;
+  padding: 2px 12px;
   box-sizing: border-box;
   width: 100%;
   max-width: 400px;
   margin-top: 10px;
-  opacity: 0;
+  opacity: 1;
   transition: opacity .5s linear;
   box-shadow: 1px 1.5px 5px rgba(0, 0, 0, 0.4);
   border: 2px solid #CCC;
@@ -32,22 +32,24 @@
   transition: none;
 }
 
-.toast--visible {
-  opacity: 1;
-}
-
 .toast--hidden {
   opacity: 0;
 }
 
 .toast__title {
   font-size: 16px;
+  padding: 8px;
 
   margin-right: auto;
 }
 
 .toast__action {
   color: #AAA;
+}
+
+.toast__action .button {
+  font-size: 16px;
+  padding: 8px;
 }
 
 .toast__action:hover {
