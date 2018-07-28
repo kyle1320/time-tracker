@@ -27,6 +27,8 @@ function task(state, action) {
   switch (action.type) {
     case PAGE_LOAD:
     case TASK_TICK:
+    case UNDO:
+    case REDO:
     case TASK_SELECT:
     case TASK_DESELECT:
       if (state.id === action._selectedId)
@@ -209,6 +211,8 @@ function lastTickTime(state, action) {
   switch (action.type) {
     case PAGE_LOAD:
     case TASK_TICK:
+    case UNDO:
+    case REDO:
     case TASK_SELECT:
     case TASK_DESELECT:
     case WRAP_UP:
@@ -272,7 +276,7 @@ export default function(state, action) {
       if (state.past.length <= 0) return state;
 
       past = state.past.slice(0, state.past.length - 1);
-      present = state.past[state.past.length - 1];
+      present = timeTracker(state.past[state.past.length - 1], action);
       future = [...state.future, state.present];
 
       return {past, present, future};
@@ -280,7 +284,7 @@ export default function(state, action) {
       if (state.future.length <= 0) return state;
 
       future = state.future.slice(0, state.future.length - 1);
-      present = state.future[state.future.length - 1];
+      present = timeTracker(state.future[state.future.length - 1], action);
       past = [...state.past, state.present];
 
       return {past, present, future};
