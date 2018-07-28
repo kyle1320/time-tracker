@@ -10,6 +10,7 @@ import TaskList from './components/TaskList';
 import Footer from './components/Footer';
 import { wrapupDay, tick } from './data/actions';
 import { colorNameToHex } from './utils/color';
+import { Toasts, ToastContext } from './components/Toasts';
 
 const mapStateToProps = state => ({
   themeColor: colorNameToHex(state.themeColor)
@@ -27,6 +28,8 @@ class App extends Component {
     this.state = {
       showSummary: false
     };
+
+    this.toasts = React.createRef();
 
     this.showSummary = this.showSummary.bind(this);
     this.closeSummary = this.closeSummary.bind(this);
@@ -68,22 +71,31 @@ class App extends Component {
     });
   }
 
+  createToast = (title, icon, action, actionText) => {
+    this.toasts.current && this.toasts.current.addToast(
+      title, icon, action, actionText
+    );
+  }
+
   render() {
     return (
-      <div className="app">
-        <Helmet>
-          <meta name="theme-color" content={this.props.themeColor} />
-        </Helmet>
-        <TaskToolbar
-          onEndDay={this.showSummary}/>
-        <TaskList />
-        <Footer />
-        {this.state.showSummary &&
-          <SummaryDialog
-            onClose={this.closeSummary}
-            onEndDay={this.endDay}/>
-        }
-      </div>
+      <ToastContext.Provider value={this.createToast}>
+        <div className="app">
+          <Helmet>
+            <meta name="theme-color" content={this.props.themeColor} />
+          </Helmet>
+          <TaskToolbar
+            onEndDay={this.showSummary}/>
+          <TaskList />
+          <Footer />
+          {this.state.showSummary &&
+            <SummaryDialog
+              onClose={this.closeSummary}
+              onEndDay={this.endDay}/>
+          }
+          <Toasts ref={this.toasts} />
+        </div>
+      </ToastContext.Provider>
     );
   }
 }

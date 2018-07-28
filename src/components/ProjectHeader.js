@@ -14,6 +14,7 @@ import {
   updateProject,
   clearNewTask } from '../data/actions';
 import IconButton from './buttons/IconButton';
+import { withToasts } from './Toasts';
 
 const mapStateToProps = (state, props) => ({
   isNew: (state.newItemId === props.project.id)
@@ -91,6 +92,7 @@ class ProjectHeader extends Component {
         'Are you sure you want to delete "' + this.props.project.name + '"?'
         + ' No tasks will be deleted.')) {
       this.props.onDelete(event);
+      this.props.createToast("Deleted " + this.props.project.name);
     }
   }
 
@@ -134,7 +136,9 @@ class ProjectHeader extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectHeader);
+export default withToasts(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ProjectHeader)
+);

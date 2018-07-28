@@ -25,6 +25,7 @@ import IconButton from './buttons/IconButton';
 import SubtaskList from './SubtaskList';
 import pressAndHold from './pressAndHold';
 import { formatTime } from '../utils/time';
+import { withToasts } from './Toasts';
 
 const mapStateToProps = (state, props) => ({
   isSelected: (state.selectedTask === props.task.id),
@@ -141,6 +142,7 @@ class TaskHeader extends Component {
   onDelete = (event) => {
     if (window.confirm('Are you sure you want to delete "' + this.props.task.name + '"?')) {
       this.props.onDelete(event);
+      this.props.createToast("Deleted " + this.props.task.name);
     }
   }
 
@@ -245,7 +247,9 @@ class TaskHeader extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TaskHeader);
+export default withToasts(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TaskHeader)
+);
