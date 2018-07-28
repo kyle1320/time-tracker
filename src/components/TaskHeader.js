@@ -5,7 +5,8 @@ import {
   faHourglassHalf,
   faPlus,
   faMinus,
-  faHistory } from '@fortawesome/free-solid-svg-icons'
+  faHistory,
+  faUndo} from '@fortawesome/free-solid-svg-icons'
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { SortableHandle } from 'react-sortable-hoc';
 
@@ -19,7 +20,8 @@ import {
   reset,
   deleteTask,
   addTime,
-  clearNewTask } from '../data/actions';
+  clearNewTask,
+  undo } from '../data/actions';
 import Button from './buttons/Button';
 import IconButton from './buttons/IconButton';
 import SubtaskList from './SubtaskList';
@@ -28,8 +30,8 @@ import { formatTime } from '../utils/time';
 import { withToasts } from './Toasts';
 
 const mapStateToProps = (state, props) => ({
-  isSelected: (state.selectedTask === props.task.id),
-  isNewTask:  (state.newItemId    === props.task.id)
+  isSelected: (state.present.selectedTask === props.task.id),
+  isNewTask:  (state.present.newItemId    === props.task.id)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -41,7 +43,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   onDelete:     ()     => dispatch(deleteTask(props.task.id)),
   onIncrement:  ()     => dispatch(addTime(props.task.id, 60000)),
   onDecrement:  ()     => dispatch(addTime(props.task.id, -60000)),
-  clearNewTask: ()     => dispatch(clearNewTask())
+  clearNewTask: ()     => dispatch(clearNewTask()),
+  undo:         ()     => dispatch(undo())
 });
 
 const HoldableButton = pressAndHold(IconButton, 80, 500);
@@ -140,10 +143,13 @@ class TaskHeader extends Component {
   }
 
   onDelete = (event) => {
-    if (window.confirm('Are you sure you want to delete "' + this.props.task.name + '"?')) {
-      this.props.onDelete(event);
-      this.props.createToast("Deleted " + this.props.task.name);
-    }
+    this.props.onDelete(event);
+    this.props.createToast(
+      "Deleted " + this.props.task.name,
+      faUndo,
+      this.props.undo,
+      "Undo"
+    );
   }
 
   render() {

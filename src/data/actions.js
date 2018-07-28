@@ -16,7 +16,9 @@ import {
   TIME_ADD,
   WRAP_UP,
   THEME_SET,
-  PAGE_LOAD } from "./action-constants";
+  PAGE_LOAD,
+  UNDO,
+  REDO } from "./action-constants";
 import uid from "../utils/uid";
 
 function makeAction(type, payload) {
@@ -132,4 +134,12 @@ export function setTheme(color) {
 
 export function pageLoad() {
   return makeAction(PAGE_LOAD);
+}
+
+export function undo() {
+  return makeAction(UNDO);
+}
+
+export function redo() {
+  return makeAction(REDO);
 }

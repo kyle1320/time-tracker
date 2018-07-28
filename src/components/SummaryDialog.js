@@ -10,7 +10,7 @@ import IconButton from './buttons/IconButton';
 import { formatTime } from '../utils/time';
 
 const mapStateToProps = (state) => ({
-  tasks: state.tasks
+  tasks: state.present.tasks
 });
 
 class SummaryDialog extends Component {

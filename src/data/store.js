@@ -30,11 +30,17 @@ export default (function() {
 
     lastSaveTime = +new Date();
 
-    return state || DEFAULT_STATE;
+    state = state || DEFAULT_STATE;
+
+    return {
+      past: [],
+      present: state,
+      future: []
+    };
   }
 
   function saveState() {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store.getState()));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store.getState().present));
     lastSaveTime = +new Date();
   }
 

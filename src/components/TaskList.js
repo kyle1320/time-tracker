@@ -9,8 +9,8 @@ import ProjectHeader from './ProjectHeader';
 import { move } from '../data/actions';
 
 const mapStateToProps = state => ({
-  tasks: state.tasks,
-  selectedTask: state.selectedTask
+  tasks: state.present.tasks,
+  selectedTask: state.present.selectedTask
 });
 
 const mapDispatchToProps = dispatch => ({

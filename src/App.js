@@ -13,7 +13,7 @@ import { colorNameToHex } from './utils/color';
 import { Toasts, ToastContext } from './components/Toasts';
 
 const mapStateToProps = state => ({
-  themeColor: colorNameToHex(state.themeColor)
+  themeColor: colorNameToHex(state.present.themeColor)
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -18,7 +18,9 @@ import {
   TIME_ADD,
   WRAP_UP,
   THEME_SET,
-  PAGE_LOAD } from './action-constants';
+  PAGE_LOAD,
+  UNDO,
+  REDO } from './action-constants';
 import { upgradeVersion } from './version';
 
 function task(state, action) {
@@ -242,7 +244,7 @@ function themeColor(state, action) {
   }
 }
 
-export default function timeTracker(state, action) {
+function timeTracker(state, action) {
   if (action.type === PAGE_LOAD) {
     state = upgradeVersion(state);
   }
@@ -260,4 +262,41 @@ export default function timeTracker(state, action) {
     newItemId: newItemId(state.newItemId, action),
     themeColor: themeColor(state.themeColor, action)
   };
+}
+
+export default function(state, action) {
+  var {past, present, future} = state;
+
+  switch (action.type) {
+    case UNDO:
+      if (state.past.length <= 0) return state;
+
+      past = state.past.slice(0, state.past.length - 1);
+      present = state.past[state.past.length - 1];
+      future = [...state.future, state.present];
+
+      return {past, present, future};
+    case REDO:
+      if (state.future.length <= 0) return state;
+
+      future = state.future.slice(0, state.future.length - 1);
+      present = state.future[state.future.length - 1];
+      past = [...state.past, state.present];
+
+      return {past, present, future};
+    case TASK_REMOVE:
+    case PROJECT_REMOVE:
+      past = state.past.concat(state.present);
+
+      while (past.length > 10) {
+        past = past.slice(1);
+      }
+
+    /* falls through */
+    default:
+      present = timeTracker(state.present, action);
+      future = [];
+
+      return {past, present, future};
+  }
 }

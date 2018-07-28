@@ -5,25 +5,28 @@ import {
   faEye,
   faPencilAlt,
   faSave,
-  faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+  faEyeSlash,
+  faUndo} from '@fortawesome/free-solid-svg-icons';
 
 import './ProjectHeader.css';
 
 import {
   deleteProject,
   updateProject,
-  clearNewTask } from '../data/actions';
+  clearNewTask,
+  undo } from '../data/actions';
 import IconButton from './buttons/IconButton';
 import { withToasts } from './Toasts';
 
 const mapStateToProps = (state, props) => ({
-  isNew: (state.newItemId === props.project.id)
+  isNew: (state.present.newItemId === props.project.id)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   onDelete: ()     => dispatch(deleteProject(props.project.id)),
   onSave:   (data) => dispatch(updateProject(props.project.id, data)),
-  clearNew: ()     => dispatch(clearNewTask())
+  clearNew: ()     => dispatch(clearNewTask()),
+  undo:     ()     => dispatch(undo())
 });
 
 class ProjectHeader extends Component {
@@ -88,12 +91,13 @@ class ProjectHeader extends Component {
   }
 
   onDelete = (event) => {
-    if (window.confirm(
-        'Are you sure you want to delete "' + this.props.project.name + '"?'
-        + ' No tasks will be deleted.')) {
-      this.props.onDelete(event);
-      this.props.createToast("Deleted " + this.props.project.name);
-    }
+    this.props.onDelete(event);
+    this.props.createToast(
+      "Deleted " + this.props.project.name,
+      faUndo,
+      this.props.undo,
+      "Undo"
+    );
   }
 
   render() {
