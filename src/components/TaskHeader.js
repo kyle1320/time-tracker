@@ -34,17 +34,22 @@ const mapStateToProps = (state, props) => ({
   isNewTask:  (state.present.newItemId    === props.task.id)
 });
 
+function idOf(dispatch, action) {
+  dispatch(action);
+  return action.id;
+}
+
 const mapDispatchToProps = (dispatch, props) => ({
   onSelect:     ()     => dispatch(select(props.task.id)),
   onDeselect:   ()     => dispatch(deselect()),
   onTick:       ()     => dispatch(tick()),
   onSave:       (data) => dispatch(update(props.task.id, data)),
   onReset:      ()     => dispatch(reset(props.task.id)),
-  onDelete:     ()     => dispatch(deleteTask(props.task.id)),
+  onDelete:     ()     => idOf(dispatch, deleteTask(props.task.id)),
   onIncrement:  ()     => dispatch(addTime(props.task.id, 60000)),
   onDecrement:  ()     => dispatch(addTime(props.task.id, -60000)),
   clearNewTask: ()     => dispatch(clearNewTask()),
-  undo:         ()     => dispatch(undo())
+  undo:         (id)   => dispatch(undo(id))
 });
 
 const HoldableButton = pressAndHold(IconButton, 80, 500);
@@ -143,11 +148,11 @@ class TaskHeader extends Component {
   }
 
   onDelete = (event) => {
-    this.props.onDelete(event);
+    var actionId = this.props.onDelete(event);
     this.props.createToast({
       title: "Deleted " + this.props.task.name,
       icon: faUndo,
-      action: this.props.undo,
+      action: this.props.undo.bind(null, actionId),
       actionText: "Undo"
     });
   }

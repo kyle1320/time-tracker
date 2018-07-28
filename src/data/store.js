@@ -3,6 +3,7 @@ import { createStore } from 'redux';
 import timeTracker from './timeTracker';
 import { pageLoad } from './actions';
 import { CURRENT_VERSION } from './version';
+import History from '../utils/History';
 
 const DEFAULT_STATE = {
   selectedTask: null,
@@ -30,17 +31,14 @@ export default (function() {
 
     lastSaveTime = +new Date();
 
-    state = state || DEFAULT_STATE;
-
-    return {
-      past: [],
-      present: state,
-      future: []
-    };
+    return History.wrap(state || DEFAULT_STATE);
   }
 
   function saveState() {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store.getState().present));
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(History.unwrap(store.getState()))
+    );
     lastSaveTime = +new Date();
   }
 

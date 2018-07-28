@@ -22,7 +22,10 @@ import {
   UNDO,
   REDO } from './action-constants';
 import { upgradeVersion } from './version';
-import findIndex from '../utils/findIndex';
+import { findIndex } from '../utils/findIndex';
+import History from '../utils/History';
+
+const history = new History(timeTracker, 25);
 
 function task(state, action) {
   switch (action.type) {
@@ -146,10 +149,12 @@ function createProject(action) {
 }
 
 function tasks(state, action) {
+  var newState;
+
   switch (action.type) {
     case TASK_ADD:
       var insertIndex = findIndex(state, x => x.id === action.payload.after) + 1;
-      var newState = state.map(t => taskOrProject(t, action));
+      newState = state.map(t => taskOrProject(t, action));
 
       newState.splice(insertIndex, 0, createTask(action));
 
@@ -166,7 +171,7 @@ function tasks(state, action) {
       var lastUnsortedIndex = 0;
       var haveSeenAnyProject = false;
       var relocateTasks = false;
-      var newState = state.reduce((arr, item, index) => {
+      newState = state.reduce((arr, item, index) => {
         if (!haveSeenAnyProject) lastUnsortedIndex = index;
         if (item.isProject) haveSeenAnyProject = true;
 
@@ -272,38 +277,33 @@ function timeTracker(state, action) {
 }
 
 export default function(state, action) {
-  var {past, present, future} = state;
-
   switch (action.type) {
     case UNDO:
-      if (state.past.length <= 0) return state;
-
-      past = state.past.slice(0, state.past.length - 1);
-      present = timeTracker(state.past[state.past.length - 1], action);
-      future = [...state.future, state.present];
-
-      return {past, present, future};
+      if (action.payload && action.payload.id)
+        state = history.undo(state, a => a.id === action.payload.id);
+      else
+        state = history.undo(state);
+      return history.ignore(state, action);
     case REDO:
-      if (state.future.length <= 0) return state;
-
-      future = state.future.slice(0, state.future.length - 1);
-      present = timeTracker(state.future[state.future.length - 1], action);
-      past = [...state.past, state.present];
-
-      return {past, present, future};
+      state = history.redo(state);
+      return history.ignore(state, action);
+    case TASK_ADD:
+    case PROJECT_ADD:
+    case SUBTASK_ADD:
     case TASK_REMOVE:
     case PROJECT_REMOVE:
-      past = state.past.concat(state.present);
-
-      while (past.length > 10) {
-        past = past.slice(1);
-      }
-
-    /* falls through */
+    case SUBTASK_REMOVE:
+    case TASK_UPDATE:
+    case PROJECT_UPDATE:
+    case TASK_MOVE:
+      return history.record(state, action);
+    case TASK_TICK:
+    case TASK_SELECT:
+    case TASK_DESELECT:
+    case CLEAR_NEW_TASK:
+    case THEME_SET:
+      return history.ignore(state, action);
     default:
-      present = timeTracker(state.present, action);
-      future = [];
-
-      return {past, present, future};
+     return history.norecord(state, action);
   }
 }

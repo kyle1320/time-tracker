@@ -25,7 +25,8 @@ function makeAction(type, payload) {
   return {
     type: type,
     payload: payload,
-    time: +new Date()
+    time: +new Date(),
+    id: uid()
   };
 }
 
@@ -141,8 +142,8 @@ export function pageLoad() {
   return makeAction(PAGE_LOAD);
 }
 
-export function undo() {
-  return makeAction(UNDO);
+export function undo(actionId) {
+  return makeAction(UNDO, {id: actionId});
 }
 
 export function redo() {

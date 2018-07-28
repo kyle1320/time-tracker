@@ -25,11 +25,16 @@ const mapStateToProps = (state, props) => ({
   isNew: (state.present.newItemId === props.project.id)
 });
 
+function idOf(dispatch, action) {
+  dispatch(action);
+  return action.id;
+}
+
 const mapDispatchToProps = (dispatch, props) => ({
-  onDelete: ()     => dispatch(deleteProject(props.project.id)),
+  onDelete: ()     => idOf(dispatch, deleteProject(props.project.id)),
   onSave:   (data) => dispatch(updateProject(props.project.id, data)),
   clearNew: ()     => dispatch(clearNewTask()),
-  undo:     ()     => dispatch(undo()),
+  undo:     (id)   => dispatch(undo(id)),
   newTask:  ()     => dispatch(newTask(props.project.id))
 });
 
@@ -95,11 +100,11 @@ class ProjectHeader extends Component {
   }
 
   onDelete = (event) => {
-    this.props.onDelete(event);
+    var actionId = this.props.onDelete(event);
     this.props.createToast({
       title: "Deleted " + this.props.project.name,
       icon: faUndo,
-      action: this.props.undo,
+      action: this.props.undo.bind(null, actionId),
       actionText: "Undo"
     });
   }
