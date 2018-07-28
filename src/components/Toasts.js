@@ -8,7 +8,7 @@ import IconButton from './buttons/IconButton';
 const State = {
   NEW: 'NEW',
   VISIBLE: 'VISIBLE',
-  WAITING: 'HOVER',
+  HOVER: 'HOVER',
   FADING_OUT: 'FADING_OUT'
 };
 
