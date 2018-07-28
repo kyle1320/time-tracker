@@ -58,6 +58,10 @@ class Toast extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.clearTimer();
+  }
+
   setTimer(callback, delay) {
     if (this.timer) {
       clearTimeout(this.timer);
