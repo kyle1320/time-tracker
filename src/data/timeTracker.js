@@ -303,10 +303,10 @@ export default function(state, action) {
       return history.record(state, action);
     case THEME_SET:
     case TIME_ADD:
-      return history.silent(state, action);
     case CLEAR_NEW_TASK:
-    case TASK_TICK:
     case PAGE_LOAD:
+      return history.silent(state, action);
+    case TASK_TICK:
       return history.ignore(state, action);
     default:
      return history.norecord(state, action);
