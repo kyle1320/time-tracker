@@ -239,7 +239,7 @@ function newItemId(state, action) {
   switch (action.type) {
     case PROJECT_ADD:
     case TASK_ADD:
-      return action.payload.data.id || null;
+      return action.payload.data.id;
     case CLEAR_NEW_TASK:
       return null;
     default:

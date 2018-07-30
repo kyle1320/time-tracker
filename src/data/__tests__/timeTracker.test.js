@@ -103,6 +103,50 @@ it("applies 'TASK_ADD' actions correctly", () => {
     }],
     newItemId: newId2
   });
+
+  var newId3 = uid();
+  var prevState = state;
+  state = timeTracker(state, {
+    type: 'TASK_ADD',
+    payload: {
+      after: newId2,
+      data: {
+        id: newId3,
+        name: "tasky dooo",
+        detail: "do the things"
+      }
+    },
+    time: 30,
+    id: uid()
+  });
+  expectBasicStateProps(state);
+  expect(state.past).toHaveLength(3);
+  expect(state.present).toEqual({
+    ...prevState.present,
+    tasks: [{
+      id: newId2,
+      name: "my other task",
+      detail: "do more stuff",
+      subtasks: [],
+      completedSubtasks: [],
+      time: 0
+    }, {
+      id: newId3,
+      name: "tasky dooo",
+      detail: "do the things",
+      subtasks: [],
+      completedSubtasks: [],
+      time: 0
+    }, {
+      id: newId1,
+      name: "my task",
+      detail: "do stuff",
+      subtasks: [],
+      completedSubtasks: [],
+      time: 0
+    }],
+    newItemId: newId3
+  });
 });
 
 it("applies 'TASK_REMOVE' actions correctly", () => {
@@ -772,6 +816,22 @@ it("applies 'PROJECT_REMOVE' actions correctly", () => {
     id: uid()
   });
 
+  var newId3 = uid();
+  state = timeTracker(state, {
+    type: 'TASK_ADD',
+    payload: { after: newId2, data: { id: newId3, name: "", detail: "" } },
+    time: 30,
+    id: uid()
+  });
+
+  var newId4 = uid();
+  state = timeTracker(state, {
+    type: 'TASK_ADD',
+    payload: { after: newId2, data: { id: newId4, name: "", detail: "" } },
+    time: 40,
+    id: uid()
+  });
+
   var prevState = state;
   state = timeTracker(state, {
     type: 'PROJECT_REMOVE',
@@ -798,10 +858,14 @@ it("applies 'PROJECT_REMOVE' actions correctly", () => {
   expect(state.past).toHaveLength(prevState.past.length + 1);
   expect(state.present).toEqual({
     ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      id: newId1
-    }]
+    tasks: [
+      prevState.present.tasks[2],
+      prevState.present.tasks[3],
+      {
+        ...prevState.present.tasks[0],
+        id: newId1
+      }
+    ]
   });
 
   var prevState = state;
@@ -817,7 +881,10 @@ it("applies 'PROJECT_REMOVE' actions correctly", () => {
   expect(state.past).toHaveLength(prevState.past.length + 1);
   expect(state.present).toEqual({
     ...prevState.present,
-    tasks: []
+    tasks: [
+      prevState.present.tasks[0],
+      prevState.present.tasks[1]
+    ]
   });
 });
 
@@ -1161,11 +1228,12 @@ describe("undo / redo functionality", () => {
   });
 
   var beforeSelectTask = state;
+  var selectTaskActionId = uid();
   state = timeTracker(state, {
     type: 'TASK_SELECT',
     payload: { id: newId1 },
     time: 20,
-    id: uid()
+    id: selectTaskActionId
   });
 
   var beforeDeselectTask = state;
@@ -1217,7 +1285,7 @@ describe("undo / redo functionality", () => {
       ...beforeRemoveTask.present,
       lastTickTime: 70
     });
-  
+
     var prevState = state;
     state = timeTracker(state, {
       type: 'UNDO',
@@ -1297,7 +1365,7 @@ describe("undo / redo functionality", () => {
       lastTickTime: 120
     });
   });
-  
+
   it("applies 'REDO' actions correctly", () => {
     var prevState = state;
     state = timeTracker(state, {
@@ -1313,7 +1381,7 @@ describe("undo / redo functionality", () => {
       ...beforeSelectTask.present,
       lastTickTime: 130
     });
-  
+
     var prevState = state;
     state = timeTracker(state, {
       type: 'REDO',
@@ -1391,6 +1459,42 @@ describe("undo / redo functionality", () => {
     expect(state.present).toEqual({
       ...beforeTests.present,
       lastTickTime: 180
+    });
+  });
+
+  it("can undo a specific action", () => {
+    var prevState = state;
+    state = timeTracker(state, {
+      type: 'UNDO',
+      payload: {},
+      time: 190,
+      id: uid()
+    });
+    expectBasicStateProps(state);
+    expect(state.past).toHaveLength(prevState.past.length - 1);
+    expect(state.future).toHaveLength(prevState.future.length + 1);
+    expect(state.present).toEqual({
+      ...beforeRemoveTask.present,
+      lastTickTime: 190
+    });
+
+    var prevState = state;
+    state = timeTracker(state, {
+      type: 'UNDO',
+      payload: { id: selectTaskActionId },
+      time: 200,
+      id: uid()
+    });
+    expectBasicStateProps(state);
+    expect(state.past).toHaveLength(prevState.past.length - 1);
+    expect(state.future).toHaveLength(prevState.future.length + 1);
+    expect(state.present).toEqual({
+      ...beforeRemoveTask.present,
+      tasks: [{
+        ...beforeRemoveTask.present.tasks[0],
+        time: 0
+      }],
+      lastTickTime: 200
     });
   });
 });
