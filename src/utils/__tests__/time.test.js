@@ -36,3 +36,8 @@ test("works with multi-layer conditional groups", () => {
   expect(formatTime("?(%hh)?( %mm?( %ss))", time(0, 0, 20)))
     .toBe("");
 });
+
+it("behaves correctly in special cases", () => {
+  expect(formatTime(")%z?", time(0, 0, 20)))
+    .toBe(")%z?");
+});

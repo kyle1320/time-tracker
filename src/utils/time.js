@@ -29,7 +29,8 @@ function parse(next, timeInfo, inGroup) {
         }
         break;
       case '%':
-        switch (next()) {
+        var nextChar = next()
+        switch (nextChar) {
           case 'h':
             str += hours;
             hasZero = hasZero || !hours;
@@ -44,6 +45,7 @@ function parse(next, timeInfo, inGroup) {
             break;
           default:
             str += c;
+            str += nextChar;
             break;
         }
         break;
