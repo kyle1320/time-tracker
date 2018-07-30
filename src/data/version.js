@@ -15,16 +15,14 @@ export function upgradeVersion(state) {
         tasks: state.tasks.map(task => ({
           ...task,
           subtasks: []
-        })),
-        version: 1
+        }))
       };
 
     /* falls through */
     case 1:
       state = {
         ...state,
-        tasksSorted: false,
-        version: 2
+        tasksSorted: false
       };
 
     /* falls through */
@@ -34,8 +32,7 @@ export function upgradeVersion(state) {
         tasks: state.tasks.map(task => ({
           ...task,
           completedSubtasks: []
-        })),
-        version: 3
+        }))
       };
 
     /* falls through */
@@ -61,10 +58,13 @@ export function upgradeVersion(state) {
 
     /* falls through */
     case CURRENT_VERSION:
+      state = {
+        ...state,
+        version: CURRENT_VERSION
+      };
       break;
     default:
-      console.error("State has unknown version: " + state.version);
-      break;
+      throw new Error("State has unknown version: " + state.version);
   }
 
   return state;

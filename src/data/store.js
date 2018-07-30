@@ -22,11 +22,13 @@ export default (function() {
   function loadState() {
     var state = window.localStorage.getItem(STORAGE_KEY);
 
-    try {
-      state = JSON.parse(state);
-    } catch (e) {
-      console.log(e);
-      state = undefined;
+    if (state) {
+      try {
+        state = JSON.parse(state);
+      } catch (e) {
+        console.log(e);
+        state = undefined;
+      }
     }
 
     lastSaveTime = +new Date();

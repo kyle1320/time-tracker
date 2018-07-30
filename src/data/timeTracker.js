@@ -262,7 +262,7 @@ function timeTracker(state, action) {
   }
 
   action._selectedId = state.selectedTask;
-  action._delta = state.lastTickTime && state.lastTickTime > 0
+  action._delta = state.lastTickTime >= 0
                ? action.time - state.lastTickTime
                : 0;
 
