@@ -1,4 +1,4 @@
-import History from './History';
+import History from '../History';
 
 function makeAction(type, data, id) {
   return { type, data, id };
@@ -72,6 +72,11 @@ it("can do simple undo / redo actions", () => {
   expect(state.future.length).toBe(2);
 
   state = h.record(state, makeAction('add', 1));
+  expect(History.unwrap(state)).toBe(4);
+  expect(state.past.length).toBe(2);
+  expect(state.future.length).toBe(0);
+
+  state = h.redo(state);
   expect(History.unwrap(state)).toBe(4);
   expect(state.past.length).toBe(2);
   expect(state.future.length).toBe(0);
