@@ -8,8 +8,14 @@ it("returns an empty string on an invalid name", () => {
   expect(colorNameToHex("notacolor")).toBe('');
 });
 
-it("returns different values for different colors", () => {
-  expect(colorNameToHex("red")).not.toBe(colorNameToHex("green"));
-  expect(colorNameToHex("green")).not.toBe(colorNameToHex("blue"));
-  expect(colorNameToHex("blue")).not.toBe(colorNameToHex("orange"));
+it("returns unique colors", () => {
+  var set = new Set();
+  var colors = ['purple', 'orange', 'red', 'green', 'blue', 'teal'];
+
+  colors.forEach(color => {
+    set.add(colorNameToHex(color));
+  });
+
+  expect(set.size).toBe(colors.length);
+  expect('' in colors).toBe(false);
 });
