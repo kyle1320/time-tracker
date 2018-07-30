@@ -1,6 +1,6 @@
 import { CURRENT_VERSION } from '../version';
 import { PAGE_LOAD } from '../action-constants';
-import { tick } from '../actions';
+import { tick, newTask } from '../actions';
 
 class MockStorage {
   constructor() {
@@ -14,14 +14,8 @@ class MockStorage {
   removeItem(key) { delete this[key]; }
 }
 
-function delay(ms) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, ms);
-  });
-}
-
 it("loads a default state", () => {
-  delete require.cache[require.resolve("../store")];
+  jest.resetModules();
   window.localStorage = new MockStorage();
 
   var store = require('../store').default;
@@ -49,7 +43,7 @@ it("loads a default state", () => {
 jest.useFakeTimers();
 
 it("saves intermittently", () => {
-  delete require.cache[require.resolve("../store")];
+  jest.resetModules();
   window.localStorage = new MockStorage();
 
   var store = require('../store').default;
@@ -74,7 +68,66 @@ it("saves intermittently", () => {
   store.dispatch(tick());
 
   expect(window.localStorage.setItem).not.toHaveBeenCalled();
-  
+
   jest.runTimersToTime(1100);
   expect(window.localStorage.setItem).toHaveBeenCalled();
+  window.localStorage.setItem.mockClear();
+
+  // fake the current time
+  var RealDate = Date;
+  global.Date = class Date extends RealDate {
+    constructor() { return new RealDate(+new RealDate() + 15000) }
+  };
+
+  store.dispatch(tick());
+  expect(window.localStorage.setItem).toHaveBeenCalled();
+
+  global.Date = RealDate;
+});
+
+it("can reload previously saved state", () => {
+  jest.resetModules();
+  window.localStorage = new MockStorage();
+
+  var store = require('../store').default;
+
+  store.dispatch(newTask());
+  jest.runTimersToTime(1100);
+  expect(store.getState().present.tasks).toHaveLength(1);
+
+  jest.resetModules();
+
+  store = require('../store').default;
+  expect(store.getState().present.tasks).toHaveLength(1);
+
+  jest.resetModules();
+  localStorage.setItem("savedState", "invalid :(");
+
+  store = require('../store').default;
+  expect(store.getState().present.tasks).toHaveLength(0);
+});
+
+it("can reset the saved state", () => {
+  jest.resetModules();
+  window.localStorage = new MockStorage();
+
+  var store = require('../store').default;
+
+  store.dispatch(newTask());
+  jest.runTimersToTime(1100);
+  expect(store.getState().present.tasks).toHaveLength(1);
+
+  window.confirm = () => false;
+  window.resetAllAppData();
+
+  jest.resetModules();
+  store = require('../store').default;
+  expect(store.getState().present.tasks).toHaveLength(1);
+
+  window.confirm = () => true;
+  window.resetAllAppData();
+
+  jest.resetModules();
+  store = require('../store').default;
+  expect(store.getState().present.tasks).toHaveLength(0);
 });

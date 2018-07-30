@@ -76,7 +76,7 @@ export default (function() {
   window.resetAllAppData = function() {
     if (window.confirm("This will delete all data, forever. Are you sure?")) {
       window.removeEventListener("beforeunload", saveState);
-      delete localStorage[STORAGE_KEY];
+      localStorage.removeItem(STORAGE_KEY);
       window.location.reload();
     }
   };
