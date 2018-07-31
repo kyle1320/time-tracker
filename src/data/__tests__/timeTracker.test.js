@@ -36,1182 +36,760 @@ function expectBasicStateProps(state) {
   expect(typeof state.present.version).toBe('number');
 }
 
-it("applies 'TASK_ADD' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
+test("default test state is current version", () => {
+  expect(DEFAULT_STATE.version).toBe(CURRENT_VERSION);
+});
 
-  var newId1 = uid();
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: {
+describe("normal functionality", () => { 
+  var state;
+  var prevState;
+  var currTime;
+  var uids;
+
+  beforeEach(() => {
+    state = History.wrap(DEFAULT_STATE);
+    prevState = null;
+    currTime = 0;
+    uids = [];
+  });
+
+  function makeUID() {
+    const newUid = uid();
+    uids.push(newUid);
+    return newUid;
+  }
+
+  function createAction(type, payload) {
+    return {
+      type,
+      payload,
+      time: (currTime += 10),
+      id: uid()
+    };
+  }
+  
+  function apply(type, payload) {
+    prevState = state;
+    state = timeTracker(
+      state,
+      createAction(type, payload)
+    );
+    expectBasicStateProps(state);
+  }
+
+  function expectUpdates(
+      pastLengthFn = x => x,
+      presentUpdates = {},
+      futureLengthFn = x => x) {
+
+    expect(state.past).toHaveLength(pastLengthFn(prevState.past.length));
+
+    expect(state.present).toEqual({
+      ...prevState.present,
+      ...presentUpdates
+    });
+
+    expect(state.future).toHaveLength(futureLengthFn(prevState.future.length));
+  }
+
+  const addedEventToPast = pastLength => pastLength + 1;
+
+  it("applies 'TASK_ADD' actions correctly", () => {
+    apply('TASK_ADD', {
       data: {
-        id: newId1,
+        id: makeUID(),
         name: "my task",
         detail: "do stuff"
       }
-    },
-    time: 10,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      id: newId1,
-      name: "my task",
-      detail: "do stuff",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }],
-    newItemId: newId1
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [{
+          id: uids[0],
+          name: "my task",
+          detail: "do stuff",
+          subtasks: [],
+          completedSubtasks: [],
+          time: 0
+        }],
+        newItemId: uids[0]
+      }
+    );
 
-  var newId2 = uid();
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: {
+    apply('TASK_ADD', {
       data: {
-        id: newId2,
+        id: makeUID(),
         name: "my other task",
         detail: "do more stuff"
       }
-    },
-    time: 20,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(2);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      id: newId2,
-      name: "my other task",
-      detail: "do more stuff",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }, {
-      id: newId1,
-      name: "my task",
-      detail: "do stuff",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }],
-    newItemId: newId2
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            id: uids[1],
+            name: "my other task",
+            detail: "do more stuff",
+            subtasks: [],
+            completedSubtasks: [],
+            time: 0
+          },
+          prevState.present.tasks[0]
+        ],
+        newItemId: uids[1]
+      }
+    );
 
-  var newId3 = uid();
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: {
-      after: newId2,
+    apply('TASK_ADD', {
+      after: uids[1],
       data: {
-        id: newId3,
+        id: makeUID(),
         name: "tasky dooo",
         detail: "do the things"
       }
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(3);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      id: newId2,
-      name: "my other task",
-      detail: "do more stuff",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }, {
-      id: newId3,
-      name: "tasky dooo",
-      detail: "do the things",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }, {
-      id: newId1,
-      name: "my task",
-      detail: "do stuff",
-      subtasks: [],
-      completedSubtasks: [],
-      time: 0
-    }],
-    newItemId: newId3
-  });
-});
-
-it("applies 'TASK_REMOVE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+            {
+            id: uids[2],
+            name: "tasky dooo",
+            detail: "do the things",
+            subtasks: [],
+            completedSubtasks: [],
+            time: 0
+          }, 
+          prevState.present.tasks[1]
+        ],
+        newItemId: uids[2]
+      }
+    );
   });
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
+  it("applies 'TASK_REMOVE' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+
+    apply('TASK_REMOVE', { id: 'not an id' });
+    expectUpdates(addedEventToPast);
+
+    apply('TASK_REMOVE', { id: uids[1] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [{
+          ...prevState.present.tasks[1],
+          id: uids[0]
+        }]
+      }
+    );
+
+    apply('TASK_REMOVE', { id: uids[0] });
+    expectUpdates(
+      addedEventToPast,
+      { tasks: [] }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_REMOVE',
-    payload: {
-      id: 'not an id'
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual(prevState.present);
+  it("applies 'TASK_TICK' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_SELECT', { id: uids[0] });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_REMOVE',
-    payload: {
-      id: newId2
-    },
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[1],
-      id: newId1
-    }]
+    apply('TASK_TICK', {});
+    expectUpdates(
+      undefined,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            id: uids[0],
+            time: 10
+          }
+        ],
+        lastTickTime: currTime
+      }
+    );
+
+    apply('TASK_DESELECT', {});
+
+    apply('TASK_TICK', {});
+    expectUpdates(
+      undefined,
+      { lastTickTime: currTime }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_REMOVE',
-    payload: {
-      id: newId1
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: []
-  });
-});
+  it("applies 'TASK_UPDATE' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
 
-it("applies 'TASK_TICK' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: {
-      id: newId1
-    },
-    time: 30,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      id: newId1,
-      time: 10
-    }],
-    lastTickTime: 40
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_DESELECT',
-    payload: {},
-    time: 50,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 60,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    lastTickTime: 60
-  });
-});
-
-it("applies 'TASK_UPDATE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_UPDATE',
-    payload: {
-      id: newId2,
+    apply('TASK_UPDATE', {
+      id: uids[1],
       data: {
         name: "task name",
         detail: "things n stuff"
       }
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      id: newId2,
-      name: "task name",
-      detail: "things n stuff"
-    }, prevState.present.tasks[1]],
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            id: uids[1],
+            name: "task name",
+            detail: "things n stuff"
+          },
+          prevState.present.tasks[1]
+        ],
+      }
+    );
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_UPDATE',
-    payload: {
+    apply('TASK_UPDATE', {
       id: 'not an id',
       data: {
         name: "taskity task",
         detail: "just another task"
       }
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual(prevState.present);
-});
-
-it("applies 'TASK_SELECT' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
+    });
+    expectUpdates(addedEventToPast);
   });
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
+  it("applies 'TASK_SELECT' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+
+    apply('TASK_SELECT', { id: uids[0] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        lastTickTime: currTime,
+        selectedTask: uids[0]
+      }
+    );
+
+    apply('TASK_SELECT', { id: uids[1] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            time: 10
+          }
+        ],
+        lastTickTime: currTime,
+        selectedTask: uids[1]
+      }
+    );
+
+    apply('TASK_SELECT', { id: 'not an id' });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            time: 10
+          },
+          prevState.present.tasks[1]
+        ],
+        lastTickTime: currTime,
+        selectedTask: 'not an id'
+      }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: {
-      id: newId1
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    lastTickTime: 30,
-    selectedTask: newId1
+  it("applies 'TASK_DESELECT' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_SELECT', { id: uids[0] });
+
+    apply('TASK_DESELECT', {});
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            id: uids[0],
+            time: 10
+          }
+        ],
+        lastTickTime: currTime,
+        selectedTask: null
+      }
+    );
+
+    apply('TASK_DESELECT', {});
+    expectUpdates(
+      addedEventToPast,
+      { lastTickTime: currTime }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: {
-      id: newId2
-    },
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      time: 10
-    }],
-    lastTickTime: 40,
-    selectedTask: newId2
-  });
+  it("applies 'TASK_MOVE' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('PROJECT_ADD', { data: { id: makeUID(), name: "" } });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: {
-      id: 'not an id'
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      time: 10
-     }, prevState.present.tasks[1]],
-    lastTickTime: 50,
-    selectedTask: 'not an id'
-  });
-});
-
-it("applies 'TASK_DESELECT' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: {
-      id: newId1
-    },
-    time: 30,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_DESELECT',
-    payload: {},
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      time: 10
-    }],
-    lastTickTime: 40,
-    selectedTask: null
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_DESELECT',
-    payload: {},
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    lastTickTime: 50,
-    selectedTask: null
-  });
-});
-
-it("applies 'TASK_MOVE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TASK_MOVE',
-    payload: {
+    apply('TASK_MOVE', {
       oldIndex: 0,
       newIndex: 1
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [
-      prevState.present.tasks[1],
-      prevState.present.tasks[0]
-    ]
-  });
-});
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[1],
+          prevState.present.tasks[0],
+          prevState.present.tasks[2]
+        ]
+      }
+    );
 
-it("applies 'SUBTASK_ADD' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
+    apply('TASK_MOVE', {
+      oldIndex: 2,
+      newIndex: 0
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[2],
+          prevState.present.tasks[0],
+          prevState.present.tasks[1]
+        ]
+      }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: {
-      id: newId1,
+  it("applies 'SUBTASK_ADD' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+
+    apply('SUBTASK_ADD', {
+      id: uids[0],
       content: "this is a subtask"
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      subtasks: [{
-        time: 30,
-        content: "this is a subtask"
-      }]
-    }]
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            subtasks: [{
+              time: currTime,
+              content: "this is a subtask"
+            }]
+          }
+        ]
+      }
+    );
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: {
-      id: newId1,
+    apply('SUBTASK_ADD', {
+      id: uids[0],
       content: "this is another subtask"
-    },
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      subtasks: [prevState.present.tasks[1].subtasks[0], {
-        time: 40,
-        content: "this is another subtask"
-      }]
-    }]
-  });
-});
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            subtasks: [
+              prevState.present.tasks[1].subtasks[0],
+              {
+                time: currTime,
+                content: "this is another subtask"
+              }
+            ]
+          }
+        ]
+      }
+    );
 
-it("applies 'SUBTASK_REMOVE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: { id: newId1, content: "subtask 1" },
-    time: 30,
-    id: uid()
+    apply('SUBTASK_ADD', {
+      id: uids[1],
+      content: "this is a different subtask"
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            subtasks: [{
+              time: currTime,
+              content: "this is a different subtask"
+            }]
+          },
+          prevState.present.tasks[1]
+        ]
+      }
+    );
   });
 
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: { id: newId1, content: "subtask 2" },
-    time: 40,
-    id: uid()
-  });
+  it("applies 'SUBTASK_REMOVE' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 1" });
+    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 2" });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'SUBTASK_REMOVE',
-    payload: {
-      id: newId1,
+    apply('SUBTASK_REMOVE', {
+      id: uids[0],
       index: 1
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      subtasks: [{
-        ...prevState.present.tasks[1].subtasks[0],
-        content: "subtask 1"
-      }],
-      completedSubtasks: [{
-        ...prevState.present.tasks[1].subtasks[1],
-        content: "subtask 2"
-      }]
-    }]
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            subtasks: [{
+              ...prevState.present.tasks[1].subtasks[0],
+              content: "subtask 1"
+            }],
+            completedSubtasks: [{
+              ...prevState.present.tasks[1].subtasks[1],
+              content: "subtask 2"
+            }]
+          }
+        ]
+      }
+    );
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'SUBTASK_REMOVE',
-    payload: {
-      id: newId1,
+    apply('SUBTASK_REMOVE', {
+      id: uids[0],
       index: 0
-    },
-    time: 60,
-    id: uid()
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            subtasks: [],
+            completedSubtasks: [
+              prevState.present.tasks[1].completedSubtasks[0],
+              {
+                ...prevState.present.tasks[1].subtasks[0],
+                content: "subtask 1"
+              }
+            ]
+          }
+        ]
+      }
+    );
   });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      subtasks: [],
-      completedSubtasks: [prevState.present.tasks[1].completedSubtasks[0], {
-        ...prevState.present.tasks[1].subtasks[0],
-        content: "subtask 1"
-      }]
-    }]
-  });
-});
 
-it("applies 'PROJECT_ADD' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
+  it("applies 'PROJECT_ADD' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
 
-  var newId1 = uid();
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: {
+    apply('PROJECT_ADD', {
       data: {
-        id: newId1,
+        id: makeUID(),
         name: "my project"
       }
-    },
-    time: 10,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      id: newId1,
-      name: "my project",
-      isProject: true,
-      isHidden: false
-    }],
-    newItemId: newId1
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          ...prevState.present.tasks,
+          {
+            id: uids[2],
+            name: "my project",
+            isProject: true,
+            isHidden: false
+          }
+        ],
+        newItemId: uids[2]
+      }
+    );
 
-  var newId2 = uid();
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: {
+    apply('PROJECT_ADD', {
       data: {
-        id: newId2,
+        id: makeUID(),
         name: "my other project"
       }
-    },
-    time: 20,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      id: newId2,
-      name: "my other project",
-      isProject: true,
-      isHidden: false
-    }],
-    newItemId: newId2
-  });
-});
-
-it("applies 'PROJECT_UPDATE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: { data: { id: newId1, name: "" } },
-    time: 10,
-    id: uid()
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          ...prevState.present.tasks,
+          {
+            id: uids[3],
+            name: "my other project",
+            isProject: true,
+            isHidden: false
+          }
+        ],
+        newItemId: uids[3]
+      }
+    );
   });
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: { data: { id: newId2, name: "" } },
-    time: 20,
-    id: uid()
-  });
+  it("applies 'PROJECT_UPDATE' actions correctly", () => {
+    apply('PROJECT_ADD', { data: { id: makeUID(), name: "" } });
+    apply('PROJECT_ADD', { data: { id: makeUID(), name: "" } });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_EDIT',
-    payload: {
-      id: newId2,
+    apply('PROJECT_EDIT', {
+      id: uids[1],
       data: {
         name: "project name",
       }
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      id: newId2,
-      name: "project name"
-    }],
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            id: uids[1],
+            name: "project name"
+          }
+        ],
+      }
+    );
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_EDIT',
-    payload: {
+    apply('PROJECT_EDIT', {
+      id: uids[0],
+      data: {
+        name: "some project",
+        detail: "this is a description"
+      }
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[1],
+            id: uids[0],
+            name: "some project",
+            detail: "this is a description"
+          },
+          prevState.present.tasks[1]
+        ],
+      }
+    );
+
+    apply('PROJECT_EDIT', {
       id: 'not an id',
       data: {
         name: "my cool project"
       }
-    },
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual(prevState.present);
-});
-
-it("applies 'PROJECT_REMOVE' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: { data: { id: newId1, name: "" } },
-    time: 10,
-    id: uid()
+    });
+    expectUpdates(addedEventToPast);
   });
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'PROJECT_ADD',
-    payload: { data: { id: newId2, name: "" } },
-    time: 20,
-    id: uid()
-  });
+  it("applies 'PROJECT_REMOVE' actions correctly", () => {
+    apply('PROJECT_ADD', { data: { id: makeUID(), name: "" } });
+    apply('PROJECT_ADD', { data: { id: makeUID(), name: "" } });
+    apply('TASK_ADD', { after: uids[1], data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { after: uids[1], data: { id: makeUID(), name: "", detail: "" } });
 
-  var newId3 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { after: newId2, data: { id: newId3, name: "", detail: "" } },
-    time: 30,
-    id: uid()
-  });
+    apply('PROJECT_REMOVE', { id: 'not an id' });
+    expectUpdates(addedEventToPast);
 
-  var newId4 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { after: newId2, data: { id: newId4, name: "", detail: "" } },
-    time: 40,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_REMOVE',
-    payload: {
-      id: 'not an id'
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual(prevState.present);
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_REMOVE',
-    payload: {
-      id: newId2
-    },
-    time: 40,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [
-      prevState.present.tasks[2],
-      prevState.present.tasks[3],
+    apply('PROJECT_REMOVE', { id: uids[1] });
+    expectUpdates(
+      addedEventToPast,
       {
-        ...prevState.present.tasks[0],
-        id: newId1
+        tasks: [
+          prevState.present.tasks[2],
+          prevState.present.tasks[3],
+          prevState.present.tasks[0]
+        ]
       }
-    ]
+    );
+
+    apply('PROJECT_REMOVE', { id: uids[0] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          prevState.present.tasks[1]
+        ]
+      }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'PROJECT_REMOVE',
-    payload: {
-      id: newId1
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [
-      prevState.present.tasks[0],
-      prevState.present.tasks[1]
-    ]
-  });
-});
+  it("applies 'CLEAR_NEW_TASK' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
 
-it("applies 'CLEAR_NEW_TASK' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
+    apply('CLEAR_NEW_TASK', {});
+    expectUpdates(
+      addedEventToPast,
+      { newItemId: null }
+    );
   });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'CLEAR_NEW_TASK',
-    payload: {},
-    time: 10,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    newItemId: null
-  });
-});
+  it("applies 'TIME_RESET' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_SELECT', { id: uids[0] });
+    apply('TASK_TICK', {});
 
-it("applies 'TIME_RESET' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
+    apply('TIME_RESET', { id: uids[0] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            id: uids[0],
+            time: 0
+          }
+        ],
+        lastTickTime: currTime
+      }
+    );
 
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
+    apply('TASK_TICK', {});
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: { id: newId1 },
-    time: 30,
-    id: uid()
+    apply('TIME_RESET', { id: uids[1] });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            time: 0
+          },
+          prevState.present.tasks[1]
+        ]
+      }
+    );
   });
 
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 40,
-    id: uid()
-  });
-  expect(state.present.tasks[1].time).toBe(10);
+  it("applies 'TIME_ADD' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TIME_RESET',
-    payload: {
-      id: newId1
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      time: 0
-    }],
-    lastTickTime: 50
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 60,
-    id: uid()
-  });
-  expect(state.present.tasks[1].time).toBe(10);
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TIME_RESET',
-    payload: {
-      id: newId2
-    },
-    time: 70,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      time: 0
-    }, prevState.present.tasks[1]]
-  });
-});
-
-it("applies 'TIME_ADD' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
-  });
-
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
-  });
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TIME_ADD',
-    payload: {
-      id: newId2,
+    apply('TIME_ADD', {
+      id: uids[1],
       delta: 1000
-    },
-    time: 30,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      time: 1000
-    }, prevState.present.tasks[1]]
-  });
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            time: 1000
+          },
+          prevState.present.tasks[1]
+        ]
+      }
+    );
 
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: { id: newId1 },
-    time: 40,
-    id: uid()
-  });
+    apply('TASK_SELECT', { id: uids[0] });
 
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'TIME_ADD',
-    payload: {
-      id: newId1,
+    apply('TIME_ADD', {
+      id: uids[0],
       delta: 500
-    },
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [prevState.present.tasks[0], {
-      ...prevState.present.tasks[1],
-      time: 500
-    }]
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 60,
-    id: uid()
-  });
-  expect(state.present.tasks[1].time).toBe(520);
-});
-
-it("applies 'WRAP_UP' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var newId1 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId1, name: "", detail: "" } },
-    time: 10,
-    id: uid()
+    });
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          prevState.present.tasks[0],
+          {
+            ...prevState.present.tasks[1],
+            time: 500
+          }
+        ]
+      }
+    );
   });
 
-  var newId2 = uid();
-  state = timeTracker(state, {
-    type: 'TASK_ADD',
-    payload: { data: { id: newId2, name: "", detail: "" } },
-    time: 20,
-    id: uid()
+  it("applies 'WRAP_UP' actions correctly", () => {
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
+    apply('TASK_SELECT', { id: uids[0] });
+    apply('TASK_SELECT', { id: uids[1] });
+    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 1" });
+    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 2" });
+    apply('SUBTASK_REMOVE', { id: uids[0], index: 1 });
+    apply('TASK_TICK', {});
+
+    apply('WRAP_UP', {});
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [
+          {
+            ...prevState.present.tasks[0],
+            time: 0
+          },
+          {
+            ...prevState.present.tasks[1],
+            time: 0,
+            completedSubtasks: []
+          }
+        ],
+        selectedTask: null,
+        lastTickTime: currTime
+      }
+    );
   });
 
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: { id: newId1 },
-    time: 30,
-    id: uid()
+  it("applies 'THEME_SET' actions correctly", () => {
+    apply('THEME_SET', { color: 'orange' });
+    expectUpdates(
+      addedEventToPast,
+      { themeColor: 'orange' }
+    );
   });
 
-  state = timeTracker(state, {
-    type: 'TASK_SELECT',
-    payload: { id: newId2 },
-    time: 80,
-    id: uid()
-  });
+  it("applies 'PAGE_LOAD' actions correctly", () => {
+    var newId1 = uid();
+    state = History.wrap({
+      selectedTask: newId1,
+      lastTickTime: 0,
+      newItemId: null,
+      themeColor: 'purple',
+      tasks: [{ id: newId1, name: "", detail: "", time: 0 }],
+      version: 5
+    });
 
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: { id: newId1, content: "subtask 1" },
-    time: 90,
-    id: uid()
-  });
+    prevState = {
+      past: state.past,
+      present: upgradeVersion(state.present),
+      future: state.future
+    };
 
-  state = timeTracker(state, {
-    type: 'SUBTASK_ADD',
-    payload: { id: newId1, content: "subtask 2" },
-    time: 100,
-    id: uid()
-  });
-
-  state = timeTracker(state, {
-    type: 'SUBTASK_REMOVE',
-    payload: { id: newId1, index: 1 },
-    time: 110,
-    id: uid()
-  });
-
-  state = timeTracker(state, {
-    type: 'TASK_TICK',
-    payload: {},
-    time: 130,
-    id: uid()
-  });
-  expect(state.present.tasks[0].time).toBe(50);
-  expect(state.present.tasks[1].time).toBe(50);
-  expect(state.present.tasks[1].completedSubtasks).toHaveLength(1);
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'WRAP_UP',
-    payload: {},
-    time: 140,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    tasks: [{
-      ...prevState.present.tasks[0],
-      time: 0
-    }, {
-      ...prevState.present.tasks[1],
-      time: 0,
-      completedSubtasks: []
-    }],
-    selectedTask: null,
-    lastTickTime: 140
-  });
-});
-
-it("applies 'THEME_SET' actions correctly", () => {
-  var state = History.wrap(DEFAULT_STATE);
-
-  var prevState = state;
-  state = timeTracker(state, {
-    type: 'THEME_SET',
-    payload: {
-      color: 'orange'
-    },
-    time: 10,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(prevState.past.length + 1);
-  expect(state.present).toEqual({
-    ...prevState.present,
-    themeColor: 'orange'
-  });
-});
-
-it("applies 'PAGE_LOAD' actions correctly", () => {
-  var newId1 = uid();
-  var state = History.wrap({
-    selectedTask: newId1,
-    lastTickTime: 0,
-    newItemId: null,
-    themeColor: 'purple',
-    tasks: [{ id: newId1, name: "", detail: "", time: 0 }],
-    version: 5
-  });
-
-  var upgradedState = {
-    past: state.past,
-    present: upgradeVersion(state.present),
-    future: state.future
-  };
-
-  state = timeTracker(state, {
-    type: 'PAGE_LOAD',
-    payload: {},
-    time: 50,
-    id: uid()
-  });
-  expectBasicStateProps(state);
-  expect(state.past).toHaveLength(upgradedState.past.length + 1);
-  expect(state.present).toEqual({
-    ...upgradedState.present,
-    tasks: [{
-      ...upgradedState.present.tasks[0],
-      time: 50
-    }],
-    lastTickTime: 50,
-    version: CURRENT_VERSION
+    apply('PAGE_LOAD', {});
+    expectUpdates(
+      addedEventToPast,
+      {
+        tasks: [{
+          ...prevState.present.tasks[0],
+          time: 10
+        }],
+        lastTickTime: currTime,
+        version: CURRENT_VERSION
+      }
+    );
   });
 });
 
