@@ -1,3 +1,12 @@
-.grow-height-enter, .grow-height-exit {
+.transition-grow-height-enter, .transition-grow-height-exit {
   transition: height 150ms ease-in-out;
 }
+
+.transition-scale-enter, .transition-scale-exit {
+  transition: transform 150ms ease-in-out;
+}
+
+.transition-scale-enter        { transform: scale(0.01); }
+.transition-scale-enter-active { transform: scale(1.0); }
+.transition-scale-exit         { transform: scale(1.0); }
+.transition-scale-exit-active  { transform: scale(0.01); }

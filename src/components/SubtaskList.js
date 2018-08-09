@@ -12,7 +12,7 @@ import './SubtaskList.css';
 import Button from './buttons/Button';
 import IconButton from './buttons/IconButton';
 import { newSubtask, deleteSubtask } from '../data/actions';
-import { growHeight } from './transitions';
+import { growHeight, scale } from './transitions';
 
 const mapDispatchToProps = (dispatch, props) => ({
   onCreate:   (content)   => dispatch(newSubtask(props.taskId, content)),
@@ -63,18 +63,22 @@ class SubtaskList extends Component {
 
     return (
       <TransitionGroup className={containerClass}>
-        <Button className="subtask-list-btn" onClick={this.toggle}>
-          {this.state.isExpanded
-            ? <React.Fragment>
-                <FontAwesomeIcon className="icon" icon={faAngleUp}/>
-                Hide Subtasks
-              </React.Fragment>
-            : <React.Fragment>
-                <FontAwesomeIcon className="icon" icon={faAngleDown}/>
-                Show Subtasks ({this.props.subtasks.length})
-              </React.Fragment>
-          }
-        </Button>
+        {showButton &&
+          <CSSTransition key={1} {...scale}>
+            <Button className="subtask-list-btn" onClick={this.toggle}>
+              {this.state.isExpanded
+                ? <React.Fragment>
+                    <FontAwesomeIcon className="icon" icon={faAngleUp}/>
+                    Hide Subtasks
+                  </React.Fragment>
+                : <React.Fragment>
+                    <FontAwesomeIcon className="icon" icon={faAngleDown}/>
+                    Show Subtasks ({this.props.subtasks.length})
+                  </React.Fragment>
+              }
+            </Button>
+          </CSSTransition>
+        }
         {showContents &&
           <CSSTransition key={0} {...growHeight}>
             <div className="subtask-list-wrapper">

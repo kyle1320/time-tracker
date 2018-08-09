@@ -19,10 +19,6 @@
   padding-top: 9px;
 }
 
-.subtask-list-container.hide-button .subtask-list-btn {
-  display: none;
-}
-
 .subtask-list > *:first-child {
   margin-top: 2px;
 }
@@ -31,9 +27,8 @@
   position: absolute;
   display: flex;
   flex-flow: row nowrap;
-  top: 5px;
+  top: -5px;
   right: 5px;
-  transform: translateY(-50%);
   background-color: white;
   border-radius: 5px;
   padding: 5px 10px;
