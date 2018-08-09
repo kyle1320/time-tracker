@@ -53,17 +53,21 @@
   margin-right: 5px;
 }
 
+.subtask-wrapper {
+  overflow: hidden;
+  border-top: 1px solid #eeeeee;
+}
+
+.subtask-wrapper:first-child {
+  border-top: none;
+}
+
 .subtask {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   padding: 4px 5px;
   font-size: 14px;
-  border-top: 1px solid #eeeeee;
-}
-
-.subtask:first-child {
-  border-top: none;
 }
 
 .subtask .complete-subtask-btn {

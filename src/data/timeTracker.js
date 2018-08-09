@@ -81,10 +81,17 @@ function task(state, action) {
       else
         return state;
     case SUBTASK_REMOVE:
-      if (state.id === action.payload.id) {
+      if (state.id === action.payload.taskId) {
         var newSubtasks = state.subtasks.slice();
+        var subtaskIndex =
+          findIndex(newSubtasks, x => x.id === action.payload.subtaskId);
+
+        if (subtaskIndex < 0) {
+          return state;
+        }
+
         var newCompletedSubtasks =
-          state.completedSubtasks.concat(newSubtasks.splice(action.payload.index, 1));
+          state.completedSubtasks.concat(newSubtasks.splice(subtaskIndex, 1));
 
         return {
           ...state,
@@ -122,7 +129,9 @@ function taskOrProject(state, action) {
 function createSubtask(action) {
   return {
     time: action.time,
-    content: action.payload.content
+    id: 0,
+    content: '',
+    ...action.payload.data
   };
 }
 

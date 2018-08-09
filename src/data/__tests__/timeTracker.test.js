@@ -40,7 +40,7 @@ test("default test state is current version", () => {
   expect(DEFAULT_STATE.version).toBe(CURRENT_VERSION);
 });
 
-describe("normal functionality", () => { 
+describe("normal functionality", () => {
   var state;
   var prevState;
   var currTime;
@@ -67,7 +67,7 @@ describe("normal functionality", () => {
       id: uid()
     };
   }
-  
+
   function apply(type, payload) {
     prevState = state;
     state = timeTracker(
@@ -162,7 +162,7 @@ describe("normal functionality", () => {
             subtasks: [],
             completedSubtasks: [],
             time: 0
-          }, 
+          },
           prevState.present.tasks[1]
         ],
         newItemId: uids[2]
@@ -378,7 +378,10 @@ describe("normal functionality", () => {
 
     apply('SUBTASK_ADD', {
       id: uids[0],
-      content: "this is a subtask"
+      data: {
+        id: makeUID(),
+        content: "this is a subtask"
+      }
     });
     expectUpdates(
       addedEventToPast,
@@ -389,6 +392,7 @@ describe("normal functionality", () => {
             ...prevState.present.tasks[1],
             subtasks: [{
               time: currTime,
+              id: uids[2],
               content: "this is a subtask"
             }]
           }
@@ -398,7 +402,10 @@ describe("normal functionality", () => {
 
     apply('SUBTASK_ADD', {
       id: uids[0],
-      content: "this is another subtask"
+      data: {
+        id: makeUID(),
+        content: "this is another subtask"
+      }
     });
     expectUpdates(
       addedEventToPast,
@@ -411,6 +418,7 @@ describe("normal functionality", () => {
               prevState.present.tasks[1].subtasks[0],
               {
                 time: currTime,
+                id: uids[3],
                 content: "this is another subtask"
               }
             ]
@@ -421,7 +429,10 @@ describe("normal functionality", () => {
 
     apply('SUBTASK_ADD', {
       id: uids[1],
-      content: "this is a different subtask"
+      data: {
+        id: makeUID(),
+        content: "this is a different subtask"
+      }
     });
     expectUpdates(
       addedEventToPast,
@@ -431,6 +442,7 @@ describe("normal functionality", () => {
             ...prevState.present.tasks[0],
             subtasks: [{
               time: currTime,
+              id: uids[4],
               content: "this is a different subtask"
             }]
           },
@@ -443,12 +455,12 @@ describe("normal functionality", () => {
   it("applies 'SUBTASK_REMOVE' actions correctly", () => {
     apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
     apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
-    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 1" });
-    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 2" });
+    apply('SUBTASK_ADD', { id: uids[0], data: { id: makeUID(), content: "" }});
+    apply('SUBTASK_ADD', { id: uids[0], data: { id: makeUID(), content: "" }});
 
     apply('SUBTASK_REMOVE', {
-      id: uids[0],
-      index: 1
+      taskId: uids[0],
+      subtaskId: uids[3]
     });
     expectUpdates(
       addedEventToPast,
@@ -459,11 +471,11 @@ describe("normal functionality", () => {
             ...prevState.present.tasks[1],
             subtasks: [{
               ...prevState.present.tasks[1].subtasks[0],
-              content: "subtask 1"
+              id: uids[2]
             }],
             completedSubtasks: [{
               ...prevState.present.tasks[1].subtasks[1],
-              content: "subtask 2"
+              id: uids[3]
             }]
           }
         ]
@@ -471,8 +483,8 @@ describe("normal functionality", () => {
     );
 
     apply('SUBTASK_REMOVE', {
-      id: uids[0],
-      index: 0
+      taskId: uids[0],
+      subtaskId: uids[2]
     });
     expectUpdates(
       addedEventToPast,
@@ -486,7 +498,7 @@ describe("normal functionality", () => {
               prevState.present.tasks[1].completedSubtasks[0],
               {
                 ...prevState.present.tasks[1].subtasks[0],
-                content: "subtask 1"
+                id: uids[2]
               }
             ]
           }
@@ -727,9 +739,9 @@ describe("normal functionality", () => {
     apply('TASK_ADD', { data: { id: makeUID(), name: "", detail: "" } });
     apply('TASK_SELECT', { id: uids[0] });
     apply('TASK_SELECT', { id: uids[1] });
-    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 1" });
-    apply('SUBTASK_ADD', { id: uids[0], content: "subtask 2" });
-    apply('SUBTASK_REMOVE', { id: uids[0], index: 1 });
+    apply('SUBTASK_ADD', { id: uids[0], data: { id: makeUID(), content: "" }});
+    apply('SUBTASK_ADD', { id: uids[0], data: { id: makeUID(), content: "" }});
+    apply('SUBTASK_REMOVE', { taskId: uids[0], subtaskId: uids[3] });
     apply('TASK_TICK', {});
 
     apply('WRAP_UP', {});
@@ -822,10 +834,11 @@ describe("undo / redo functionality", () => {
     id: uid()
   });
 
+  var newId2 = uid();
   var beforeAddSubtask = state;
   state = timeTracker(state, {
     type: 'SUBTASK_ADD',
-    payload: { id: newId1, content: "subtask 2" },
+    payload: { id: newId1, data: { id: newId2, content: "subtask 2" } },
     time: 40,
     id: uid()
   });
@@ -833,7 +846,7 @@ describe("undo / redo functionality", () => {
   var beforeRemoveSubtask = state;
   state = timeTracker(state, {
     type: 'SUBTASK_REMOVE',
-    payload: { id: newId1, index: 0 },
+    payload: { taskId: newId1, subtaskId: newId2 },
     time: 50,
     id: uid()
   });

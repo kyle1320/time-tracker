@@ -78,14 +78,17 @@ export function deleteTask(id) {
 export function newSubtask(taskId, content) {
   return makeAction(SUBTASK_ADD, {
     id: taskId,
-    content
+    data: {
+      id: uid(),
+      content
+    }
   });
 }
 
-export function deleteSubtask(taskId, index) {
+export function deleteSubtask(taskId, subtaskId) {
   return makeAction(SUBTASK_REMOVE, {
-    id: taskId,
-    index
+    taskId,
+    subtaskId
   });
 }
 

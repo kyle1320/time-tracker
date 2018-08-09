@@ -15,8 +15,8 @@ import { newSubtask, deleteSubtask } from '../data/actions';
 import { growHeight } from './transitions';
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onCreate:   (content) => dispatch(newSubtask(props.taskId, content)),
-  onComplete: (index) => () => dispatch(deleteSubtask(props.taskId, index))
+  onCreate:   (content)   => dispatch(newSubtask(props.taskId, content)),
+  onComplete: (subtaskId) => dispatch(deleteSubtask(props.taskId, subtaskId))
 });
 
 class SubtaskList extends Component {
@@ -78,30 +78,38 @@ class SubtaskList extends Component {
         {showContents &&
           <CSSTransition key={0} {...growHeight}>
             <div className="subtask-list-wrapper">
-              <div className="subtask-list">
-                {this.props.subtasks.map((subtask, index) => (
-                  <div className="subtask" key={index}> {/* TODO: use IDs */}
-                    <IconButton
-                      icon={faCheck}
-                      title="Complete Subtask"
-                      className="complete-subtask-btn"
-                      onClick={this.props.onComplete(index)} />
-                    <div>{subtask.content}</div>
-                  </div>
+              <TransitionGroup className="subtask-list">
+                {this.props.subtasks.map(subtask => (
+                  <CSSTransition key={subtask.id} {...growHeight}>
+                    <div className="subtask-wrapper">
+                      <div className="subtask" key={subtask.id}>
+                        <IconButton
+                          icon={faCheck}
+                          title="Complete Subtask"
+                          className="complete-subtask-btn"
+                          onClick={() => this.props.onComplete(subtask.id)} />
+                        <div>{subtask.content}</div>
+                      </div>
+                    </div>
+                  </CSSTransition>
                 ))}
                 {this.props.isEditing &&
-                  <div className="subtask subtask-list-new">
-                    <input
-                      ref={this.inputField}
-                      onKeyDown={this.onInputKey}
-                      required="required"
-                      placeholder="Add a Subtask..." />
-                    <Button
-                      className="add-subtask-btn"
-                      onClick={this.onCreate}>Add Subtask</Button>
-                  </div>
+                  <CSSTransition key={0} {...growHeight}>
+                    <div className="subtask-wrapper">
+                      <div className="subtask subtask-list-new">
+                        <input
+                          ref={this.inputField}
+                          onKeyDown={this.onInputKey}
+                          required="required"
+                          placeholder="Add a Subtask..." />
+                        <Button
+                          className="add-subtask-btn"
+                          onClick={this.onCreate}>Add Subtask</Button>
+                      </div>
+                    </div>
+                  </CSSTransition>
                 }
-              </div>
+              </TransitionGroup>
             </div>
           </CSSTransition>
         }
