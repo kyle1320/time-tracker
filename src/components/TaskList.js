@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './TaskList.css';
 
 import TaskHeader from './TaskHeader';
 import ProjectHeader from './ProjectHeader';
 import { move } from '../data/actions';
+import { growHeight } from './transitions';
 
 const mapStateToProps = state => ({
   tasks: state.present.tasks,
@@ -22,7 +24,7 @@ const SortableProjectHeader = SortableElement(ProjectHeader)
 
 const SortableList = SortableContainer(({selectedTask, tasks}) => {
   return (
-    <div className="task-list">
+    <TransitionGroup className="task-list">
       {tasks.reduce((agg, item, index) => {
         if (item.isProject) {
           agg.ignoreTask = item.isHidden
@@ -30,20 +32,24 @@ const SortableList = SortableContainer(({selectedTask, tasks}) => {
           return agg;
         }
 
-        agg.elements.push(item.isProject
-          ? <SortableProjectHeader
-              project={item}
-              key={item.id}
-              index={index} />
-          : <SortableItem
-              task={item}
-              key={item.id}
-              index={index} />
+        agg.elements.push(
+          <CSSTransition key={item.id} {...growHeight}>
+            {item.isProject
+              ? <SortableProjectHeader
+                  project={item}
+                  key={item.id}
+                  index={index} />
+              : <SortableItem
+                  task={item}
+                  key={item.id}
+                  index={index} />
+            }
+          </CSSTransition>
         );
 
         return agg;
       }, {elements: [], ignoreTask: false}).elements}
-    </div>
+    </TransitionGroup>
   );
 });
 

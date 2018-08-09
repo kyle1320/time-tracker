@@ -1,3 +1,7 @@
+.project-header-wrapper {
+  overflow: hidden;
+}
+
 .project-header {
   display: flex;
   flex-flow: row nowrap;
@@ -11,7 +15,7 @@
   border-left: 10px solid #1976D2;
 }
 
-.project-header:first-child {
+.project-header-wrapper:first-child .project-header {
   margin-top: 0;
 }
 
@@ -65,6 +69,6 @@
   color: #03A9F4;
 }
 
-.project-header ~ .task-header-container {
+.project-header-wrapper ~ .task-header-wrapper {
   margin-left: 10px;
 }

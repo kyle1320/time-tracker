@@ -1,0 +1,3 @@
+.grow-height-enter, .grow-height-exit {
+  transition: height 150ms ease-in-out;
+}

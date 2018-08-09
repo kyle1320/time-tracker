@@ -1,9 +1,14 @@
+.subtask-list-wrapper {
+  overflow: hidden;
+}
+
 .subtask-list-container {
   position: relative;
   background-color: white;
   margin: -5px 0 0 18px;
   border-radius: 0 0 5px 5px;
   padding-top: 5px;
+  transition: all 150ms ease-in-out;
 }
 
 .subtask-list-container.show-button.closed {
@@ -12,10 +17,6 @@
 
 .subtask-list-container.show-button.open {
   padding-top: 9px;
-}
-
-.subtask-list-container.closed .subtask-list {
-  display: none; /* TODO: animate this */
 }
 
 .subtask-list-container.hide-button .subtask-list-btn {

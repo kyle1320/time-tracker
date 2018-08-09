@@ -1,3 +1,7 @@
+.task-header-wrapper {
+  overflow: hidden;
+}
+
 .task-header-container {
   display: flex;
   flex-flow: column nowrap;

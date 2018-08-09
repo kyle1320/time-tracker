@@ -159,100 +159,102 @@ class TaskHeader extends Component {
 
   render() {
     return (
-      <div className="task-header-container">
-        <div
-            id={this.props.isSelected ? "selected-task" : undefined}
-            className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`} >
-          <SortableHandleItem />
-          <div className="task-header-center-content">
-            <div className="task-header-main-content" onClick={this.onToggle}>
-              {this.state.isEditing
-                ? <div className="task-header-details">
-                    <input
-                      name="name"
-                      ref={this.nameField}
-                      size="1"
-                      className="task-name"
-                      placeholder="Add a Title"
-                      value={this.state.name}
-                      onChange={this.onChange}
-                      onKeyDown={this.onInputKey}
-                      onClick={noSelect} />
-                    <textarea
-                      name="detail"
-                      ref={this.detailField}
-                      size="1"
-                      className="task-detail"
-                      placeholder="Add a Description"
-                      value={this.state.detail}
-                      onChange={this.onChange}
-                      onKeyDown={this.onInputKey}
-                      onClick={noSelect} />
-                  </div>
-                : <div className="task-header-details">
-                    <div className="task-name">
-                      <div>{this.props.task.name}</div>
-                      <IconButton
-                          icon={faPencilAlt}
-                          onClick={this.onEdit}
-                          title="Edit Task"
-                          className="button icon-edit" />
-                    </div>
-                    <div className="task-detail">
-                      {this.props.task.detail}
-                    </div>
-                  </div>
-              }
-              <div className="task-time">
+      <div className="task-header-wrapper">
+        <div className="task-header-container">
+          <div
+              id={this.props.isSelected ? "selected-task" : undefined}
+              className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`} >
+            <SortableHandleItem />
+            <div className="task-header-center-content">
+              <div className="task-header-main-content" onClick={this.onToggle}>
                 {this.state.isEditing
-                  ? <IconButton
-                      icon={faHistory}
-                      onClick={this.props.onReset}
-                      title="Reset Task"
-                      className="button icon-reset" />
-                  : (this.props.isSelected &&
-                    <FontAwesomeIcon
-                      icon={faHourglassHalf}
-                      className="icon-running" />)
+                  ? <div className="task-header-details">
+                      <input
+                        name="name"
+                        ref={this.nameField}
+                        size="1"
+                        className="task-name"
+                        placeholder="Add a Title"
+                        value={this.state.name}
+                        onChange={this.onChange}
+                        onKeyDown={this.onInputKey}
+                        onClick={noSelect} />
+                      <textarea
+                        name="detail"
+                        ref={this.detailField}
+                        size="1"
+                        className="task-detail"
+                        placeholder="Add a Description"
+                        value={this.state.detail}
+                        onChange={this.onChange}
+                        onKeyDown={this.onInputKey}
+                        onClick={noSelect} />
+                    </div>
+                  : <div className="task-header-details">
+                      <div className="task-name">
+                        <div>{this.props.task.name}</div>
+                        <IconButton
+                            icon={faPencilAlt}
+                            onClick={this.onEdit}
+                            title="Edit Task"
+                            className="button icon-edit" />
+                      </div>
+                      <div className="task-detail">
+                        {this.props.task.detail}
+                      </div>
+                    </div>
                 }
-                <div>{formatTime("?(%hh )%mm", this.props.task.time)}</div>
+                <div className="task-time">
+                  {this.state.isEditing
+                    ? <IconButton
+                        icon={faHistory}
+                        onClick={this.props.onReset}
+                        title="Reset Task"
+                        className="button icon-reset" />
+                    : (this.props.isSelected &&
+                      <FontAwesomeIcon
+                        icon={faHourglassHalf}
+                        className="icon-running" />)
+                  }
+                  <div>{formatTime("?(%hh )%mm", this.props.task.time)}</div>
+                </div>
+                <div className="task-time-buttons">
+                  <HoldableButton
+                    icon={faPlus}
+                    onTrigger={this.props.onIncrement}
+                    title="Add a Minute"
+                    className="button icon-plus-time" />
+                  <HoldableButton
+                    icon={faMinus}
+                    onTrigger={this.props.onDecrement}
+                    title="Subtract a Minute"
+                    className="button icon-minus-time" />
+                </div>
               </div>
-              <div className="task-time-buttons">
-                <HoldableButton
-                  icon={faPlus}
-                  onTrigger={this.props.onIncrement}
-                  title="Add a Minute"
-                  className="button icon-plus-time" />
-                <HoldableButton
-                  icon={faMinus}
-                  onTrigger={this.props.onDecrement}
-                  title="Subtract a Minute"
-                  className="button icon-minus-time" />
-              </div>
+              {this.state.isEditing &&
+                <div className="task-header-buttons">
+                  <Button
+                    onClick={this.onSave}
+                    title="Save Changes"
+                    className="button icon-save" >Save</Button>
+                  <div className="button-divider" />
+                  <Button
+                    onClick={this.onCancelEdit}
+                    title="Undo Changes"
+                    className="button icon-cancel" >Cancel</Button>
+                  <Button
+                    onClick={this.onDelete}
+                    title="Delete Task"
+                    className="button icon-trash" >Delete</Button>
+                </div>
+              }
             </div>
-            {this.state.isEditing &&
-              <div className="task-header-buttons">
-                <Button
-                  onClick={this.onSave}
-                  title="Save Changes"
-                  className="button icon-save" >Save</Button>
-                <div className="button-divider" />
-                <Button
-                  onClick={this.onCancelEdit}
-                  title="Undo Changes"
-                  className="button icon-cancel" >Cancel</Button>
-                <Button
-                  onClick={this.onDelete}
-                  title="Delete Task"
-                  className="button icon-trash" >Delete</Button>
-              </div>
-            }
           </div>
+          <SubtaskList
+            taskId={this.props.task.id}
+            subtasks={this.props.task.subtasks}
+            isEditing={this.state.isEditing} />
         </div>
-        <SubtaskList
-          taskId={this.props.task.id}
-          subtasks={this.props.task.subtasks}
-          isEditing={this.state.isEditing} />
       </div>
     );
   }

@@ -5,12 +5,14 @@ import {
   faAngleDown,
   faCheck} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './SubtaskList.css';
 
 import Button from './buttons/Button';
 import IconButton from './buttons/IconButton';
 import { newSubtask, deleteSubtask } from '../data/actions';
+import { growHeight } from './transitions';
 
 const mapDispatchToProps = (dispatch, props) => ({
   onCreate:   (content) => dispatch(newSubtask(props.taskId, content)),
@@ -60,7 +62,7 @@ class SubtaskList extends Component {
       + (showButton ? " show-button" : " hide-button");
 
     return (
-      <div className={containerClass}>
+      <TransitionGroup className={containerClass}>
         <Button className="subtask-list-btn" onClick={this.toggle}>
           {this.state.isExpanded
             ? <React.Fragment>
@@ -73,31 +75,37 @@ class SubtaskList extends Component {
               </React.Fragment>
           }
         </Button>
-        <div className="subtask-list">
-          {this.props.subtasks.map((subtask, index) => (
-            <div className="subtask" key={index}> {/* TODO: use IDs */}
-              <IconButton
-                icon={faCheck}
-                title="Complete Subtask"
-                className="complete-subtask-btn"
-                onClick={this.props.onComplete(index)} />
-              <div>{subtask.content}</div>
+        {showContents &&
+          <CSSTransition key={0} {...growHeight}>
+            <div className="subtask-list-wrapper">
+              <div className="subtask-list">
+                {this.props.subtasks.map((subtask, index) => (
+                  <div className="subtask" key={index}> {/* TODO: use IDs */}
+                    <IconButton
+                      icon={faCheck}
+                      title="Complete Subtask"
+                      className="complete-subtask-btn"
+                      onClick={this.props.onComplete(index)} />
+                    <div>{subtask.content}</div>
+                  </div>
+                ))}
+                {this.props.isEditing &&
+                  <div className="subtask subtask-list-new">
+                    <input
+                      ref={this.inputField}
+                      onKeyDown={this.onInputKey}
+                      required="required"
+                      placeholder="Add a Subtask..." />
+                    <Button
+                      className="add-subtask-btn"
+                      onClick={this.onCreate}>Add Subtask</Button>
+                  </div>
+                }
+              </div>
             </div>
-          ))}
-          {this.props.isEditing &&
-            <div className="subtask subtask-list-new">
-              <input
-                ref={this.inputField}
-                onKeyDown={this.onInputKey}
-                required="required"
-                placeholder="Add a Subtask..." />
-              <Button
-                className="add-subtask-btn"
-                onClick={this.onCreate}>Add Subtask</Button>
-            </div>
-          }
-        </div>
-      </div>
+          </CSSTransition>
+        }
+      </TransitionGroup>
     );
   }
 }
