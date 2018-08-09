@@ -2,6 +2,13 @@ import uid from '../utils/uid';
 
 export const CURRENT_VERSION = 7;
 
+function mapTasksAndProjects(arr, mapTasks = x => x, mapProjects = x => x) {
+  return arr.map(item => item.isProject
+    ? mapProjects(item)
+    : mapTasks(item)
+  );
+}
+
 export function upgradeVersion(state) {
   switch (state.version) {
     case undefined:
@@ -62,7 +69,7 @@ export function upgradeVersion(state) {
     case 6:
       state = {
         ...state,
-        tasks: state.tasks.map(task => ({
+        tasks: mapTasksAndProjects(state.tasks, task => ({
           ...task,
           subtasks: task.subtasks.map(subtask => ({
             ...subtask,
