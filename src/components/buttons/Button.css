@@ -1,4 +1,5 @@
 .button {
+  user-select: none;
   cursor: pointer;
   pointer-events: auto;
 }
