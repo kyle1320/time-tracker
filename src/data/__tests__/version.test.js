@@ -42,7 +42,7 @@ it("can upgrade all the way from version 0 to " + CURRENT_VERSION, () => {
       completedSubtasks: [],
       time: 400
     }],
-    version: 6
+    version: 7
   });
 });
 

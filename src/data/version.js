@@ -1,4 +1,6 @@
-export const CURRENT_VERSION = 6;
+import uid from '../utils/uid';
+
+export const CURRENT_VERSION = 7;
 
 export function upgradeVersion(state) {
   switch (state.version) {
@@ -55,6 +57,19 @@ export function upgradeVersion(state) {
     case 5:
       delete state.tasksSorted;
       delete state.nextTaskId;
+
+    /* falls through */
+    case 6:
+      state = {
+        ...state,
+        tasks: state.tasks.map(task => ({
+          ...task,
+          subtasks: task.subtasks.map(subtask => ({
+            ...subtask,
+            id: uid()
+          }))
+        }))
+      };
 
     /* falls through */
     case CURRENT_VERSION:

@@ -1,7 +1,8 @@
-import timeTracker from '../timeTracker';
 import History from '../../utils/History';
 import uid from '../../utils/uid';
 import { CURRENT_VERSION, upgradeVersion } from '../version';
+
+var timeTracker = require('../timeTracker').default;
 
 const DEFAULT_STATE = {
   selectedTask: null,
@@ -9,7 +10,7 @@ const DEFAULT_STATE = {
   newItemId: null,
   themeColor: 'purple',
   tasks: [],
-  version: CURRENT_VERSION
+  version: 7
 };
 
 function expectBasicStateProps(state) {
@@ -47,6 +48,9 @@ describe("normal functionality", () => {
   var uids;
 
   beforeEach(() => {
+    jest.resetModules();
+    timeTracker = require('../timeTracker').default;
+
     state = History.wrap(DEFAULT_STATE);
     prevState = null;
     currTime = 0;
@@ -59,20 +63,20 @@ describe("normal functionality", () => {
     return newUid;
   }
 
-  function createAction(type, payload) {
+  function createAction(type, payload, id) {
     return {
       type,
       payload,
       time: (currTime += 10),
-      id: uid()
+      id
     };
   }
 
-  function apply(type, payload) {
+  function apply(type, payload, id = uid()) {
     prevState = state;
     state = timeTracker(
       state,
-      createAction(type, payload)
+      createAction(type, payload, id)
     );
     expectBasicStateProps(state);
   }
@@ -780,7 +784,7 @@ describe("normal functionality", () => {
       lastTickTime: 0,
       newItemId: null,
       themeColor: 'purple',
-      tasks: [{ id: newId1, name: "", detail: "", time: 0 }],
+      tasks: [{ id: newId1, name: "", detail: "", time: 0, subtasks: [], completedSubtasks: [] }],
       version: 5
     });
 
@@ -802,6 +806,24 @@ describe("normal functionality", () => {
         version: CURRENT_VERSION
       }
     );
+  });
+
+  it("Has not changed since the last shapshotted version", () => {
+    apply('TASK_ADD', { data: { id: "abcdefgh1", name: "", detail: "" } }, "abcdefgf1");
+    apply('TASK_ADD', { data: { id: "abcdefgh2", name: "", detail: "" } }, "abcdefgf2");
+    apply('CLEAR_NEW_TASK', {}, "abcdefgf3");
+    apply('TASK_SELECT', { id: "abcdefgh1" }, "abcdefgf4");
+    apply('TASK_SELECT', { id: "abcdefgh2" }, "abcdefgf5");
+    apply('SUBTASK_ADD', { id: "abcdefgh1", data: { id: "abcdefgh3", content: "" }}, "abcdefgf6");
+    apply('SUBTASK_ADD', { id: "abcdefgh1", data: { id: "abcdefgh4", content: "" }}, "abcdefgf7");
+    apply('SUBTASK_REMOVE', { taskId: "abcdefgh1", subtaskId: "abcdefgh4" }, "abcdefgf8");
+    apply('THEME_SET', { color: 'orange' }, "abcdefgf9");
+    apply('TASK_TICK', {}, "abcdefgf0");
+
+    // if this test needs to be updated,
+    // a new state version should likely also be created.
+
+    expect(state).toMatchSnapshot();
   });
 });
 

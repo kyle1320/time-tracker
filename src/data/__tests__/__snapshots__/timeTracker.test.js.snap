@@ -1,0 +1,416 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`normal functionality Has not changed since the last shapshotted version 1`] = `
+Object {
+  "future": Array [],
+  "past": Array [
+    Object {
+      "action": Object {
+        "_delta": 10,
+        "_selectedId": null,
+        "id": "abcdefgf1",
+        "payload": Object {
+          "data": Object {
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+          },
+        },
+        "time": 10,
+        "type": "TASK_ADD",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 0,
+        "newItemId": null,
+        "selectedTask": null,
+        "tasks": Array [],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 0,
+    },
+    Object {
+      "action": Object {
+        "_delta": 20,
+        "_selectedId": null,
+        "id": "abcdefgf2",
+        "payload": Object {
+          "data": Object {
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+          },
+        },
+        "time": 20,
+        "type": "TASK_ADD",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 0,
+        "newItemId": "abcdefgh1",
+        "selectedTask": null,
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 1,
+    },
+    Object {
+      "action": Object {
+        "_delta": 30,
+        "_selectedId": null,
+        "id": "abcdefgf3",
+        "payload": Object {},
+        "time": 30,
+        "type": "CLEAR_NEW_TASK",
+      },
+      "permanent": true,
+      "state": Object {
+        "lastTickTime": 0,
+        "newItemId": "abcdefgh2",
+        "selectedTask": null,
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 2,
+    },
+    Object {
+      "action": Object {
+        "_delta": 40,
+        "_selectedId": null,
+        "id": "abcdefgf4",
+        "payload": Object {
+          "id": "abcdefgh1",
+        },
+        "time": 40,
+        "type": "TASK_SELECT",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 0,
+        "newItemId": null,
+        "selectedTask": null,
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 3,
+    },
+    Object {
+      "action": Object {
+        "_delta": 10,
+        "_selectedId": "abcdefgh1",
+        "id": "abcdefgf5",
+        "payload": Object {
+          "id": "abcdefgh2",
+        },
+        "time": 50,
+        "type": "TASK_SELECT",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 40,
+        "newItemId": null,
+        "selectedTask": "abcdefgh1",
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 4,
+    },
+    Object {
+      "action": Object {
+        "_delta": 10,
+        "_selectedId": "abcdefgh2",
+        "id": "abcdefgf6",
+        "payload": Object {
+          "data": Object {
+            "content": "",
+            "id": "abcdefgh3",
+          },
+          "id": "abcdefgh1",
+        },
+        "time": 60,
+        "type": "SUBTASK_ADD",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 50,
+        "newItemId": null,
+        "selectedTask": "abcdefgh2",
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [],
+            "time": 10,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 5,
+    },
+    Object {
+      "action": Object {
+        "_delta": 20,
+        "_selectedId": "abcdefgh2",
+        "id": "abcdefgf7",
+        "payload": Object {
+          "data": Object {
+            "content": "",
+            "id": "abcdefgh4",
+          },
+          "id": "abcdefgh1",
+        },
+        "time": 70,
+        "type": "SUBTASK_ADD",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 50,
+        "newItemId": null,
+        "selectedTask": "abcdefgh2",
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [
+              Object {
+                "content": "",
+                "id": "abcdefgh3",
+                "time": 60,
+              },
+            ],
+            "time": 10,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 6,
+    },
+    Object {
+      "action": Object {
+        "_delta": 30,
+        "_selectedId": "abcdefgh2",
+        "id": "abcdefgf8",
+        "payload": Object {
+          "subtaskId": "abcdefgh4",
+          "taskId": "abcdefgh1",
+        },
+        "time": 80,
+        "type": "SUBTASK_REMOVE",
+      },
+      "permanent": false,
+      "state": Object {
+        "lastTickTime": 50,
+        "newItemId": null,
+        "selectedTask": "abcdefgh2",
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [
+              Object {
+                "content": "",
+                "id": "abcdefgh3",
+                "time": 60,
+              },
+              Object {
+                "content": "",
+                "id": "abcdefgh4",
+                "time": 70,
+              },
+            ],
+            "time": 10,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 7,
+    },
+    Object {
+      "action": Object {
+        "_delta": 40,
+        "_selectedId": "abcdefgh2",
+        "id": "abcdefgf9",
+        "payload": Object {
+          "color": "orange",
+        },
+        "time": 90,
+        "type": "THEME_SET",
+      },
+      "permanent": true,
+      "state": Object {
+        "lastTickTime": 50,
+        "newItemId": null,
+        "selectedTask": "abcdefgh2",
+        "tasks": Array [
+          Object {
+            "completedSubtasks": Array [],
+            "detail": "",
+            "id": "abcdefgh2",
+            "name": "",
+            "subtasks": Array [],
+            "time": 0,
+          },
+          Object {
+            "completedSubtasks": Array [
+              Object {
+                "content": "",
+                "id": "abcdefgh4",
+                "time": 70,
+              },
+            ],
+            "detail": "",
+            "id": "abcdefgh1",
+            "name": "",
+            "subtasks": Array [
+              Object {
+                "content": "",
+                "id": "abcdefgh3",
+                "time": 60,
+              },
+            ],
+            "time": 10,
+          },
+        ],
+        "themeColor": "purple",
+        "version": 7,
+      },
+      "time": 8,
+    },
+  ],
+  "present": Object {
+    "lastTickTime": 100,
+    "newItemId": null,
+    "selectedTask": "abcdefgh2",
+    "tasks": Array [
+      Object {
+        "completedSubtasks": Array [],
+        "detail": "",
+        "id": "abcdefgh2",
+        "name": "",
+        "subtasks": Array [],
+        "time": 50,
+      },
+      Object {
+        "completedSubtasks": Array [
+          Object {
+            "content": "",
+            "id": "abcdefgh4",
+            "time": 70,
+          },
+        ],
+        "detail": "",
+        "id": "abcdefgh1",
+        "name": "",
+        "subtasks": Array [
+          Object {
+            "content": "",
+            "id": "abcdefgh3",
+            "time": 60,
+          },
+        ],
+        "time": 10,
+      },
+    ],
+    "themeColor": "orange",
+    "version": 7,
+  },
+}
+`;
