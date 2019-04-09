@@ -2,21 +2,8 @@ import { CURRENT_VERSION } from '../version';
 import { PAGE_LOAD } from '../action-constants';
 import { tick, newTask } from '../actions';
 
-class MockStorage {
-  constructor() {
-    this.getItem = jest.fn(this.getItem);
-    this.setItem = jest.fn(this.setItem);
-    this.removeItem = jest.fn(this.removeItem);
-  }
-
-  getItem(key)    { return this[key]; }
-  setItem(key, value)    { this[key] = value; }
-  removeItem(key) { delete this[key]; }
-}
-
 it("loads a default state", () => {
   jest.resetModules();
-  window.localStorage = new MockStorage();
 
   var store = require('../store').default;
   var state = store.getState();
@@ -44,7 +31,7 @@ jest.useFakeTimers();
 
 it("saves intermittently", () => {
   jest.resetModules();
-  window.localStorage = new MockStorage();
+  jest.spyOn(Storage.prototype, 'setItem');
 
   var store = require('../store').default;
 
@@ -87,7 +74,6 @@ it("saves intermittently", () => {
 
 it("can reload previously saved state", () => {
   jest.resetModules();
-  window.localStorage = new MockStorage();
 
   var store = require('../store').default;
 
@@ -109,7 +95,6 @@ it("can reload previously saved state", () => {
 
 it("can reset the saved state", () => {
   jest.resetModules();
-  window.localStorage = new MockStorage();
 
   var store = require('../store').default;
 
@@ -117,12 +102,14 @@ it("can reset the saved state", () => {
   jest.runTimersToTime(1100);
   expect(store.getState().present.tasks).toHaveLength(1);
 
+  window.location.reload = jest.fn();
   window.confirm = () => false;
   window.resetAllAppData();
 
   jest.resetModules();
   store = require('../store').default;
   expect(store.getState().present.tasks).toHaveLength(1);
+  expect(window.location.reload).not.toHaveBeenCalled();
 
   window.confirm = () => true;
   window.resetAllAppData();
@@ -130,4 +117,5 @@ it("can reset the saved state", () => {
   jest.resetModules();
   store = require('../store').default;
   expect(store.getState().present.tasks).toHaveLength(0);
+  expect(window.location.reload).toHaveBeenCalled();
 });
