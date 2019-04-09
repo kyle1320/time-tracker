@@ -2,9 +2,9 @@
   user-select: none;
   cursor: pointer;
   pointer-events: auto;
-}
 
-.button.disabled {
-  cursor: not-allowed;
-  pointer-events: none;
+  &.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }

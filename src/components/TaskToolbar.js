@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarCheck, faFolder } from '@fortawesome/free-regular-svg-icons'
 
-import './TaskToolbar.css';
+import './TaskToolbar.scss';
 
 import { newTask, newProject } from '../data/actions';
 import IconButton from './buttons/IconButton';
@@ -21,17 +21,17 @@ class TaskToolbar extends Component {
         <div className="button-container">
           <IconButton
             icon={faPlusSquare}
-            className="task-toolbar-btn add"
+            className="task-toolbar__btn add"
             title="New Task"
             onClick={this.props.triggerNewTask} />
           <IconButton
             icon={faFolder}
-            className="task-toolbar-btn add-project"
+            className="task-toolbar__btn add-project"
             title="New Project"
             onClick={this.props.triggerNewProject} />
           <IconButton
             icon={faCalendarCheck}
-            className="task-toolbar-btn end-day"
+            className="task-toolbar__btn end-day"
             title="Wrap-up Day"
             onClick={this.props.onEndDay} />
         </div>

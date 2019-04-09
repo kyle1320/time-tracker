@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import './TaskList.css';
+import './TaskList.scss';
 
 import TaskHeader from './TaskHeader';
 import ProjectHeader from './ProjectHeader';
@@ -61,8 +61,8 @@ class TaskList extends Component {
   render() {
     return this.props.tasks.length === 0
       ? <div className="no-tasks">
-          <div className="no-tasks-header">No Tasks</div>
-          <div className="no-tasks-small">Click + to create a task</div>
+          <div className="no-tasks__header">No Tasks</div>
+          <div className="no-tasks--small">Click + to create a task</div>
         </div>
       : <SortableList
           tasks={this.props.tasks}

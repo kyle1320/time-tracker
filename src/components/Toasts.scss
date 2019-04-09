@@ -1,0 +1,71 @@
+.toast {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  background-color: white;
+  border-radius: 50px;
+  padding: 2px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 10px;
+  opacity: 1;
+  transition: opacity .5s linear;
+  box-shadow: 1px 1.5px 5px rgba(0, 0, 0, 0.4);
+  border: 2px solid #CCC;
+
+  &__container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  &--hover {
+    transition: none;
+  }
+
+  &--hidden {
+    opacity: 0;
+  }
+
+  &__title {
+    font-size: 16px;
+    padding: 8px;
+
+    margin-right: auto;
+  }
+
+  &__action {
+    color: #AAA;
+    font-size: 16px;
+    padding: 8px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+
+    &__text {
+      font-size: 10px;
+      font-weight: bold;
+      line-height: 10px;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      margin-right: 5px;
+    }
+
+    &:hover {
+      color: inherit;
+    }
+
+    svg {
+      width: 1em !important;
+    }
+  }
+}

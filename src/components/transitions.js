@@ -1,4 +1,4 @@
-import './transitions.css';
+import './transitions.scss';
 
 export const growHeight = {
   classNames: "transition-grow-height",

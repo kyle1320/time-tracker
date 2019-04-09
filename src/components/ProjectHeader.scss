@@ -1,0 +1,57 @@
+.project-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin: 15px 0 5px;
+  min-height: 32px;
+  background-color: white;
+  border-left: 10px solid #1976D2;
+
+  &__wrapper {
+    overflow: hidden;
+
+    &:first-child .project-header {
+      margin-top: 0;
+    }
+
+    & ~ .task-header__wrapper {
+      margin-left: 10px;
+    }
+  }
+
+  @at-root input#{&}__name, &__name {
+    font-family: 'Open Sans';
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: .03em;
+    flex-grow: 1;
+    padding-bottom: 1px;
+  }
+
+  &__button-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+  }
+
+  &__btn {
+    color: #AAA;
+    font-size: 18px;
+    margin: 0 0 0 8px;
+    padding: 6px;
+
+    &.btn-save { color: #1976D2; }
+    &.btn-cancel { color: #F44336; }
+    &.btn-delete:hover { color: #F44336; }
+    &.btn-edit:hover { color: #1976D2; }
+    &.btn-add:hover { color: #03A9F4; }
+    &.btn-hide:hover, .project-header.hidden .btn-hide { color: #FFC107; }
+  }
+
+  &.hidden {
+    border-left-color: #FFC107;
+  }
+}

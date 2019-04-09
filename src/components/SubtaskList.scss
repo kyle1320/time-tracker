@@ -1,0 +1,115 @@
+.subtask {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding: 4px 5px;
+  font-size: 14px;
+
+  &__wrapper {
+    overflow: hidden;
+    border-top: 1px solid #eeeeee;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  .complete-subtask-btn {
+    color: #CCC;
+    font-size: 12px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+
+    &:hover {
+      color: #4CAF50;
+    }
+  }
+}
+
+.subtask-list {
+  & > *:first-child {
+    margin-top: 2px;
+  }
+
+  &__wrapper {
+    overflow: hidden;
+  }
+
+  &__container {
+    position: relative;
+    background-color: white;
+    margin: -5px 0 0 18px;
+    border-radius: 0 0 5px 5px;
+    padding-top: 5px;
+    transition: all 150ms ease-in-out;
+
+    &.show-button.closed {
+      margin-bottom: 10px;
+    }
+
+    &.show-button.open {
+      padding-top: 9px;
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    display: flex;
+    flex-flow: row nowrap;
+    top: -5px;
+    right: 5px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 10px;
+    line-height: 1em;
+    text-transform: uppercase;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    z-index: 50;
+    cursor: pointer;
+
+    &:hover {
+      color: #1976D2;
+    }
+
+    .icon {
+      margin-right: 5px;
+    }
+  }
+
+  &__new {
+    align-items: stretch;
+    padding: 5px;
+
+    input {
+      flex-grow: 1;
+      border: 1px solid #CCC;
+      border-radius: 5px 0 0 5px;
+      padding: 5px;
+    }
+
+    .add-subtask-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #CCC;
+      color: white;
+      padding: 5px 10px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      font-size: 10px;
+      font-weight: bold;
+      border-radius: 0 5px 5px 0;
+      pointer-events: none;
+    }
+
+    input:valid + .add-subtask-btn {
+      background-color: #2196F3;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+  }
+}

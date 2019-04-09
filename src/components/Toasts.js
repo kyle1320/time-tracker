@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './Toasts.css';
+import './Toasts.scss';
 
 import Button from './buttons/Button';
 
@@ -203,7 +203,7 @@ export class Toasts extends Component {
 
   render() {
     return (
-      <div className="toast-container">
+      <div className="toast__container">
         {this.state.toasts.map(toastProps =>
           <Toast {...toastProps} key={toastProps.id} onDone={this.onDone} />
         )}

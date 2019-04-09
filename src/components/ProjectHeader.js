@@ -10,7 +10,7 @@ import {
   faPlusSquare,
   faTimes} from '@fortawesome/free-solid-svg-icons';
 
-import './ProjectHeader.css';
+import './ProjectHeader.scss';
 
 import {
   deleteProject,
@@ -119,56 +119,56 @@ class ProjectHeader extends Component {
 
   render() {
     return (
-      <div className="project-header-wrapper">
+      <div className="project-header__wrapper">
         <div className={"project-header" + (this.props.project.isHidden ? " hidden" : "")}>
           {this.state.isEditing
             ? <input
                 name="name"
                 ref={this.nameField}
                 size="1"
-                className="project-header-name"
+                className="project-header__name"
                 placeholder="Project Name"
                 value={this.state.name}
                 onChange={this.onChange}
                 onKeyDown={this.onInputKey} />
-            : <div className="project-header-name">
+            : <div className="project-header__name">
                 {this.props.project.name}
               </div>
           }
 
-          <div className="project-header-button-container">
+          <div className="project-header__button-container">
           {this.state.isEditing
             ? <React.Fragment>
                 <IconButton
                   icon={faSave}
-                  className="project-header-btn btn-save"
+                  className="project-header__btn btn-save"
                   title="Save Project"
                   onClick={this.onSave} />
                 <IconButton
                   icon={faTimes}
-                  className="project-header-btn btn-cancel"
+                  className="project-header__btn btn-cancel"
                   title="Cancel Changes"
                   onClick={this.onCancelEdit} />
                 <IconButton
                   icon={faTrash}
-                  className="project-header-btn btn-delete"
+                  className="project-header__btn btn-delete"
                   title="Delete Project Header"
                   onClick={this.onDelete} />
               </React.Fragment>
             : <React.Fragment>
                 <IconButton
                   icon={faPencilAlt}
-                  className="project-header-btn btn-edit"
+                  className="project-header__btn btn-edit"
                   title="Edit Project"
                   onClick={this.onEdit} />
                 <IconButton
                   icon={this.props.project.isHidden ? faEyeSlash : faEye}
-                  className="project-header-btn btn-hide"
+                  className="project-header__btn btn-hide"
                   title={this.props.project.isHidden ? "Show Project Tasks" : "Hide Project Tasks"}
                   onClick={this.toggleHidden} />
                 <IconButton
                   icon={faPlusSquare}
-                  className="project-header-btn btn-add"
+                  className="project-header__btn btn-add"
                   title="New Task"
                   onClick={this.newTask} />
               </React.Fragment>

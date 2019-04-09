@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './Button.css';
+import './Button.scss';
 
 export default class Button extends Component {
   onClick = (event) => {

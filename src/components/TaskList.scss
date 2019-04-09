@@ -1,0 +1,14 @@
+.no-tasks {
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0 13px 0;
+
+  &__header {
+    font-size: 24pt;
+  }
+
+  &--small {
+    font-size: 12pt;
+  }
+}

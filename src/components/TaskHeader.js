@@ -10,7 +10,7 @@ import {
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { SortableHandle } from 'react-sortable-hoc';
 
-import './TaskHeader.css';
+import './TaskHeader.scss';
 
 import {
   select,
@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 const HoldableButton = pressAndHold(IconButton, 80, 500);
 
 const SortableHandleItem = SortableHandle(() => (
-  <div className="task-header-handle" title="Drag to Reorder"></div>
+  <div className="task-header__handle" title="Drag to Reorder"></div>
 ));
 
 function noSelect(event) {
@@ -159,16 +159,16 @@ class TaskHeader extends Component {
 
   render() {
     return (
-      <div className="task-header-wrapper">
-        <div className="task-header-container">
+      <div className="task-header__wrapper">
+        <div className="task-header__container">
           <div
               id={this.props.isSelected ? "selected-task" : undefined}
               className={`task-header ${this.props.isSelected ? "selected" : ""} ${this.state.isEditing ? "editing" : ""}`} >
             <SortableHandleItem />
-            <div className="task-header-center-content">
-              <div className="task-header-main-content" onClick={this.onToggle}>
+            <div className="task-header__center-content">
+              <div className="task-header__main-content" onClick={this.onToggle}>
                 {this.state.isEditing
-                  ? <div className="task-header-details">
+                  ? <div className="task-header__details">
                       <input
                         name="name"
                         ref={this.nameField}
@@ -190,7 +190,7 @@ class TaskHeader extends Component {
                         onKeyDown={this.onInputKey}
                         onClick={noSelect} />
                     </div>
-                  : <div className="task-header-details">
+                  : <div className="task-header__details">
                       <div className="task-name">
                         <div>{this.props.task.name}</div>
                         <IconButton
@@ -232,7 +232,7 @@ class TaskHeader extends Component {
                 </div>
               </div>
               {this.state.isEditing &&
-                <div className="task-header-buttons">
+                <div className="task-header__buttons">
                   <Button
                     onClick={this.onSave}
                     title="Save Changes"

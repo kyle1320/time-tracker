@@ -1,0 +1,61 @@
+.task-toolbar {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: -5px -5px 5px;
+
+  & > * {
+    margin: 5px;
+  }
+
+  .title {
+    color: white;
+    font-size: 18pt;
+    font-weight: bold;
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+  }
+
+  .button-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-end;
+    justify-content: flex-start;
+    margin: 0;
+  }
+
+  &__btn {
+    color: #03A9F4;
+    background-color: white;
+    border-bottom: 2px solid #CCC;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+
+    &:hover {
+      border-color: #03A9F4;
+    }
+
+    &:active {
+      background-color: #03A9F4;
+      color: white !important;
+      border-bottom: none;
+    }
+
+    &.add {
+      color: #03A9F4;
+    }
+
+    &.add-project {
+      color: #4CAF50;
+    }
+
+    &.end-day {
+      color: #FF5252;
+    }
+  }
+}

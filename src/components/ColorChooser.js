@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './ColorChooser.css';
+import './ColorChooser.scss';
 
 import Button from './buttons/Button';
 import { setTheme } from '../data/actions';

@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import './SubtaskList.css';
+import './SubtaskList.scss';
 
 import Button from './buttons/Button';
 import IconButton from './buttons/IconButton';
@@ -57,7 +57,7 @@ class SubtaskList extends Component {
     var showButton = this.props.subtasks.length > 0 && !this.props.isEditing;
     var showContents = this.state.isExpanded || this.props.isEditing;
 
-    var containerClass = "subtask-list-container"
+    var containerClass = "subtask-list__container"
       + (showContents ? " open" : " closed")
       + (showButton ? " show-button" : " hide-button");
 
@@ -65,7 +65,7 @@ class SubtaskList extends Component {
       <TransitionGroup className={containerClass}>
         {showButton &&
           <CSSTransition key={1} {...scale}>
-            <Button className="subtask-list-btn" onClick={this.toggle}>
+            <Button className="subtask-list__btn" onClick={this.toggle}>
               {this.state.isExpanded
                 ? <React.Fragment>
                     <FontAwesomeIcon className="icon" icon={faAngleUp}/>
@@ -81,11 +81,11 @@ class SubtaskList extends Component {
         }
         {showContents &&
           <CSSTransition key={0} {...growHeight}>
-            <div className="subtask-list-wrapper">
+            <div className="subtask-list__wrapper">
               <TransitionGroup className="subtask-list">
                 {this.props.subtasks.map(subtask => (
                   <CSSTransition key={subtask.id} {...growHeight}>
-                    <div className="subtask-wrapper">
+                    <div className="subtask__wrapper">
                       <div className="subtask" key={subtask.id}>
                         <IconButton
                           icon={faCheck}
@@ -99,8 +99,8 @@ class SubtaskList extends Component {
                 ))}
                 {this.props.isEditing &&
                   <CSSTransition key={0} {...growHeight}>
-                    <div className="subtask-wrapper">
-                      <div className="subtask subtask-list-new">
+                    <div className="subtask__wrapper">
+                      <div className="subtask subtask-list__new">
                         <input
                           ref={this.inputField}
                           onKeyDown={this.onInputKey}
